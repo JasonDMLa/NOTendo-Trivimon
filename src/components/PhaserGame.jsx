@@ -21,15 +21,12 @@ const PhaserGame = () => {
         this.load.image("playerDown", "../../public/playerDown.png");
         this.load.image("playerLeft", "../../public/playerLeft.png");
         this.load.image("playerRight", "../../public/playerRight.png");
-        this.load.image("tree", "../../public/tree.png"); // Asset for obstacle
-        this.load.image("teleporter", "../../public/teleporter.png"); // Teleporter asset
+        this.load.image("tree", "../../public/tree.png");
+        this.load.image("teleporter", "../../public/teleporter.png");
       },
 
       create: function () {
-        background = this.add
-          .image(400, 300, "background")
-          .setScale(0.8)
-          .setOrigin(0.5, 0.5);
+        background = this.add.image(400, 300, "background").setScale(0.8).setOrigin(0.5, 0.5);
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
@@ -40,8 +37,8 @@ const PhaserGame = () => {
 
         // Teleporter configuration with target scenes
         const teleporterConfig = {
-          scale: 0.1, // Scale for the teleporters
-          hitboxScale: 0.1, // Hitbox scale factor
+          scale: 0.1,
+          hitboxScale: 0.1,
           teleporters: [
             { x: 110, y: 485, scene: "SecondScene" },
             { x: 113, y: 351, scene: "ThirdScene" },
@@ -51,19 +48,9 @@ const PhaserGame = () => {
 
         // Add teleporters
         teleporterConfig.teleporters.forEach((teleporter) => {
-          const teleporterSprite = this.physics.add
-            .staticImage(teleporter.x, teleporter.y, "teleporter")
-            .setScale(teleporterConfig.scale);
-
-          teleporterSprite.body.setSize(
-            teleporterSprite.width * teleporterConfig.hitboxScale,
-            teleporterSprite.height * teleporterConfig.hitboxScale
-          );
-
-          teleporterSprite.body.setOffset(
-            (teleporterSprite.width - teleporterSprite.width * teleporterConfig.hitboxScale) / 2,
-            (teleporterSprite.height - teleporterSprite.height * teleporterConfig.hitboxScale) / 2
-          );
+          const teleporterSprite = this.physics.add.staticImage(teleporter.x, teleporter.y, "teleporter").setScale(teleporterConfig.scale);
+          teleporterSprite.body.setSize(teleporterSprite.width * teleporterConfig.hitboxScale, teleporterSprite.height * teleporterConfig.hitboxScale);
+          teleporterSprite.body.setOffset((teleporterSprite.width - teleporterSprite.width * teleporterConfig.hitboxScale) / 2, (teleporterSprite.height - teleporterSprite.height * teleporterConfig.hitboxScale) / 2);
 
           // Player overlaps with teleporter, triggers scene change in React
           this.physics.add.overlap(player, teleporterSprite, () => {
@@ -78,22 +65,6 @@ const PhaserGame = () => {
         });
 
         cursors = this.input.keyboard.createCursorKeys();
-
-        const coordinatesText = this.add.text(10, 10, 'Mouse: (0, 0)', {
-          fontSize: '16px',
-          fill: '#fff',
-          backgroundColor: '#000',
-      });
-  
-      // Update the text with the mouse coordinates on pointer move
-      this.input.on('pointermove', (pointer) => {
-          coordinatesText.setText(`Mouse: (${pointer.x}, ${pointer.y})`);
-      });
-
-
-
-
-
       },
 
       update: function () {
@@ -131,7 +102,11 @@ const PhaserGame = () => {
           debug: true, // Enable debug mode to see hitboxes
         },
       },
-      scene: currentScene === "FirstScene" ? FirstScene : currentScene === "SecondScene" ? SecondScene : ThirdScene, // Handle multiple scenes
+      scene: currentScene === "FirstScene" 
+        ? FirstScene 
+        : currentScene === "SecondScene" 
+          ? SecondScene 
+          : ThirdScene(setCurrentScene), // Handle multiple scenes
     };
 
     const game = new Phaser.Game(config);
