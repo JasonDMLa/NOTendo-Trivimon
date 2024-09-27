@@ -1,24 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import SecondScreen from "./SecondScreen"; // Import your SecondScreen component
-import ThirdScreen from "./ThirdScreen"; // Import additional scenes as needed
-import StartScreen from "./StartScreen";
+import SecondScreen from "./SecondScreen";
+import ThirdScreen from "./ThirdScreen";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
+  const [house2Teleported, setHouse2Teleported] = useState(false); // New flag to disable house2 teleport
+
+  const disableHouse2 = () => {
+    setHouse2Teleported(true); // Disables house2 teleport when called
+  };
 
   useEffect(() => {
     let player;
     let cursors;
     let background;
     let obstacles;
-    // Mouse Decleartion
     let mouseText;
-    // Individual variables for teleporters
     let teleporter;
     let house1;
     let house2;
+    let staticHouse2;
 
     const FirstScene = {
       preload: function () {
@@ -41,19 +44,17 @@ const PhaserGame = () => {
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
-        // Static obstacles group
         obstacles = this.physics.add.staticGroup();
         obstacles.create(515, 293, "tree").setScale(0.5).refreshBody();
         obstacles.create(500, 450, "tree").setScale(0.5).refreshBody();
 
-        // Create teleporters using images
         teleporter = this.physics.add
           .staticImage(110, 485, "teleporter")
           .setScale(0.1);
         house1 = this.physics.add.staticImage(113, 351, "house1").setScale(0.1);
         house2 = this.physics.add.staticImage(120, 200, "house2").setScale(0.3);
 
-        // Set the hitbox size based on scaled dimensions
+        // Retain hitbox logic unchanged
         teleporter.body.setSize(
           teleporter.width * 0.1,
           teleporter.height * 0.1
@@ -75,30 +76,44 @@ const PhaserGame = () => {
           (house2.height - house2.height * 0.3) / 2
         );
 
-        // Set up teleporting functionality for each image
+        // Teleportation logic for teleporter and house1
         this.physics.add.overlap(player, teleporter, () => {
           console.log("Player hit the teleporter!");
-          setCurrentScene("SecondScreen"); // Teleport to SecondScreen
+          setCurrentScene("SecondScreen");
         });
 
         this.physics.add.overlap(player, house1, () => {
           console.log("Player hit house1!");
-          setCurrentScene("SecondScreen"); // Teleport to SecondScreen
+          setCurrentScene("SecondScreen");
         });
 
-        this.physics.add.overlap(player, house2, () => {
-          console.log("Player hit house2!");
-          setCurrentScene("ThirdScreen"); // Teleport to ThirdScreen
-        });
+        // Disable house2 teleportation after first use (based on flag)
+        if (!house2Teleported) {
+          this.physics.add.overlap(player, house2, () => {
+            console.log("Player hit house2! Teleporting to ThirdScreen...");
+            setCurrentScene("ThirdScreen"); // Go to ThirdScreen without disabling house2 yet
+          });
+        } else {
+          // Replace house2 with a static version (like the tree) once disabled
+          staticHouse2 = this.physics.add.staticImage(120, 200, "house2").setScale(0.3);
+          staticHouse2.body.setSize(staticHouse2.width * 0.3, staticHouse2.height * 0.3);
+          staticHouse2.body.setOffset(
+            (staticHouse2.width - staticHouse2.width * 0.3) / 2,
+            (staticHouse2.height - staticHouse2.height * 0.3) / 2
+          );
+          
+          // Add collision so the player can't pass through
+          this.physics.add.collider(player, staticHouse2, () => {
+            console.log("Player collided with the static house2");
+          });
+        }
 
-        // Player collides with obstacles
         this.physics.add.collider(player, obstacles, () => {
           console.log("Player hit an obstacle!");
         });
 
         cursors = this.input.keyboard.createCursorKeys();
 
-        // Mouse coordinates display text
         mouseText = this.add.text(10, 10, "", {
           font: "16px Courier",
           fill: "#ffffff",
@@ -126,7 +141,6 @@ const PhaserGame = () => {
           player.setTexture("playerDown");
         }
 
-        // Update mouse coordinates on the canvas
         const pointer = this.input.activePointer;
         mouseText.setText(
           `Mouse X: ${pointer.worldX.toFixed(
@@ -145,7 +159,7 @@ const PhaserGame = () => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true, // Enable debug mode to see hitboxes
+          debug: true,
         },
       },
       scene:
@@ -153,7 +167,7 @@ const PhaserGame = () => {
           ? FirstScene
           : currentScene === "SecondScreen"
           ? SecondScreen
-          : ThirdScreen(setCurrentScene), // Handle multiple scenes
+          : ThirdScreen(setCurrentScene, disableHouse2), // Pass disableHouse2 function to ThirdScreen
     };
 
     const game = new Phaser.Game(config);
@@ -161,7 +175,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); // Depend on the scene state
+  }, [currentScene, house2Teleported]); // Added house2Teleported to dependencies
 
   return <div ref={gameRef}></div>;
 };
