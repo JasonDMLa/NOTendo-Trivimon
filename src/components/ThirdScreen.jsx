@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 
 const ThirdScene = (setCurrentScene) => {
+  let hasBadge = false; // Flag to track badge acquisition
+
   return {
     player: null,
     cursors: null,
@@ -17,19 +19,28 @@ const ThirdScene = (setCurrentScene) => {
 
     create: function () {
       this.add.image(400, 300, "background").setScale(0.8).setOrigin(0.5, 0.5);
-      this.player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
+      this.player = this.physics.add
+        .sprite(400, 300, "playerDown")
+        .setScale(0.8);
       this.player.setCollideWorldBounds(true);
 
       // Create a button for teleportation
-      const teleportButton = this.add.text(400, 500, 'Teleport Back', {
-        fontSize: '32px',
-        fill: '#fff',
-        backgroundColor: '#000',
-      }).setOrigin(0.5).setInteractive();
+      const teleportButton = this.add
+        .text(400, 500, "Teleport Back", {
+          fontSize: "32px",
+          fill: "#fff",
+          backgroundColor: "#000",
+        })
+        .setOrigin(0.5)
+        .setInteractive();
 
-      teleportButton.on('pointerdown', () => {
-        console.log("Teleporting back to Phaser Game...");
-        setCurrentScene("FirstScene"); // Change scene back to FirstScene
+      teleportButton.on("pointerdown", () => {
+        if (hasBadge) {
+          console.log("Teleporting back to Phaser Game...");
+          setCurrentScene("FirstScene"); // Change scene back to FirstScene
+        } else {
+          console.log("You need a badge to teleport back!");
+        }
       });
 
       // Static obstacles group
@@ -61,6 +72,12 @@ const ThirdScene = (setCurrentScene) => {
         this.player.setVelocityY(250);
         this.player.setTexture("playerDown");
       }
+    },
+
+    // Function to award the badge (call this when appropriate)
+    awardBadge: function () {
+      hasBadge = true;
+      console.log("Congratulations! You earned the badge.");
     },
   };
 };

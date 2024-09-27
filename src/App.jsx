@@ -1,21 +1,19 @@
-import { useState } from 'react';
-import './App.css';
-import PhaserGame from './components/PhaserGame';
-import StartScreen from './components/StartScreen';
-import ThirdScreen from './components/ThirdScreen';
+import { useState } from "react";
+import "./App.css";
+import PhaserGame from "./components/PhaserGame";
+import StartScreen from "./components/StartScreen";
+import ThirdScene from "./components/ThirdScreen";
 
 function App() {
   const [isGameStarted, setIsGameStarted] = useState(false); // State to track if the game has started
 
   return (
     <div className="App">
-      {/* {!isGameStarted ? (
+      {!isGameStarted ? (
         <StartScreen onStart={() => setIsGameStarted(true)} />
       ) : (
         <PhaserGame />
-      )} */}
-      <PhaserGame/>
-      {/* <ThirdScreen/> */}
+      )}
     </div>
   );
 }

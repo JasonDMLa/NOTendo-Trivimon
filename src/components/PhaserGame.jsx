@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import SecondScene from "./SecondScreen"; // Import your SecondScene component
-import ThirdScene from "./ThirdScreen"; // Import additional scenes as needed
+import SecondScene from "./SecondScreen";
+import ThirdScene from "./ThirdScreen";
 import StartScreen from "./StartScreen";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
-  const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
+  const [currentScene, setCurrentScene] = useState("FirstScene");
+  const [hasBadge, setHasBadge] = useState(false);
 
   useEffect(() => {
     let player;
@@ -26,16 +27,17 @@ const PhaserGame = () => {
       },
 
       create: function () {
-        background = this.add.image(400, 300, "background").setScale(0.8).setOrigin(0.5, 0.5);
+        background = this.add
+          .image(400, 300, "background")
+          .setScale(0.8)
+          .setOrigin(0.5, 0.5);
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
-        // Static obstacles group
         obstacles = this.physics.add.staticGroup();
         obstacles.create(515, 293, "tree").setScale(0.5).refreshBody();
         obstacles.create(500, 450, "tree").setScale(0.5).refreshBody();
 
-        // Teleporter configuration with target scenes
         const teleporterConfig = {
           scale: 0.1,
           hitboxScale: 0.1,
@@ -46,20 +48,35 @@ const PhaserGame = () => {
           ],
         };
 
-        // Add teleporters
         teleporterConfig.teleporters.forEach((teleporter) => {
-          const teleporterSprite = this.physics.add.staticImage(teleporter.x, teleporter.y, "teleporter").setScale(teleporterConfig.scale);
-          teleporterSprite.body.setSize(teleporterSprite.width * teleporterConfig.hitboxScale, teleporterSprite.height * teleporterConfig.hitboxScale);
-          teleporterSprite.body.setOffset((teleporterSprite.width - teleporterSprite.width * teleporterConfig.hitboxScale) / 2, (teleporterSprite.height - teleporterSprite.height * teleporterConfig.hitboxScale) / 2);
+          const teleporterSprite = this.physics.add
+            .staticImage(teleporter.x, teleporter.y, "teleporter")
+            .setScale(teleporterConfig.scale);
+          teleporterSprite.body.setSize(
+            teleporterSprite.width * teleporterConfig.hitboxScale,
+            teleporterSprite.height * teleporterConfig.hitboxScale
+          );
+          teleporterSprite.body.setOffset(
+            (teleporterSprite.width -
+              teleporterSprite.width * teleporterConfig.hitboxScale) /
+              2,
+            (teleporterSprite.height -
+              teleporterSprite.height * teleporterConfig.hitboxScale) /
+              2
+          );
 
-          // Player overlaps with teleporter, triggers scene change in React
           this.physics.add.overlap(player, teleporterSprite, () => {
-            console.log(`Player hit teleporter leading to ${teleporter.scene}!`);
-            setCurrentScene(teleporter.scene); // Trigger scene change
+            if (hasBadge || teleporter.scene !== "ThirdScene") {
+              console.log(
+                `Player hit teleporter leading to ${teleporter.scene}!`
+              );
+              setCurrentScene(teleporter.scene);
+            } else {
+              console.log("You need a badge to enter this area!");
+            }
           });
         });
 
-        // Player collides with obstacles
         this.physics.add.collider(player, obstacles, () => {
           console.log("Player hit an obstacle!");
         });
@@ -99,14 +116,15 @@ const PhaserGame = () => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true, // Enable debug mode to see hitboxes
+          debug: true,
         },
       },
-      scene: currentScene === "FirstScene" 
-        ? FirstScene 
-        : currentScene === "SecondScene" 
-          ? SecondScene 
-          : ThirdScene(setCurrentScene), // Handle multiple scenes
+      scene:
+        currentScene === "FirstScene"
+          ? FirstScene
+          : currentScene === "SecondScene"
+          ? new SecondScene(setCurrentScene, setHasBadge)
+          : new ThirdScene(setCurrentScene, setHasBadge),
     };
 
     const game = new Phaser.Game(config);
@@ -114,9 +132,9 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); // Depend on the scene state
+  }, [currentScene, hasBadge]);
 
-  return <div ref={gameRef}></div>;
+  return <div ref={gameRef} />;
 };
 
 export default PhaserGame;
