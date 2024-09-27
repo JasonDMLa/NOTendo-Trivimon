@@ -37,65 +37,29 @@ const PhaserGame = () => {
         obstacles.create(200, 200, "tree").setScale(0.5).refreshBody();
         obstacles.create(600, 400, "tree").setScale(0.5).refreshBody();
 
-        // Teleporter object
-        this.teleporter = this.physics.add.staticGroup();
 
-        // Check overlap between player and all teleporters in the group
-        this.physics.add.overlap(
-          player,
-          this.teleporters,
-          this.handleTeleporterOverlap,
-          null,
-          this
+
+
+        this.teleporter = this.physics.add
+        .staticImage(500, 100, "teleporter")
+        .setScale(0.1);
+
+    
+        this.teleporter.body.setSize(
+          this.teleporter.width * 0.1,
+          this.teleporter.height * 0.1
         );
+        // Set the multiplier to the set scale (0.1)
 
-        cursors = this.input.keyboard.createCursorKeys();
-      },
-
-      // Function to add a teleporter to the group
-      addTeleporter: function (x, y, name) {
-        const teleporter = this.teleporters
-          .create(x, y, "teleporter")
-          .setScale(0.5);
-        teleporter.name = name; // Assign a unique name
-      },
-
-      // Function to handle player overlapping with a teleporter
-      handleTeleporterOverlap: function (player, teleporter) {
-        console.log(`Player hit ${teleporter.name}!`);
-
-        this.addTeleporter(500, 100, "teleporter");
-        this.addTeleporter(300, 400, "teleporter2");
-        this.addTeleporter(700, 150, "teleporter3");
-
-        // if (teleporter.name === "teleporter1") {
-        //   console.log("Teleporting to scene 1");
-        //   setCurrentScene("SecondScene"); // Example of changing scene on overlap
-        // }
-
-        // .staticImage(500, 100, "teleporter")
-        // .setScale(0.1);
-
-        // this.teleporter = this.physics.add
-        // .staticImage(200, 100, "teleporter")
-        // .setScale(0.1);
-
-        // Adjust the teleporter's hitbox to match the scaled size
-        // this.teleporter.body.setSize(
-        //   this.teleporter.width * 0.1,
-        //   this.teleporter.height * 0.1
-        // );
-        // // Set the multiplier to the set scale (0.1)
-
-        // this.teleporter.body.setOffset(
-        //   (this.teleporter.width - this.teleporter.width * 0.1) / 2,
-        //   (this.teleporter.height - this.teleporter.height * 0.1) / 2
-        //         // );
-        //  // Player overlaps with teleporter, triggers scene change in React
-        //         this.physics.add.overlap(player, this.teleporter, () => {
-        //           console.log("Player hit the teleporter!");
-        //           setCurrentScene("SecondScene"); // Trigger scene change
-        //         });
+        this.teleporter.body.setOffset(
+          (this.teleporter.width - this.teleporter.width * 0.1) / 2,
+          (this.teleporter.height - this.teleporter.height * 0.1) / 2
+                );
+         // Player overlaps with teleporter, triggers scene change in React
+                this.physics.add.overlap(player, this.teleporter, () => {
+                  console.log("Player hit the teleporter!");
+                  setCurrentScene("SecondScene"); // Trigger scene change
+                });
 
         // Player collides with obstacles
         this.physics.add.collider(player, obstacles, () => {
