@@ -8,11 +8,12 @@ function App() {
 
   return (
     <div className="App">
-      {!isGameStarted ? (
+      {/* {!isGameStarted ? (
         <StartScreen onStart={() => setIsGameStarted(true)} />
       ) : (
         <PhaserGame />
-      )}
+      )} */}
+      <PhaserGame/>
     </div>
   );
 }

@@ -16,7 +16,7 @@ const PhaserGame = () => {
 
     const FirstScene = {
       preload: function () {
-        this.load.image("background", "../../public/mock.png");
+        this.load.image("background", "../../public/pokeman.png");
         this.load.image("playerUp", "../../public/playerUp.png");
         this.load.image("playerDown", "../../public/playerDown.png");
         this.load.image("playerLeft", "../../public/playerLeft.png");
