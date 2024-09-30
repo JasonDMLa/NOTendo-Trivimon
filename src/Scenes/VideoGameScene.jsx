@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import { allVideoGameQuestions } from "../data/videoGamesQuestions"; // Import your questions
-import StartScene from "./StartScreen";
-import WinningScene from "./WinningScene";
+
 
 const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
   let currentQuestionIndex = 0;

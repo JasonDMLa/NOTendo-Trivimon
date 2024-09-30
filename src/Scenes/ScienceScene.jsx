@@ -1,7 +1,5 @@
 import Phaser from "phaser";
-import { allScienceQuestions } from "../data/scienceQuestions"; // Import your questions
-import StartScene from "./StartScreen";
-import WinningScene from "./WinningScene";
+// import { allScienceQuestions } from "../data/scienceQuestions"; // Import your questions
 
 const ScienceScene = (setCurrentScene, setScienceCompleted) => {
   let currentQuestionIndex = 0;

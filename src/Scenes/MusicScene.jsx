@@ -1,9 +1,8 @@
 import Phaser from "phaser";
-import { allMusicQuestions } from "../data/musicQuestions"; // Import your questions
-import StartScene from "./StartScreen";
-import WinningScene from "./WinningScene";
+//import { allMusicQuestions } from "../data/musicQuestions"; // Import your questions
 
-const MusicScene = (setCurrentScene, disableMusic, setMusicCompleted) => {
+
+const MusicScene = (setCurrentScene, setMusicCompleted) => {
   let currentQuestionIndex = 0;
   let score = 0;
   let correctAnswer = "";

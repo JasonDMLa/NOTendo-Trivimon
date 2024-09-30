@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
 import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
 import MusicScene from "../Scenes/MusicScene"
+import SportScene from "../Scenes/SportScene";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
@@ -10,7 +11,7 @@ const PhaserGame = () => {
   const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
   const [scienceCompleted, setScienceCompleted] = useState(false);
   const [musicCompleted,setMusicCompleted] = useState(false)
-  
+  const [sportCompleted,setSportCompleted] = useState(false)
 
 
   // State to track if the right button was clicked in the ScienceScene
@@ -24,6 +25,7 @@ const PhaserGame = () => {
     let music;
     let videoGame;
     let science;
+    let sport;
 
     const FirstScene = {
       preload: function () {
@@ -36,6 +38,7 @@ const PhaserGame = () => {
         this.load.image("music", "../../public/houses/music.png");
         this.load.image("science", "../../public/houses/science.png");
         this.load.image("videoGame", "../../public/houses/vgs.png");
+        this.load.image("sport", "../../public/houses/sport.png");
       },
 
       create: function () {
@@ -56,6 +59,11 @@ const PhaserGame = () => {
         videoGame = this.physics.add
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
+          sport = this.physics.add
+          .staticImage(717, 219, "sport")
+          .setScale(0.1);
+
+        
         // Keep hitbox logic unchanged
 
         music.body.setSize(
@@ -77,6 +85,12 @@ const PhaserGame = () => {
         videoGame.body.setOffset(
           (videoGame.width - videoGame.width * 0.3) / 2,
           (videoGame.height - videoGame.height * 0.3) / 2
+        );
+
+        sport.body.setSize(sport.width * 0.1, sport.height * 0.1);
+        sport.body.setOffset(
+          (sport.width - sport.width * 0.1) / 2,
+          (sport.height - sport.height * 0.1) / 2
         );
 
         if (!videoGameCompleted) {
@@ -154,10 +168,36 @@ const PhaserGame = () => {
           });
         }
         //////////////////////////////////////////////////
+        if (!sportCompleted) {
+          this.physics.add.overlap(player, sport, () => {
+            console.log(
+              "Player hit sport! Teleporting to sportScene..."
+            );
+            setCurrentScene("SportScene");
+          });
+        } else {
+          // Keep the logic to handle static videoGame if disabled
+          const staticSport = this.physics.add
+            .staticImage(717, 219, "sport")
+            .setScale(0.1);
+            staticSport.body.setSize(
+              staticSport.width * 0.1,
+              staticSport.height * 0.1
+          );
+          staticSport.body.setOffset(
+            (staticSport.width - staticSport.width * 0.1) / 2,
+            (staticSport.height - staticSport.height * 0.1) / 2
+          );
+          this.physics.add.collider(player, staticSport, () => {
+            console.log("Player collided with the static sport");
+          });
+        }
+
+        ///////////////////////
 
         obstacles = this.physics.add.staticGroup();
-        obstacles.create(515, 293, "tree").setScale(0.5).refreshBody();
-        obstacles.create(500, 450, "tree").setScale(0.5).refreshBody();
+        obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
+        obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
         this.physics.add.collider(player, obstacles, () => {
           console.log("Player hit an obstacle!");
@@ -221,6 +261,8 @@ const PhaserGame = () => {
           ? VideoGameScene(setCurrentScene, setVideoGameCompleted)
           : currentScene === "MusicScene"
           ? MusicScene(setCurrentScene, setMusicCompleted)// Call VideoGameScene here
+          : currentScene === "SportScene"
+          ? SportScene(setCurrentScene, setSportCompleted)// Call VideoGameScene here
           : <h1>nope</h1>
     };
 
@@ -229,7 +271,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); // Added videoGameCompleted to dependencies
+  }, [currentScene]); // Added sportCompleted to dependencies
 
   return <div ref={gameRef}></div>;
 };
