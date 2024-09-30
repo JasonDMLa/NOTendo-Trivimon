@@ -1,16 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import SecondScreen from "./SecondScreen";
-import ThirdScreen from "./ThirdScreen";
+import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
+import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
-  const [house2Teleported, setHouse2Teleported] = useState(false); // New flag to disable house2 teleport
-
-  const disableHouse2 = () => {
-    setHouse2Teleported(true); // Disables house2 teleport when called
+  const [videoGameTeleported, setVideoGameTeleported] = useState(false); // Flag for videoGame teleport
+  const [scienceTeleported, setScienceTeleported] = useState(false);
+  const disableVideoGame = () => {
+    setVideoGameTeleported(true); // Disables videoGame teleport when called
   };
+  const disableScience = () => {
+    setScienceTeleported(true); // Disables videoGame teleport when called
+  };
+
+  // State to track if the right button was clicked in the ScienceScene
 
   useEffect(() => {
     let player;
@@ -19,24 +24,24 @@ const PhaserGame = () => {
     let obstacles;
     let mouseText;
     let teleporter;
-    let house1;
-    let house2;
-    let staticHouse2;
+    let videoGame;
+    let science;
 
     const FirstScene = {
       preload: function () {
-        this.load.image("background", "../../public/mock.png");
-        this.load.image("playerUp", "../../public/playerUp.png");
-        this.load.image("playerDown", "../../public/playerDown.png");
-        this.load.image("playerLeft", "../../public/playerLeft.png");
-        this.load.image("playerRight", "../../public/playerRight.png");
+        this.load.image("background", "../../public/backgrounds/mock.png");
+        this.load.image("playerUp", "../../public/player/playerUp.png");
+        this.load.image("playerDown", "../../public/player/playerDown.png");
+        this.load.image("playerLeft", "../../public/player/playerLeft.png");
+        this.load.image("playerRight", "../../public/player/playerRight.png");
         this.load.image("tree", "../../public/tree.png");
-        this.load.image("teleporter", "../../public/teleporter.png");
-        this.load.image("house1", "../../public/house.png");
-        this.load.image("house2", "../../public/house2.png");
+        this.load.image("teleporter", "../../public/houses/teleporter.png");
+        this.load.image("science", "../../public/houses/science.png");
+        this.load.image("videoGame", "../../public/houses/vgs.png");
       },
 
       create: function () {
+        // Your existing create logic for FirstScene
         background = this.add
           .image(400, 300, "background")
           .setScale(0.8)
@@ -51,10 +56,14 @@ const PhaserGame = () => {
         teleporter = this.physics.add
           .staticImage(110, 485, "teleporter")
           .setScale(0.1);
-        house1 = this.physics.add.staticImage(113, 351, "house1").setScale(0.1);
-        house2 = this.physics.add.staticImage(120, 200, "house2").setScale(0.3);
+        science = this.physics.add
+          .staticImage(113, 351, "science")
+          .setScale(0.1);
+        videoGame = this.physics.add
+          .staticImage(120, 200, "videoGame")
+          .setScale(0.3);
 
-        // Retain hitbox logic unchanged
+        // Keep hitbox logic unchanged
         teleporter.body.setSize(
           teleporter.width * 0.1,
           teleporter.height * 0.1
@@ -64,56 +73,79 @@ const PhaserGame = () => {
           (teleporter.height - teleporter.height * 0.1) / 2
         );
 
-        house1.body.setSize(house1.width * 0.1, house1.height * 0.1);
-        house1.body.setOffset(
-          (house1.width - house1.width * 0.1) / 2,
-          (house1.height - house1.height * 0.1) / 2
+        science.body.setSize(science.width * 0.1, science.height * 0.1);
+        science.body.setOffset(
+          (science.width - science.width * 0.1) / 2,
+          (science.height - science.height * 0.1) / 2
         );
 
-        house2.body.setSize(house2.width * 0.3, house2.height * 0.3);
-        house2.body.setOffset(
-          (house2.width - house2.width * 0.3) / 2,
-          (house2.height - house2.height * 0.3) / 2
+        videoGame.body.setSize(videoGame.width * 0.3, videoGame.height * 0.3);
+        videoGame.body.setOffset(
+          (videoGame.width - videoGame.width * 0.3) / 2,
+          (videoGame.height - videoGame.height * 0.3) / 2
         );
 
-        // Teleportation logic for teleporter and house1
+        // Teleportation logic
         this.physics.add.overlap(player, teleporter, () => {
           console.log("Player hit the teleporter!");
-          setCurrentScene("SecondScreen");
+          setCurrentScene("ScienceScene");
         });
 
-        this.physics.add.overlap(player, house1, () => {
-          console.log("Player hit house1!");
-          setCurrentScene("SecondScreen");
-        });
-
-        // Disable house2 teleportation after first use (based on flag)
-        if (!house2Teleported) {
-          this.physics.add.overlap(player, house2, () => {
-            console.log("Player hit house2! Teleporting to ThirdScreen...");
-            setCurrentScene("ThirdScreen"); // Go to ThirdScreen without disabling house2 yet
+        if (!videoGameTeleported) {
+          this.physics.add.overlap(player, videoGame, () => {
+            console.log(
+              "Player hit videoGame! Teleporting to videoGameScene..."
+            );
+            setCurrentScene("videoGameScene");
           });
         } else {
-          // Replace house2 with a static version (like the tree) once disabled
-          staticHouse2 = this.physics.add.staticImage(120, 200, "house2").setScale(0.3);
-          staticHouse2.body.setSize(staticHouse2.width * 0.3, staticHouse2.height * 0.3);
-          staticHouse2.body.setOffset(
-            (staticHouse2.width - staticHouse2.width * 0.3) / 2,
-            (staticHouse2.height - staticHouse2.height * 0.3) / 2
+          // Keep the logic to handle static videoGame if disabled
+          const staticVideoGame = this.physics.add
+            .staticImage(120, 200, "videoGame")
+            .setScale(0.3);
+          staticVideoGame.body.setSize(
+            staticVideoGame.width * 0.3,
+            staticVideoGame.height * 0.3
           );
-          
-          // Add collision so the player can't pass through
-          this.physics.add.collider(player, staticHouse2, () => {
-            console.log("Player collided with the static house2");
+          staticVideoGame.body.setOffset(
+            (staticVideoGame.width - staticVideoGame.width * 0.3) / 2,
+            (staticVideoGame.height - staticVideoGame.height * 0.3) / 2
+          );
+          this.physics.add.collider(player, staticVideoGame, () => {
+            console.log("Player collided with the static videoGame");
           });
         }
+        //////////////////////////////////////////////////
+
+        if (!scienceTeleported) {
+          this.physics.add.overlap(player, science, () => {
+            console.log("Player hit science! Teleporting to scienceScene...");
+            setCurrentScene("ScienceScene");
+          });
+        } else {
+          // Keep the logic to handle static videoGame if disabled
+          const staticScience = this.physics.add
+            .staticImage(113, 351, "science")
+            .setScale(0.1);
+          staticScience.body.setSize(
+            staticScience.width * 0.1,
+            staticScience.height * 0.1
+          );
+          staticScience.body.setOffset(
+            (staticScience.width - staticScience.width * 0.1) / 2,
+            (staticScience.height - staticScience.height * 0.1) / 2
+          );
+          this.physics.add.collider(player, staticScience, () => {
+            console.log("Player collided with the static Science");
+          });
+        }
+        //////////////////////////
 
         this.physics.add.collider(player, obstacles, () => {
           console.log("Player hit an obstacle!");
         });
 
         cursors = this.input.keyboard.createCursorKeys();
-
         mouseText = this.add.text(10, 10, "", {
           font: "16px Courier",
           fill: "#ffffff",
@@ -165,9 +197,11 @@ const PhaserGame = () => {
       scene:
         currentScene === "FirstScene"
           ? FirstScene
-          : currentScene === "SecondScreen"
-          ? SecondScreen
-          : ThirdScreen(setCurrentScene, disableHouse2), // Pass disableHouse2 function to ThirdScreen
+          : currentScene === "ScienceScene"
+          ? ScienceScene(setCurrentScene, disableScience) // Call your ScienceScene here
+          :currentScene === "VideoGameScene"
+          ? VideoGameScene(setCurrentScene, disableVideoGame) // Call VideoGameScene here
+          : VideoGameScene(setCurrentScene, disableVideoGame), // Call VideoGameScene here
     };
 
     const game = new Phaser.Game(config);
@@ -175,7 +209,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene, house2Teleported]); // Added house2Teleported to dependencies
+  }, [currentScene, videoGameTeleported, scienceTeleported]); // Added videoGameTeleported to dependencies
 
   return <div ref={gameRef}></div>;
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StartScreen = ({ onStart }) => {
+const StartScene = ({ onStart }) => {
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
       <h1>Welcome to the Game!</h1>
@@ -11,4 +11,4 @@ const StartScreen = ({ onStart }) => {
   );
 };
 
-export default StartScreen;
+export default StartScene;

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import './App.css';
-import PhaserGame from './components/PhaserGame';
-import StartScreen from './components/StartScreen';
-import ThirdScreen from './components/ThirdScreen';
+import { useState } from "react";
+import "./App.css";
+import PhaserGame from "./components/PhaserGame";
+import StartScreen from "./Scenes/StartScreen";
+import ThirdScreen from "./Scenes/VideoGameScene";
 
 function App() {
   const [isGameStarted, setIsGameStarted] = useState(false); // State to track if the game has started
@@ -14,7 +14,7 @@ function App() {
       ) : (
         <PhaserGame />
       )} */}
-      <PhaserGame/>
+      <PhaserGame />
       {/* <ThirdScreen/> */}
     </div>
   );
