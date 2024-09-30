@@ -10,16 +10,8 @@ const PhaserGame = () => {
   const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
   const [scienceCompleted, setScienceCompleted] = useState(false);
   const [musicCompleted,setMusicCompleted] = useState(false)
-  const disableVideoGame = () => {
-    setVideoGameCompleted(true); // Disables videoGame teleport when called
-  };
-  const disableScience = () => {
-    setScienceCompleted(true); // Disables videoGame teleport when called
-  };
+  
 
-  const disableMusic = () => {
-    setMusicCompleted(true); // Disables videoGame teleport when called
-  };
 
   // State to track if the right button was clicked in the ScienceScene
 
@@ -224,11 +216,11 @@ const PhaserGame = () => {
         currentScene === "FirstScene"
           ? FirstScene
           : currentScene === "ScienceScene"
-          ? ScienceScene(setCurrentScene, disableScience) // Call your ScienceScene here
+          ? ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
           : currentScene === "VideoGameScene"
-          ? VideoGameScene(setCurrentScene, disableVideoGame)
+          ? VideoGameScene(setCurrentScene, setVideoGameCompleted)
           : currentScene === "MusicScene"
-          ? MusicScene(setCurrentScene, disableMusic,setMusicCompleted)// Call VideoGameScene here
+          ? MusicScene(setCurrentScene, setMusicCompleted)// Call VideoGameScene here
           : <h1>nope</h1>
     };
 
@@ -237,7 +229,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene, videoGameCompleted, scienceCompleted, musicCompleted]); // Added videoGameCompleted to dependencies
+  }, [currentScene]); // Added videoGameCompleted to dependencies
 
   return <div ref={gameRef}></div>;
 };
