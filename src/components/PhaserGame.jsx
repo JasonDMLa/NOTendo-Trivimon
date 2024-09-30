@@ -2,17 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
 import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
+import MusicScene from "../Scenes/MusicScene"
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
-  const [videoGameTeleported, setVideoGameTeleported] = useState(false); // Flag for videoGame teleport
-  const [scienceTeleported, setScienceTeleported] = useState(false);
+  const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
+  const [scienceCompleted, setScienceCompleted] = useState(false);
+  const [musicCompleted,setMusicCompleted] = useState(false)
   const disableVideoGame = () => {
-    setVideoGameTeleported(true); // Disables videoGame teleport when called
+    setVideoGameCompleted(true); // Disables videoGame teleport when called
   };
   const disableScience = () => {
-    setScienceTeleported(true); // Disables videoGame teleport when called
+    setScienceCompleted(true); // Disables videoGame teleport when called
+  };
+
+  const disableMusic = () => {
+    setMusicCompleted(true); // Disables videoGame teleport when called
   };
 
   // State to track if the right button was clicked in the ScienceScene
@@ -23,7 +29,7 @@ const PhaserGame = () => {
     let background;
     let obstacles;
     let mouseText;
-    let teleporter;
+    let music;
     let videoGame;
     let science;
 
@@ -35,7 +41,7 @@ const PhaserGame = () => {
         this.load.image("playerLeft", "../../public/player/playerLeft.png");
         this.load.image("playerRight", "../../public/player/playerRight.png");
         this.load.image("tree", "../../public/tree.png");
-        this.load.image("teleporter", "../../public/houses/teleporter.png");
+        this.load.image("music", "../../public/houses/music.png");
         this.load.image("science", "../../public/houses/science.png");
         this.load.image("videoGame", "../../public/houses/vgs.png");
       },
@@ -49,12 +55,8 @@ const PhaserGame = () => {
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
-        obstacles = this.physics.add.staticGroup();
-        obstacles.create(515, 293, "tree").setScale(0.5).refreshBody();
-        obstacles.create(500, 450, "tree").setScale(0.5).refreshBody();
-
-        teleporter = this.physics.add
-          .staticImage(110, 485, "teleporter")
+        music = this.physics.add
+          .staticImage(110, 485, "music")
           .setScale(0.1);
         science = this.physics.add
           .staticImage(113, 351, "science")
@@ -62,15 +64,15 @@ const PhaserGame = () => {
         videoGame = this.physics.add
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
-
         // Keep hitbox logic unchanged
-        teleporter.body.setSize(
-          teleporter.width * 0.1,
-          teleporter.height * 0.1
+
+        music.body.setSize(
+          music.width * 0.1,
+          music.height * 0.1
         );
-        teleporter.body.setOffset(
-          (teleporter.width - teleporter.width * 0.1) / 2,
-          (teleporter.height - teleporter.height * 0.1) / 2
+        music.body.setOffset(
+          (music.width - music.width * 0.1) / 2,
+          (music.height - music.height * 0.1) / 2
         );
 
         science.body.setSize(science.width * 0.1, science.height * 0.1);
@@ -85,18 +87,12 @@ const PhaserGame = () => {
           (videoGame.height - videoGame.height * 0.3) / 2
         );
 
-        // Teleportation logic
-        this.physics.add.overlap(player, teleporter, () => {
-          console.log("Player hit the teleporter!");
-          setCurrentScene("ScienceScene");
-        });
-
-        if (!videoGameTeleported) {
+        if (!videoGameCompleted) {
           this.physics.add.overlap(player, videoGame, () => {
             console.log(
               "Player hit videoGame! Teleporting to videoGameScene..."
             );
-            setCurrentScene("videoGameScene");
+            setCurrentScene("VideoGameScene");
           });
         } else {
           // Keep the logic to handle static videoGame if disabled
@@ -117,7 +113,7 @@ const PhaserGame = () => {
         }
         //////////////////////////////////////////////////
 
-        if (!scienceTeleported) {
+        if (!scienceCompleted) {
           this.physics.add.overlap(player, science, () => {
             console.log("Player hit science! Teleporting to scienceScene...");
             setCurrentScene("ScienceScene");
@@ -140,6 +136,36 @@ const PhaserGame = () => {
           });
         }
         //////////////////////////
+
+        if (!musicCompleted) {
+          this.physics.add.overlap(player, music, () => {
+            console.log(
+              "Player hit music! Teleporting to musicScene..."
+            );
+            setCurrentScene("MusicScene");
+          });
+        } else {
+          // Keep the logic to handle static videoGame if disabled
+          const staticMusic = this.physics.add
+            .staticImage(110, 485, "music")
+            .setScale(0.1);
+            staticMusic.body.setSize(
+              staticMusic.width * 0.1,
+              staticMusic.height * 0.1
+          );
+          staticMusic.body.setOffset(
+            (staticMusic.width - staticMusic.width * 0.1) / 2,
+            (staticMusic.height - staticMusic.height * 0.1) / 2
+          );
+          this.physics.add.collider(player, staticMusic, () => {
+            console.log("Player collided with the static music");
+          });
+        }
+        //////////////////////////////////////////////////
+
+        obstacles = this.physics.add.staticGroup();
+        obstacles.create(515, 293, "tree").setScale(0.5).refreshBody();
+        obstacles.create(500, 450, "tree").setScale(0.5).refreshBody();
 
         this.physics.add.collider(player, obstacles, () => {
           console.log("Player hit an obstacle!");
@@ -199,9 +225,11 @@ const PhaserGame = () => {
           ? FirstScene
           : currentScene === "ScienceScene"
           ? ScienceScene(setCurrentScene, disableScience) // Call your ScienceScene here
-          :currentScene === "VideoGameScene"
-          ? VideoGameScene(setCurrentScene, disableVideoGame) // Call VideoGameScene here
-          : VideoGameScene(setCurrentScene, disableVideoGame), // Call VideoGameScene here
+          : currentScene === "VideoGameScene"
+          ? VideoGameScene(setCurrentScene, disableVideoGame)
+          : currentScene === "MusicScene"
+          ? MusicScene(setCurrentScene, disableMusic)// Call VideoGameScene here
+          : <h1>nope</h1>
     };
 
     const game = new Phaser.Game(config);
@@ -209,7 +237,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene, videoGameTeleported, scienceTeleported]); // Added videoGameTeleported to dependencies
+  }, [currentScene, videoGameCompleted, scienceCompleted, musicCompleted]); // Added videoGameCompleted to dependencies
 
   return <div ref={gameRef}></div>;
 };
