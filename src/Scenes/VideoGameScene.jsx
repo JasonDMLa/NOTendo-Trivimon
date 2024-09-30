@@ -1,12 +1,12 @@
 import Phaser from "phaser";
-import { allVideoGameQuestions } from "../data/videoGamesQuestions"; // Import your questions
-
+import { getAllVideoGameQuestions } from "../data/videoGamesQuestions"; // Import your questions
 
 const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
   let currentQuestionIndex = 0;
   let score = 0;
   let correctAnswer = "";
   let wrongAnswer = 0;
+  const allVideoGameQuestions = []; // Keep this as an array to store questions
 
   return {
     preload: function () {
@@ -16,6 +16,7 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
     create: function () {
       // Add background image
+      this.add.image(0, 0, "background").setOrigin(0); // Set background position
 
       // Display the score and wrong answer counters
       const scoreText = this.add.text(16, 16, `Score: ${score}`, {
@@ -50,6 +51,12 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
         answerButtons.push(button);
       }
+
+      // Load the questions and start the game
+      getAllVideoGameQuestions().then((questions) => {
+        allVideoGameQuestions.push(...questions); // Populate local questions array
+        displayQuestion(); // Display the first question
+      });
 
       // Function to shuffle answers and display the current question
       const displayQuestion = () => {
@@ -93,31 +100,27 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
           wrongText.setText(`Wrong: ${wrongAnswer}`);
         }
 
+        // Check for completion conditions
         if (score === 2) {
-          answerButtons.forEach((button) => {
-            button.disableInteractive();
-          });
-          setTimeout(() => {
-            setCurrentScene("FirstScene");
-          }, 2000); // 2000 ms = 2 seconds
-          setVideoGameCompleted(true)
-          answerButtons.forEach((button) => {
-            button.disableInteractive();
-          });
-        }
-
-        if (wrongAnswer === 14) {
-          answerButtons.forEach((button) => button.disableInteractive());
-          setTimeout(() => setCurrentScene("FirstScene"), 1000); // 5 seconds delay
-        }
-
-        // Move to the next question or end the game if no more questions
-        if (currentQuestionIndex < allVideoGameQuestions.length - 1) {
-          currentQuestionIndex++;
-          displayQuestion();
-        } else {
+          setCompletion(true);
+        } else if (wrongAnswer === 14) {
           endGame();
+        } else {
+          // Move to the next question
+          if (currentQuestionIndex < allVideoGameQuestions.length - 1) {
+            currentQuestionIndex++;
+            displayQuestion();
+          } else {
+            endGame();
+          }
         }
+      };
+
+      // Function to handle game completion
+      const setCompletion = (completed) => {
+        answerButtons.forEach((button) => button.disableInteractive());
+        setVideoGameCompleted(completed);
+        setTimeout(() => setCurrentScene("FirstScene"), 2000); // 2 seconds delay
       };
 
       // Function to end the game
@@ -129,9 +132,6 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
         answerButtons.forEach((button) => button.disableInteractive());
       };
-
-      // Display the first question when the scene is created
-      displayQuestion();
 
       // Optionally, add a back button to return to another scene
       const backButton = this.add

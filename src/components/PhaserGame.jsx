@@ -2,18 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
 import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
-import MusicScene from "../Scenes/MusicScene"
+import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
+
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
   const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
   const [scienceCompleted, setScienceCompleted] = useState(false);
-  const [musicCompleted,setMusicCompleted] = useState(false)
-  const [sportCompleted,setSportCompleted] = useState(false)
-
-
+  const [musicCompleted, setMusicCompleted] = useState(false);
+  const [sportCompleted, setSportCompleted] = useState(false);
+  const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
+  const [videoGameQuestionsLoaded,setVideoGameQuestionsLoaded] = useState(false)
+  const [sportQuestionsLoaded,setSportQuestionsLoaded] = useState(false)
   // State to track if the right button was clicked in the ScienceScene
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const PhaserGame = () => {
 
     const FirstScene = {
       preload: function () {
-        this.load.image("background", "../../public/backgrounds/mock.png");
+        this.load.image("background", "../../public/backgrounds/map.png");
         this.load.image("playerUp", "../../public/player/playerUp.png");
         this.load.image("playerDown", "../../public/player/playerDown.png");
         this.load.image("playerLeft", "../../public/player/playerLeft.png");
@@ -42,34 +44,29 @@ const PhaserGame = () => {
       },
 
       create: function () {
+        //// cursor
+        cursors = this.input.keyboard.createCursorKeys();
+
         // Your existing create logic for FirstScene
         background = this.add
           .image(400, 300, "background")
-          .setScale(0.8)
+          .setScale(2.7)
           .setOrigin(0.5, 0.5);
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
-        music = this.physics.add
-          .staticImage(110, 485, "music")
-          .setScale(0.1);
+        music = this.physics.add.staticImage(110, 485, "music").setScale(0.1);
         science = this.physics.add
           .staticImage(113, 351, "science")
           .setScale(0.1);
         videoGame = this.physics.add
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
-          sport = this.physics.add
-          .staticImage(717, 219, "sport")
-          .setScale(0.1);
+        sport = this.physics.add.staticImage(717, 219, "sport").setScale(0.1);
 
-        
         // Keep hitbox logic unchanged
 
-        music.body.setSize(
-          music.width * 0.1,
-          music.height * 0.1
-        );
+        music.body.setSize(music.width * 0.1, music.height * 0.1);
         music.body.setOffset(
           (music.width - music.width * 0.1) / 2,
           (music.height - music.height * 0.1) / 2
@@ -97,8 +94,19 @@ const PhaserGame = () => {
           this.physics.add.overlap(player, videoGame, () => {
             console.log(
               "Player hit videoGame! Teleporting to videoGameScene..."
-            );
-            setCurrentScene("VideoGameScene");
+            )
+            if (!videoGameQuestionsLoaded) {
+              console.log("Loading music questions...");
+                setVideoGameQuestionsLoaded(true); // Set flag to true
+                setCurrentScene("VideoGameScene"); // Change to MusicScene
+              //});
+
+            } else {
+              console.log(
+                "VideoGame questions already loaded, changing to MusicScene..."
+              );
+              setCurrentScene("VideoGameScene"); // Change to MusicScene if already loaded
+            }
           });
         } else {
           // Keep the logic to handle static videoGame if disabled
@@ -145,19 +153,28 @@ const PhaserGame = () => {
 
         if (!musicCompleted) {
           this.physics.add.overlap(player, music, () => {
-            console.log(
-              "Player hit music! Teleporting to musicScene..."
-            );
-            setCurrentScene("MusicScene");
+            console.log("Player hit music! Teleporting to musicScene...");
+            if (!musicQuestionsLoaded) {
+              console.log("Loading music questions...");
+                setMusicQuestionsLoaded(true); // Set flag to true
+                setCurrentScene("MusicScene"); // Change to MusicScene
+              //});
+
+            } else {
+              console.log(
+                "Music questions already loaded, changing to MusicScene..."
+              );
+              setCurrentScene("MusicScene"); // Change to MusicScene if already loaded
+            }
           });
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticMusic = this.physics.add
             .staticImage(110, 485, "music")
             .setScale(0.1);
-            staticMusic.body.setSize(
-              staticMusic.width * 0.1,
-              staticMusic.height * 0.1
+          staticMusic.body.setSize(
+            staticMusic.width * 0.1,
+            staticMusic.height * 0.1
           );
           staticMusic.body.setOffset(
             (staticMusic.width - staticMusic.width * 0.1) / 2,
@@ -170,19 +187,28 @@ const PhaserGame = () => {
         //////////////////////////////////////////////////
         if (!sportCompleted) {
           this.physics.add.overlap(player, sport, () => {
-            console.log(
-              "Player hit sport! Teleporting to sportScene..."
-            );
-            setCurrentScene("SportScene");
+            console.log("Player hit sport! Teleporting to sportScene...");
+            if (!sportQuestionsLoaded) {
+              console.log("Loading sport questions...");
+                setSportQuestionsLoaded(true); // Set flag to true
+                setCurrentScene("SportScene"); // Change to MusicScene
+              //});
+
+            } else {
+              console.log(
+                "sport questions already loaded, changing to SportScene..."
+              );
+              setCurrentScene("SportScene"); // Change to MusicScene if already loaded
+            }
           });
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticSport = this.physics.add
             .staticImage(717, 219, "sport")
             .setScale(0.1);
-            staticSport.body.setSize(
-              staticSport.width * 0.1,
-              staticSport.height * 0.1
+          staticSport.body.setSize(
+            staticSport.width * 0.1,
+            staticSport.height * 0.1
           );
           staticSport.body.setOffset(
             (staticSport.width - staticSport.width * 0.1) / 2,
@@ -253,17 +279,19 @@ const PhaserGame = () => {
         },
       },
       scene:
-        currentScene === "FirstScene"
-          ? FirstScene
-          : currentScene === "ScienceScene"
-          ? ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
-          : currentScene === "VideoGameScene"
-          ? VideoGameScene(setCurrentScene, setVideoGameCompleted)
-          : currentScene === "MusicScene"
-          ? MusicScene(setCurrentScene, setMusicCompleted)// Call VideoGameScene here
-          : currentScene === "SportScene"
-          ? SportScene(setCurrentScene, setSportCompleted)// Call VideoGameScene here
-          : <h1>nope</h1>
+        currentScene === "FirstScene" ? (
+          FirstScene
+        ) : currentScene === "ScienceScene" ? (
+          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
+        ) : currentScene === "VideoGameScene" ? (
+          VideoGameScene(setCurrentScene, setVideoGameCompleted)
+        ) : currentScene === "MusicScene" ? (
+          MusicScene(setCurrentScene, setMusicCompleted) // Call VideoGameScene here
+        ) : currentScene === "SportScene" ? (
+          SportScene(setCurrentScene, setSportCompleted) // Call VideoGameScene here
+        ) : (
+          <h1>nope</h1>
+        ),
     };
 
     const game = new Phaser.Game(config);
