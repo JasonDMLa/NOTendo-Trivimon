@@ -228,7 +228,7 @@ const PhaserGame = () => {
           : currentScene === "VideoGameScene"
           ? VideoGameScene(setCurrentScene, disableVideoGame)
           : currentScene === "MusicScene"
-          ? MusicScene(setCurrentScene, disableMusic)// Call VideoGameScene here
+          ? MusicScene(setCurrentScene, disableMusic,setMusicCompleted)// Call VideoGameScene here
           : <h1>nope</h1>
     };
 
