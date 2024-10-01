@@ -4,6 +4,7 @@ import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene c
 import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
 import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
+import HistoryScene from "../Scenes/HistoryScene";
 
 
 const PhaserGame = () => {
@@ -13,9 +14,11 @@ const PhaserGame = () => {
   const [scienceCompleted, setScienceCompleted] = useState(false);
   const [musicCompleted, setMusicCompleted] = useState(false);
   const [sportCompleted, setSportCompleted] = useState(false);
+  const [historyCompleted,setHistoryCompleted] = useState(false)
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
   const [videoGameQuestionsLoaded,setVideoGameQuestionsLoaded] = useState(false)
   const [sportQuestionsLoaded,setSportQuestionsLoaded] = useState(false)
+  const [historyQuestionsLoaded,setHistoryQuestionsLoaded] = useState(false)
   // State to track if the right button was clicked in the ScienceScene
 
   useEffect(() => {
@@ -28,6 +31,7 @@ const PhaserGame = () => {
     let videoGame;
     let science;
     let sport;
+    let history;
 
     const FirstScene = {
       preload: function () {
@@ -41,6 +45,7 @@ const PhaserGame = () => {
         this.load.image("science", "../../public/houses/science.png");
         this.load.image("videoGame", "../../public/houses/vgs.png");
         this.load.image("sport", "../../public/houses/sport.png");
+        this.load.image("history", "../../public/houses/history.png");
       },
 
       create: function () {
@@ -63,6 +68,7 @@ const PhaserGame = () => {
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
         sport = this.physics.add.staticImage(717, 219, "sport").setScale(0.1);
+        history = this.physics.add.staticImage(617, 352, "history").setScale(0.3);
 
         // Keep hitbox logic unchanged
 
@@ -88,6 +94,12 @@ const PhaserGame = () => {
         sport.body.setOffset(
           (sport.width - sport.width * 0.1) / 2,
           (sport.height - sport.height * 0.1) / 2
+        );
+
+        history.body.setSize(history.width * 0.3, history.height * 0.3);
+        history.body.setOffset(
+          (history.width - history.width * 0.3) / 2,
+          (history.height - history.height * 0.3) / 2
         );
 
         if (!videoGameCompleted) {
@@ -221,6 +233,43 @@ const PhaserGame = () => {
 
         ///////////////////////
 
+        if (!historyCompleted) {
+          this.physics.add.overlap(player, history, () => {
+            console.log(
+              "Player hit history! Teleporting to HistoryScene..."
+            )
+            if (!historyQuestionsLoaded) {
+              console.log("Loading history questions...");
+                setHistoryQuestionsLoaded(true); // Set flag to true
+                setCurrentScene("HistoryScene"); // Change to MusicScene
+              //});
+
+            } else {
+              console.log(
+                "History questions already loaded, changing to HistoryScene..."
+              );
+              setCurrentScene("HistoryScene"); // Change to MusicScene if already loaded
+            }
+          });
+        } else {
+          // Keep the logic to handle static videoGame if disabled
+          const staticHistory = this.physics.add
+            .staticImage(617, 352, "history")
+            .setScale(0.3);
+            staticHistory.body.setSize(
+              staticHistory.width * 0.3,
+              staticHistory.height * 0.3
+          );
+          staticHistory.body.setOffset(
+            (staticHistory.width - staticHistory.width * 0.3) / 2,
+            (staticHistory.height - staticHistory.height * 0.3) / 2
+          );
+          this.physics.add.collider(player, staticHistory, () => {
+            console.log("Player collided with the static history");
+          });
+        }
+        //////////////////////////////////////////////////
+
         obstacles = this.physics.add.staticGroup();
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
@@ -289,9 +338,10 @@ const PhaserGame = () => {
           MusicScene(setCurrentScene, setMusicCompleted) // Call VideoGameScene here
         ) : currentScene === "SportScene" ? (
           SportScene(setCurrentScene, setSportCompleted) // Call VideoGameScene here
-        ) : (
-          <h1>nope</h1>
-        ),
+        ) : currentScene === "HistoryScene" ? (
+          HistoryScene(setCurrentScene, setHistoryCompleted) // Call VideoGameScene here (
+  
+        ): <h1>nope</h1>,
     };
 
     const game = new Phaser.Game(config);
