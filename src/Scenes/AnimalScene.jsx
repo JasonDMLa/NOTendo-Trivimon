@@ -6,23 +6,84 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
     preload: function () {
       // Preload assets like background image
       this.load.image("background", "../../public/backgrounds/pokeman.jpg"); // Change the path accordingly
+      this.load.image("heart", "../../public/triviaScenes/heart.png");
     },
 
     create: function () {
       // Initialize variables
+
       let currentQuestionIndex = 0;
-      let score = 0;
-      let wrongAnswer = 0;
+      let score = 10;
+      let wrongAnswer = 3;
       let correctAnswer = "";
+      let heart;
       const allAnimalQuestions = []; // Use a local variable
 
+      //
+      const heartX = 230;
+      const enemyHeartY = 32;
+      const playerHeartY = 95;
+      heart = this.physics.add.staticGroup();
+      const enemyHeart1 = heart
+        .create(heartX, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart2 = heart
+        .create(heartX + 30, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart3 = heart
+        .create(heartX + 60, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart4 = heart
+        .create(heartX + 90, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart5 = heart
+        .create(heartX + 120, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart6 = heart
+        .create(heartX + 150, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart7 = heart
+        .create(heartX + 180, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart8 = heart
+        .create(heartX + 210, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart9 = heart
+        .create(heartX + 240, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart10 = heart
+        .create(heartX + 270, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const playerHeart1 = heart
+        .create(heartX, playerHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const playerHeart2 = heart
+        .create(heartX + 30, playerHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const playerHeart3 = heart
+        .create(heartX + 60, playerHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+
       // Display the score and wrong answer counters
-      const scoreText = this.add.text(16, 16, `Score: ${score}`, {
+      const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
         fill: "#fff",
       });
 
-      const wrongText = this.add.text(16, 80, `Wrong: ${wrongAnswer}`, {
+      const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
         fill: "#fff",
       });
@@ -95,14 +156,14 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
         const selectedAnswer = answerButtons[selectedIndex].text;
 
         if (selectedAnswer === correctAnswer) {
-          score++;
-          scoreText.setText(`Score: ${score}`);
+          score--;
+          scoreText.setText(`HP: ${score}/10`);
         } else {
-          wrongAnswer++;
-          wrongText.setText(`Wrong: ${wrongAnswer}`);
+          wrongAnswer--;
+          wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
-        if (score === 2) {
+        if (score === 0) {
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => {
             setCurrentScene("FirstScene");
@@ -110,11 +171,36 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
           }, 2000); // 2000 ms = 2 seconds
         }
 
-        if (wrongAnswer === 10) {
+        if (wrongAnswer === 0) {
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
         }
 
+        const enemyHearts = [
+          enemyHeart1,
+          enemyHeart2,
+          enemyHeart3,
+          enemyHeart4,
+          enemyHeart5,
+          enemyHeart6,
+          enemyHeart7,
+          enemyHeart8,
+          enemyHeart9,
+          enemyHeart10,
+        ];
+
+        for (let i = 0; i <= 9; i++) {
+          if (score === i) {
+            enemyHearts[i].visible = false;
+          }
+        }
+
+        const playerHearts = [playerHeart1, playerHeart2, playerHeart3];
+        for (let i = 0; i <= 3; i++) {
+          if (wrongAnswer === i) {
+            playerHearts[i].visible = false;
+          }
+        }
         currentQuestionIndex++;
         displayQuestion();
       };
@@ -130,19 +216,19 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
       };
 
       // Optionally, add a back button to return to another scene
-      const backButton = this.add
-        .text(400, 500, "Back to Phaser Game", {
-          fontSize: "32px",
-          fill: "#fff",
-          backgroundColor: "#000",
-        })
-        .setOrigin(0.5)
-        .setInteractive();
+      // const backButton = this.add
+      //   .text(400, 500, "Back to Phaser Game", {
+      //     fontSize: "32px",
+      //     fill: "#fff",
+      //     backgroundColor: "#000",
+      //   })
+      //   .setOrigin(0.5)
+      //   .setInteractive();
 
-      backButton.on("pointerdown", () => {
-        console.log("Returning to Phaser Game (FirstScene)...");
-        setCurrentScene("FirstScene"); // Go back to the FirstScene
-      });
+      // backButton.on("pointerdown", () => {
+      //   console.log("Returning to Phaser Game (FirstScene)...");
+      //   setCurrentScene("FirstScene"); // Go back to the FirstScene
+      // });
     },
   };
 };

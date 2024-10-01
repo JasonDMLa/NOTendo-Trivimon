@@ -11,18 +11,18 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
     create: function () {
       // Initialize variables
       let currentQuestionIndex = 0;
-      let score = 0;
-      let wrongAnswer = 0;
+      let score = 10;
+      let wrongAnswer = 3;
       let correctAnswer = "";
       const allSportQuestions = []; // Use a local variable
 
       // Display the score and wrong answer counters
-      const scoreText = this.add.text(16, 16, `Score: ${score}`, {
+      const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
         fill: "#fff",
       });
 
-      const wrongText = this.add.text(16, 80, `Wrong: ${wrongAnswer}`, {
+      const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
         fill: "#fff",
       });
@@ -95,14 +95,14 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
         const selectedAnswer = answerButtons[selectedIndex].text;
 
         if (selectedAnswer === correctAnswer) {
-          score++;
-          scoreText.setText(`Score: ${score}`);
+          score--;
+          scoreText.setText(`HP: ${score}/10`);
         } else {
-          wrongAnswer++;
-          wrongText.setText(`Wrong: ${wrongAnswer}`);
+          wrongAnswer--;
+          wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
-        if (score === 2) {
+        if (score === 0) {
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => {
             setCurrentScene("FirstScene");
@@ -110,7 +110,7 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
           }, 2000); // 2000 ms = 2 seconds
         }
 
-        if (wrongAnswer === 3) {
+        if (wrongAnswer === 0) {
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
         }
@@ -130,19 +130,19 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
       };
 
       // Optionally, add a back button to return to another scene
-      const backButton = this.add
-        .text(400, 500, "Back to Phaser Game", {
-          fontSize: "32px",
-          fill: "#fff",
-          backgroundColor: "#000",
-        })
-        .setOrigin(0.5)
-        .setInteractive();
+      // const backButton = this.add
+      //   .text(400, 500, "Back to Phaser Game", {
+      //     fontSize: "32px",
+      //     fill: "#fff",
+      //     backgroundColor: "#000",
+      //   })
+      //   .setOrigin(0.5)
+      //   .setInteractive();
 
-      backButton.on("pointerdown", () => {
-        console.log("Returning to Phaser Game (FirstScene)...");
-        setCurrentScene("FirstScene"); // Go back to the FirstScene
-      });
+      // backButton.on("pointerdown", () => {
+      //   console.log("Returning to Phaser Game (FirstScene)...");
+      //   setCurrentScene("FirstScene"); // Go back to the FirstScene
+      // });
     },
   };
 };
