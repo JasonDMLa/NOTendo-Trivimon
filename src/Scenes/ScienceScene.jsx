@@ -1,20 +1,20 @@
 import Phaser from "phaser";
-// import { allScienceQuestions } from "../data/scienceQuestions"; // Import your questions
+import {getAllScienceQuestions} from "../data/scienceQuestions"; // Ensure you import this correctly
 
 const ScienceScene = (setCurrentScene, setScienceCompleted) => {
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let correctAnswer = "";
-  let wrongAnswer = 0;
-
   return {
     preload: function () {
       // Preload assets like background image
-      this.load.image("background", "../../public/backgrounds/pokeman.jpg");
+      this.load.image("background", "../../public/backgrounds/pokeman.jpg"); // Change the path accordingly
     },
 
     create: function () {
-      // Add background image
+      // Initialize variables
+      let currentQuestionIndex = 0;
+      let score = 0;
+      let wrongAnswer = 0;
+      let correctAnswer = "";
+      const allScienceQuestions = []; // Use a local variable
 
       // Display the score and wrong answer counters
       const scoreText = this.add.text(16, 16, `Score: ${score}`, {
@@ -50,19 +50,29 @@ const ScienceScene = (setCurrentScene, setScienceCompleted) => {
         answerButtons.push(button);
       }
 
+      // Load the questions and start the game
+      getAllScienceQuestions().then((questions) => {
+        allScienceQuestions.push(...questions); // Populate local questions array
+        displayQuestion(); // Display the first question
+      });
+
       // Function to shuffle answers and display the current question
       const displayQuestion = () => {
-        const questionData = allScienceQuestions[currentQuestionIndex];
-        questionText.setText(questionData.question);
+        if (currentQuestionIndex < allScienceQuestions.length) {
+          const questionData = allScienceQuestions[currentQuestionIndex];
+          questionText.setText(questionData.question);
 
-        // Shuffle answers
-        const shuffledAnswers = shuffleAnswers(questionData);
-        answerButtons.forEach((button, index) => {
-          button.setText(shuffledAnswers[index]);
-        });
+          // Shuffle answers
+          const shuffledAnswers = shuffleAnswers(questionData);
+          answerButtons.forEach((button, index) => {
+            button.setText(shuffledAnswers[index]);
+          });
 
-        // Track the correct answer
-        correctAnswer = questionData.correctAnswer;
+          // Track the correct answer
+          correctAnswer = questionData.correctAnswer;
+        } else {
+          endGame(); // End the game if no more questions
+        }
       };
 
       // Function to shuffle answers
@@ -93,30 +103,20 @@ const ScienceScene = (setCurrentScene, setScienceCompleted) => {
         }
 
         if (score === 2) {
-          answerButtons.forEach((button) => {
-            button.disableInteractive();
-          });
+          answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => {
             setCurrentScene("FirstScene");
+            setScienceCompleted(true);
           }, 2000); // 2000 ms = 2 seconds
-          setScienceCompleted(true)
-          answerButtons.forEach((button) => {
-            button.disableInteractive();
-          });
         }
 
-        if (wrongAnswer === 14) {
+        if (wrongAnswer === 10) {
           answerButtons.forEach((button) => button.disableInteractive());
-          setTimeout(() => setCurrentScene("FirstScene"), 1000); // 5 seconds delay
+          setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
         }
 
-        // Move to the next question or end the game if no more questions
-        if (currentQuestionIndex < allScienceQuestions.length - 1) {
-          currentQuestionIndex++;
-          displayQuestion();
-        } else {
-          endGame();
-        }
+        currentQuestionIndex++;
+        displayQuestion();
       };
 
       // Function to end the game
@@ -128,9 +128,6 @@ const ScienceScene = (setCurrentScene, setScienceCompleted) => {
 
         answerButtons.forEach((button) => button.disableInteractive());
       };
-
-      // Display the first question when the scene is created
-      displayQuestion();
 
       // Optionally, add a back button to return to another scene
       const backButton = this.add

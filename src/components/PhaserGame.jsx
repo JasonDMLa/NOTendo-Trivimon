@@ -5,20 +5,26 @@ import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameS
 import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
 import HistoryScene from "../Scenes/HistoryScene";
-
+import AnimalScene from "../Scenes/AnimalScene";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
+  ////
   const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
   const [scienceCompleted, setScienceCompleted] = useState(false);
   const [musicCompleted, setMusicCompleted] = useState(false);
   const [sportCompleted, setSportCompleted] = useState(false);
-  const [historyCompleted,setHistoryCompleted] = useState(false)
+  const [historyCompleted, setHistoryCompleted] = useState(false);
+  const [animalCompleted, setAnimalCompleted] = useState(false);
+  ////
+  const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
-  const [videoGameQuestionsLoaded,setVideoGameQuestionsLoaded] = useState(false)
-  const [sportQuestionsLoaded,setSportQuestionsLoaded] = useState(false)
-  const [historyQuestionsLoaded,setHistoryQuestionsLoaded] = useState(false)
+  const [videoGameQuestionsLoaded, setVideoGameQuestionsLoaded] =
+    useState(false);
+  const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
+  const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
+  const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
   // State to track if the right button was clicked in the ScienceScene
 
   useEffect(() => {
@@ -32,6 +38,7 @@ const PhaserGame = () => {
     let science;
     let sport;
     let history;
+    let animal;
 
     const FirstScene = {
       preload: function () {
@@ -46,6 +53,7 @@ const PhaserGame = () => {
         this.load.image("videoGame", "../../public/houses/vgs.png");
         this.load.image("sport", "../../public/houses/sport.png");
         this.load.image("history", "../../public/houses/history.png");
+        this.load.image("animal", "../../public/houses/animal.png");
       },
 
       create: function () {
@@ -68,7 +76,10 @@ const PhaserGame = () => {
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
         sport = this.physics.add.staticImage(717, 219, "sport").setScale(0.1);
-        history = this.physics.add.staticImage(617, 352, "history").setScale(0.3);
+        history = this.physics.add
+          .staticImage(617, 352, "history")
+          .setScale(0.3);
+        animal = this.physics.add.staticImage(609, 500, "animal").setScale(0.1);
 
         // Keep hitbox logic unchanged
 
@@ -102,17 +113,22 @@ const PhaserGame = () => {
           (history.height - history.height * 0.3) / 2
         );
 
+        animal.body.setSize(animal.width * 0.1, animal.height * 0.1);
+        animal.body.setOffset(
+          (animal.width - animal.width * 0.1) / 2,
+          (animal.height - animal.height * 0.1) / 2
+        );
+
         if (!videoGameCompleted) {
           this.physics.add.overlap(player, videoGame, () => {
             console.log(
               "Player hit videoGame! Teleporting to videoGameScene..."
-            )
+            );
             if (!videoGameQuestionsLoaded) {
               console.log("Loading music questions...");
-                setVideoGameQuestionsLoaded(true); // Set flag to true
-                setCurrentScene("VideoGameScene"); // Change to MusicScene
+              setVideoGameQuestionsLoaded(true); // Set flag to true
+              setCurrentScene("VideoGameScene"); // Change to MusicScene
               //});
-
             } else {
               console.log(
                 "VideoGame questions already loaded, changing to MusicScene..."
@@ -142,10 +158,20 @@ const PhaserGame = () => {
         if (!scienceCompleted) {
           this.physics.add.overlap(player, science, () => {
             console.log("Player hit science! Teleporting to scienceScene...");
-            setCurrentScene("ScienceScene");
+            if (!scienceQuestionsLoaded) {
+              console.log("Loading music questions...");
+              setScienceQuestionsLoaded(true); // Set flag to true
+              setCurrentScene("ScienceScene"); // Change to MusicScene
+              //});
+            } else {
+              console.log(
+                "Science questions already loaded, changing to MusicScene..."
+              );
+              setCurrentScene("ScienceScene"); // Change to MusicScene if already loaded
+            }
           });
         } else {
-          // Keep the logic to handle static videoGame if disabled
+          // Keep the logic to handle static science if disabled
           const staticScience = this.physics.add
             .staticImage(113, 351, "science")
             .setScale(0.1);
@@ -158,9 +184,10 @@ const PhaserGame = () => {
             (staticScience.height - staticScience.height * 0.1) / 2
           );
           this.physics.add.collider(player, staticScience, () => {
-            console.log("Player collided with the static Science");
+            console.log("Player collided with the static science");
           });
         }
+
         //////////////////////////
 
         if (!musicCompleted) {
@@ -168,10 +195,9 @@ const PhaserGame = () => {
             console.log("Player hit music! Teleporting to musicScene...");
             if (!musicQuestionsLoaded) {
               console.log("Loading music questions...");
-                setMusicQuestionsLoaded(true); // Set flag to true
-                setCurrentScene("MusicScene"); // Change to MusicScene
+              setMusicQuestionsLoaded(true); // Set flag to true
+              setCurrentScene("MusicScene"); // Change to MusicScene
               //});
-
             } else {
               console.log(
                 "Music questions already loaded, changing to MusicScene..."
@@ -202,10 +228,9 @@ const PhaserGame = () => {
             console.log("Player hit sport! Teleporting to sportScene...");
             if (!sportQuestionsLoaded) {
               console.log("Loading sport questions...");
-                setSportQuestionsLoaded(true); // Set flag to true
-                setCurrentScene("SportScene"); // Change to MusicScene
+              setSportQuestionsLoaded(true); // Set flag to true
+              setCurrentScene("SportScene"); // Change to MusicScene
               //});
-
             } else {
               console.log(
                 "sport questions already loaded, changing to SportScene..."
@@ -235,15 +260,12 @@ const PhaserGame = () => {
 
         if (!historyCompleted) {
           this.physics.add.overlap(player, history, () => {
-            console.log(
-              "Player hit history! Teleporting to HistoryScene..."
-            )
+            console.log("Player hit history! Teleporting to HistoryScene...");
             if (!historyQuestionsLoaded) {
               console.log("Loading history questions...");
-                setHistoryQuestionsLoaded(true); // Set flag to true
-                setCurrentScene("HistoryScene"); // Change to MusicScene
+              setHistoryQuestionsLoaded(true); // Set flag to true
+              setCurrentScene("HistoryScene"); // Change to MusicScene
               //});
-
             } else {
               console.log(
                 "History questions already loaded, changing to HistoryScene..."
@@ -256,9 +278,9 @@ const PhaserGame = () => {
           const staticHistory = this.physics.add
             .staticImage(617, 352, "history")
             .setScale(0.3);
-            staticHistory.body.setSize(
-              staticHistory.width * 0.3,
-              staticHistory.height * 0.3
+          staticHistory.body.setSize(
+            staticHistory.width * 0.3,
+            staticHistory.height * 0.3
           );
           staticHistory.body.setOffset(
             (staticHistory.width - staticHistory.width * 0.3) / 2,
@@ -270,6 +292,40 @@ const PhaserGame = () => {
         }
         //////////////////////////////////////////////////
 
+        if (!animalCompleted) {
+          this.physics.add.overlap(player, animal, () => {
+            console.log("Player hit animal! Teleporting to animalScene...");
+            if (!animalQuestionsLoaded) {
+              console.log("Loading music questions...");
+              setAnimalQuestionsLoaded(true); // Set flag to true
+              setCurrentScene("AnimalScene"); // Change to MusicScene
+              //});
+            } else {
+              console.log(
+                "Animal questions already loaded, changing to MusicScene..."
+              );
+              setCurrentScene("AnimalScene"); // Change to MusicScene if already loaded
+            }
+          });
+        } else {
+          // Keep the logic to handle static animal if disabled
+          const staticAnimal = this.physics.add
+            .staticImage(609,500, "animal")
+            .setScale(0.1);
+          staticAnimal.body.setSize(
+            staticAnimal.width * 0.1,
+            staticAnimal.height * 0.1
+          );
+          staticAnimal.body.setOffset(
+            (staticAnimal.width - staticAnimal.width * 0.1) / 2,
+            (staticAnimal.height - staticAnimal.height * 0.1) / 2
+          );
+          this.physics.add.collider(player, staticAnimal, () => {
+            console.log("Player collided with the static animal");
+          });
+        }
+
+        /////////////////////////////////////////////////
         obstacles = this.physics.add.staticGroup();
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
@@ -340,8 +396,11 @@ const PhaserGame = () => {
           SportScene(setCurrentScene, setSportCompleted) // Call VideoGameScene here
         ) : currentScene === "HistoryScene" ? (
           HistoryScene(setCurrentScene, setHistoryCompleted) // Call VideoGameScene here (
-  
-        ): <h1>nope</h1>,
+        ) : currentScene === "AnimalScene" ? (
+          AnimalScene(setCurrentScene, setAnimalCompleted)
+        ) : (
+          <h1>nope</h1>
+        ),
     };
 
     const game = new Phaser.Game(config);
