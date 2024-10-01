@@ -2,16 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
 import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
-import MusicScene from "../Scenes/MusicScene"
+import MusicScene from "../Scenes/MusicScene";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
   const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
   const [scienceCompleted, setScienceCompleted] = useState(false);
-  const [musicCompleted,setMusicCompleted] = useState(false)
-  
-
+  const [musicCompleted, setMusicCompleted] = useState(false);
 
   // State to track if the right button was clicked in the ScienceScene
 
@@ -39,29 +37,37 @@ const PhaserGame = () => {
       },
 
       create: function () {
-        // Your existing create logic for FirstScene
+        // Set a larger background
         background = this.add
-          .image(400, 300, "background")
-          .setScale(0.8)
-          .setOrigin(0.5, 0.5);
+          .image(0, 0, "background")
+          .setOrigin(0, 0)
+          .setScale(2); // Make the background bigger
+
+        // Set camera bounds to match the background size
+        this.cameras.main.setBounds(
+          0,
+          0,
+          background.width * 2,
+          background.height * 2
+        );
+
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
-        music = this.physics.add
-          .staticImage(110, 485, "music")
-          .setScale(0.1);
+        // Make the camera follow the player
+        this.cameras.main.startFollow(player);
+
+        // Add music, science, and videoGame as static objects
+        music = this.physics.add.staticImage(110, 485, "music").setScale(0.1);
         science = this.physics.add
           .staticImage(113, 351, "science")
           .setScale(0.1);
         videoGame = this.physics.add
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
-        // Keep hitbox logic unchanged
 
-        music.body.setSize(
-          music.width * 0.1,
-          music.height * 0.1
-        );
+        // Keep hitbox logic unchanged
+        music.body.setSize(music.width * 0.1, music.height * 0.1);
         music.body.setOffset(
           (music.width - music.width * 0.1) / 2,
           (music.height - music.height * 0.1) / 2
@@ -131,9 +137,7 @@ const PhaserGame = () => {
 
         if (!musicCompleted) {
           this.physics.add.overlap(player, music, () => {
-            console.log(
-              "Player hit music! Teleporting to musicScene..."
-            );
+            console.log("Player hit music! Teleporting to musicScene...");
             setCurrentScene("MusicScene");
           });
         } else {
@@ -141,9 +145,9 @@ const PhaserGame = () => {
           const staticMusic = this.physics.add
             .staticImage(110, 485, "music")
             .setScale(0.1);
-            staticMusic.body.setSize(
-              staticMusic.width * 0.1,
-              staticMusic.height * 0.1
+          staticMusic.body.setSize(
+            staticMusic.width * 0.1,
+            staticMusic.height * 0.1
           );
           staticMusic.body.setOffset(
             (staticMusic.width - staticMusic.width * 0.1) / 2,
@@ -213,15 +217,17 @@ const PhaserGame = () => {
         },
       },
       scene:
-        currentScene === "FirstScene"
-          ? FirstScene
-          : currentScene === "ScienceScene"
-          ? ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
-          : currentScene === "VideoGameScene"
-          ? VideoGameScene(setCurrentScene, setVideoGameCompleted)
-          : currentScene === "MusicScene"
-          ? MusicScene(setCurrentScene, setMusicCompleted)// Call VideoGameScene here
-          : <h1>nope</h1>
+        currentScene === "FirstScene" ? (
+          FirstScene
+        ) : currentScene === "ScienceScene" ? (
+          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
+        ) : currentScene === "VideoGameScene" ? (
+          VideoGameScene(setCurrentScene, setVideoGameCompleted)
+        ) : currentScene === "MusicScene" ? (
+          MusicScene(setCurrentScene, setMusicCompleted) // Call VideoGameScene here
+        ) : (
+          <h1>nope</h1>
+        ),
     };
 
     const game = new Phaser.Game(config);

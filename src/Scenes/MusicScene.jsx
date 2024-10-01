@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { allMusicQuestions } from "../data/musicQuestions"; // Import your questions
+//import { allMusicQuestions } from "../data/musicQuestions"; // Import your questions
 import StartScene from "./StartScreen";
 import WinningScene from "./WinningScene";
 
@@ -101,7 +101,7 @@ const MusicScene = (setCurrentScene, disableMusic, setMusicCompleted) => {
           setTimeout(() => {
             setCurrentScene("FirstScene");
           }, 2000); // 2000 ms = 2 seconds
-          setMusicCompleted(true)
+          setMusicCompleted(true);
           answerButtons.forEach((button) => {
             button.disableInteractive();
           });
