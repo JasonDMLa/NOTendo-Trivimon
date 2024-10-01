@@ -29,6 +29,7 @@ const PhaserGame = () => {
 
   useEffect(() => {
     let player;
+    let badges;
     let cursors;
     let background;
     let obstacles;
@@ -39,6 +40,7 @@ const PhaserGame = () => {
     let sport;
     let history;
     let animal;
+    let bar;
 
     const FirstScene = {
       preload: function () {
@@ -54,6 +56,7 @@ const PhaserGame = () => {
         this.load.image("sport", "../../public/houses/sport.png");
         this.load.image("history", "../../public/houses/history.png");
         this.load.image("animal", "../../public/houses/animal.png");
+        this.load.image("bar", "../../public/badges/bar.png");
       },
 
       create: function () {
@@ -310,7 +313,7 @@ const PhaserGame = () => {
         } else {
           // Keep the logic to handle static animal if disabled
           const staticAnimal = this.physics.add
-            .staticImage(609,500, "animal")
+            .staticImage(609, 500, "animal")
             .setScale(0.1);
           staticAnimal.body.setSize(
             staticAnimal.width * 0.1,
@@ -326,9 +329,57 @@ const PhaserGame = () => {
         }
 
         /////////////////////////////////////////////////
+
+        bar = this.physics.add.staticImage(350, 600, "bar").setScale(0.7);
+
+        bar.body.setSize(bar.width * 0.7, bar.height * 0.4);
+        bar.body.setOffset(
+          (bar.width - bar.width * 0.7) / 2,
+          (bar.height - bar.height * 0.4) / 2
+        );
+
         obstacles = this.physics.add.staticGroup();
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
+
+        const badgeX = 204;
+        const badgeY = 553;
+
+        badges = this.physics.add.staticGroup();
+        if (scienceCompleted) {
+          badges.create(badgeX, badgeY, "science").setScale(0.1).refreshBody();
+        }
+        if (sportCompleted) {
+          badges
+            .create(badgeX + 70, badgeY, "sport")
+            .setScale(0.1)
+            .refreshBody();
+        }
+        if (videoGameCompleted) {
+          badges
+            .create(badgeX + 140, badgeY, "videoGame")
+            .setScale(0.1)
+            .refreshBody();
+        }
+        if (musicCompleted) {
+          badges
+            .create(badgeX + 210, badgeY, "music")
+            .setScale(0.1)
+            .refreshBody();
+        }
+        if (animalCompleted) {
+          badges
+            .create(badgeX + 280, badgeY, "animal")
+            .setScale(0.1)
+            .refreshBody();
+        }
+        if (historyCompleted) {
+          badges
+            .create(badgeX + 350, badgeY, "history")
+            .setScale(0.1)
+            .refreshBody();
+        }
+        // badges.create(540, 68, "sports").setScale(0.5).refreshBody();
 
         this.physics.add.collider(player, obstacles, () => {
           console.log("Player hit an obstacle!");

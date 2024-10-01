@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import {getAllScienceQuestions} from "../data/scienceQuestions"; // Ensure you import this correctly
 
-const ScienceScene = (setCurrentScene, setScienceCompleted) => {
+const ScienceScene = (setCurrentScene, setScienceCompleted,setBadgeHolder,badgeHolder) => {
   return {
     preload: function () {
       // Preload assets like background image
@@ -110,7 +110,7 @@ const ScienceScene = (setCurrentScene, setScienceCompleted) => {
           }, 2000); // 2000 ms = 2 seconds
         }
 
-        if (wrongAnswer === 10) {
+        if (wrongAnswer === 13) {
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
         }
