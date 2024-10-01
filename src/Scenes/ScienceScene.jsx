@@ -1,11 +1,12 @@
 import Phaser from "phaser";
 import {getAllScienceQuestions} from "../data/scienceQuestions"; // Ensure you import this correctly
 
-const ScienceScene = (setCurrentScene, setScienceCompleted,setBadgeHolder,badgeHolder) => {
+const ScienceScene = (setCurrentScene, setScienceCompleted) => {
   return {
     preload: function () {
       // Preload assets like background image
       this.load.image("background", "../../public/backgrounds/pokeman.jpg"); // Change the path accordingly
+      this.load.image("heart", "../../public/triviaScenes/heart.png");
     },
 
     create: function () {
@@ -14,8 +15,65 @@ const ScienceScene = (setCurrentScene, setScienceCompleted,setBadgeHolder,badgeH
       let score = 10;
       let wrongAnswer = 3;
       let correctAnswer = "";
+      let heart;
       const allScienceQuestions = []; // Use a local variable
-
+      //
+      const heartX = 230;
+      const enemyHeartY = 32;
+      const playerHeartY = 95;
+      heart = this.physics.add.staticGroup();
+      const enemyHeart1 = heart
+        .create(heartX, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart2 = heart
+        .create(heartX + 30, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart3 = heart
+        .create(heartX + 60, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart4 = heart
+        .create(heartX + 90, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart5 = heart
+        .create(heartX + 120, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart6 = heart
+        .create(heartX + 150, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart7 = heart
+        .create(heartX + 180, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart8 = heart
+        .create(heartX + 210, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart9 = heart
+        .create(heartX + 240, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const enemyHeart10 = heart
+        .create(heartX + 270, enemyHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const playerHeart1 = heart
+        .create(heartX, playerHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const playerHeart2 = heart
+        .create(heartX + 30, playerHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
+      const playerHeart3 = heart
+        .create(heartX + 60, playerHeartY, "heart")
+        .setScale(0.05)
+        .refreshBody();
       // Display the score and wrong answer counters
       const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
@@ -109,10 +167,26 @@ const ScienceScene = (setCurrentScene, setScienceCompleted,setBadgeHolder,badgeH
             setScienceCompleted(true);
           }, 2000); // 2000 ms = 2 seconds
         }
+
         if (wrongAnswer === 0) {
-        
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
+        }
+
+        const enemyHearts = [
+          enemyHeart1, enemyHeart2, enemyHeart3, enemyHeart4, 
+          enemyHeart5, enemyHeart6, enemyHeart7, enemyHeart8, 
+          enemyHeart9, enemyHeart10
+        ];
+        
+        // Make the corresponding heart invisible based on the score
+        if (score >= 0 && score <= 9) {
+          enemyHearts[score].visible = false;
+        }
+
+        const playerHearts = [playerHeart1, playerHeart2, playerHeart3];
+        if (wrongAnswer >= 0 && wrongAnswer <= 2) {
+          playerHearts[wrongAnswer].visible = false;
         }
 
         currentQuestionIndex++;

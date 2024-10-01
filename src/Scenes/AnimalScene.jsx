@@ -177,29 +177,19 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
         }
 
         const enemyHearts = [
-          enemyHeart1,
-          enemyHeart2,
-          enemyHeart3,
-          enemyHeart4,
-          enemyHeart5,
-          enemyHeart6,
-          enemyHeart7,
-          enemyHeart8,
-          enemyHeart9,
-          enemyHeart10,
+          enemyHeart1, enemyHeart2, enemyHeart3, enemyHeart4, 
+          enemyHeart5, enemyHeart6, enemyHeart7, enemyHeart8, 
+          enemyHeart9, enemyHeart10
         ];
-
-        for (let i = 0; i <= 9; i++) {
-          if (score === i) {
-            enemyHearts[i].visible = false;
-          }
+        
+        // Make the corresponding heart invisible based on the score
+        if (score >= 0 && score <= 9) {
+          enemyHearts[score].visible = false;
         }
 
         const playerHearts = [playerHeart1, playerHeart2, playerHeart3];
-        for (let i = 0; i <= 3; i++) {
-          if (wrongAnswer === i) {
-            playerHearts[i].visible = false;
-          }
+        if (wrongAnswer >= 0 && wrongAnswer <= 2) {
+          playerHearts[wrongAnswer].visible = false;
         }
         currentQuestionIndex++;
         displayQuestion();
