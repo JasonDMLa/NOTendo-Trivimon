@@ -68,18 +68,18 @@ const PhaserGame = () => {
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
 
-        music = this.physics.add.staticImage(110, 485, "music").setScale(0.1);
+        music = this.physics.add.staticImage(190, 580, "music").setScale(0.1);
         science = this.physics.add
-          .staticImage(113, 351, "science")
+          .staticImage(190, 390, "science")
           .setScale(0.1);
         videoGame = this.physics.add
           .staticImage(120, 200, "videoGame")
           .setScale(0.3);
-        sport = this.physics.add.staticImage(717, 219, "sport").setScale(0.1);
+        sport = this.physics.add.staticImage(610, 160, "sport").setScale(0.1);
         history = this.physics.add
           .staticImage(617, 352, "history")
           .setScale(0.3);
-        animal = this.physics.add.staticImage(609, 500, "animal").setScale(0.1);
+        animal = this.physics.add.staticImage(610, 580, "animal").setScale(0.07);
 
         // Keep hitbox logic unchanged
 
@@ -113,10 +113,10 @@ const PhaserGame = () => {
           (history.height - history.height * 0.3) / 2
         );
 
-        animal.body.setSize(animal.width * 0.1, animal.height * 0.1);
+        animal.body.setSize(animal.width * 0.07, animal.height * 0.07);
         animal.body.setOffset(
-          (animal.width - animal.width * 0.1) / 2,
-          (animal.height - animal.height * 0.1) / 2
+          (animal.width - animal.width * 0.07) / 2,
+          (animal.height - animal.height * 0.07) / 2
         );
 
         if (!videoGameCompleted) {
@@ -173,7 +173,7 @@ const PhaserGame = () => {
         } else {
           // Keep the logic to handle static science if disabled
           const staticScience = this.physics.add
-            .staticImage(113, 351, "science")
+            .staticImage(190, 390, "science")
             .setScale(0.1);
           staticScience.body.setSize(
             staticScience.width * 0.1,
@@ -208,7 +208,7 @@ const PhaserGame = () => {
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticMusic = this.physics.add
-            .staticImage(110, 485, "music")
+            .staticImage(190, 580, "music")
             .setScale(0.1);
           staticMusic.body.setSize(
             staticMusic.width * 0.1,
@@ -241,7 +241,7 @@ const PhaserGame = () => {
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticSport = this.physics.add
-            .staticImage(717, 219, "sport")
+            .staticImage(610, 160, "sport")
             .setScale(0.1);
           staticSport.body.setSize(
             staticSport.width * 0.1,
@@ -310,15 +310,15 @@ const PhaserGame = () => {
         } else {
           // Keep the logic to handle static animal if disabled
           const staticAnimal = this.physics.add
-            .staticImage(609,500, "animal")
-            .setScale(0.1);
+            .staticImage(610, 580, "animal")
+            .setScale(0.07);
           staticAnimal.body.setSize(
-            staticAnimal.width * 0.1,
-            staticAnimal.height * 0.1
+            staticAnimal.width * 0.07,
+            staticAnimal.height * 0.07
           );
           staticAnimal.body.setOffset(
-            (staticAnimal.width - staticAnimal.width * 0.1) / 2,
-            (staticAnimal.height - staticAnimal.height * 0.1) / 2
+            (staticAnimal.width - staticAnimal.width * 0.07) / 2,
+            (staticAnimal.height - staticAnimal.height * 0.07) / 2
           );
           this.physics.add.collider(player, staticAnimal, () => {
             console.log("Player collided with the static animal");

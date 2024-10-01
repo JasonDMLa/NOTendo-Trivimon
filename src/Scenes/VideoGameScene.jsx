@@ -1,30 +1,28 @@
 import Phaser from "phaser";
-import { getAllVideoGameQuestions } from "../data/videoGamesQuestions"; // Import your questions
+import {getAllVideoGameQuestions} from "../data/videoGamesQuestions"; // Ensure you import this correctly
 
 const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let correctAnswer = "";
-  let wrongAnswer = 0;
-  const allVideoGameQuestions = []; // Keep this as an array to store questions
-
   return {
     preload: function () {
       // Preload assets like background image
-      this.load.image("background", "../../public/backgrounds/pokeman.jpg");
+      this.load.image("background", "../../public/backgrounds/pokeman.jpg"); // Change the path accordingly
     },
 
     create: function () {
-      // Add background image
-      this.add.image(0, 0, "background").setOrigin(0); // Set background position
+      // Initialize variables
+      let currentQuestionIndex = 0;
+      let score = 10;
+      let wrongAnswer = 3;
+      let correctAnswer = "";
+      const allVideoGameQuestions = []; // Use a local variable
 
       // Display the score and wrong answer counters
-      const scoreText = this.add.text(16, 16, `Score: ${score}`, {
+      const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
         fill: "#fff",
       });
 
-      const wrongText = this.add.text(16, 80, `Wrong: ${wrongAnswer}`, {
+      const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
         fill: "#fff",
       });
@@ -60,17 +58,21 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
       // Function to shuffle answers and display the current question
       const displayQuestion = () => {
-        const questionData = allVideoGameQuestions[currentQuestionIndex];
-        questionText.setText(questionData.question);
+        if (currentQuestionIndex < allVideoGameQuestions.length) {
+          const questionData = allVideoGameQuestions[currentQuestionIndex];
+          questionText.setText(questionData.question);
 
-        // Shuffle answers
-        const shuffledAnswers = shuffleAnswers(questionData);
-        answerButtons.forEach((button, index) => {
-          button.setText(shuffledAnswers[index]);
-        });
+          // Shuffle answers
+          const shuffledAnswers = shuffleAnswers(questionData);
+          answerButtons.forEach((button, index) => {
+            button.setText(shuffledAnswers[index]);
+          });
 
-        // Track the correct answer
-        correctAnswer = questionData.correctAnswer;
+          // Track the correct answer
+          correctAnswer = questionData.correctAnswer;
+        } else {
+          endGame(); // End the game if no more questions
+        }
       };
 
       // Function to shuffle answers
@@ -93,34 +95,28 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
         const selectedAnswer = answerButtons[selectedIndex].text;
 
         if (selectedAnswer === correctAnswer) {
-          score++;
-          scoreText.setText(`Score: ${score}`);
+          score--;
+          scoreText.setText(`HP: ${score}/10`);
         } else {
-          wrongAnswer++;
-          wrongText.setText(`Wrong: ${wrongAnswer}`);
+          wrongAnswer--;
+          wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
-        // Check for completion conditions
-        if (score === 2) {
-          setCompletion(true);
-        } else if (wrongAnswer === 14) {
-          endGame();
-        } else {
-          // Move to the next question
-          if (currentQuestionIndex < allVideoGameQuestions.length - 1) {
-            currentQuestionIndex++;
-            displayQuestion();
-          } else {
-            endGame();
-          }
+        if (score === 0) {
+          answerButtons.forEach((button) => button.disableInteractive());
+          setTimeout(() => {
+            setCurrentScene("FirstScene");
+            setVideoGameCompleted(true);
+          }, 2000); // 2000 ms = 2 seconds
         }
-      };
 
-      // Function to handle game completion
-      const setCompletion = (completed) => {
-        answerButtons.forEach((button) => button.disableInteractive());
-        setVideoGameCompleted(completed);
-        setTimeout(() => setCurrentScene("FirstScene"), 2000); // 2 seconds delay
+        if (wrongAnswer === 0) {
+          answerButtons.forEach((button) => button.disableInteractive());
+          setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
+        }
+
+        currentQuestionIndex++;
+        displayQuestion();
       };
 
       // Function to end the game
@@ -134,19 +130,19 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
       };
 
       // Optionally, add a back button to return to another scene
-      const backButton = this.add
-        .text(400, 500, "Back to Phaser Game", {
-          fontSize: "32px",
-          fill: "#fff",
-          backgroundColor: "#000",
-        })
-        .setOrigin(0.5)
-        .setInteractive();
+      // const backButton = this.add
+      //   .text(400, 500, "Back to Phaser Game", {
+      //     fontSize: "32px",
+      //     fill: "#fff",
+      //     backgroundColor: "#000",
+      //   })
+      //   .setOrigin(0.5)
+      //   .setInteractive();
 
-      backButton.on("pointerdown", () => {
-        console.log("Returning to Phaser Game (FirstScene)...");
-        setCurrentScene("FirstScene"); // Go back to the FirstScene
-      });
+      // backButton.on("pointerdown", () => {
+      //   console.log("Returning to Phaser Game (FirstScene)...");
+      //   setCurrentScene("FirstScene"); // Go back to the FirstScene
+      // });
     },
   };
 };
