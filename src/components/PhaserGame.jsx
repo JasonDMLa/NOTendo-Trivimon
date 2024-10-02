@@ -1,3 +1,4 @@
+import { movement } from "../../mobileControls";
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
@@ -27,6 +28,8 @@ const PhaserGame = () => {
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
   // State to track if the right button was clicked in the ScienceScene
 
+  const isMobile = window.innerWidth < 1000;
+
   useEffect(() => {
     let player;
     let badges;
@@ -44,22 +47,19 @@ const PhaserGame = () => {
 
     const FirstScene = {
       preload: function () {
-        this.load.image(
-          "background",
-          "../../public/backgrounds/goodpokeman.png"
-        );
-        this.load.image("playerUp", "../../public/player/playerUp.png");
-        this.load.image("playerDown", "../../public/player/playerDown.png");
-        this.load.image("playerLeft", "../../public/player/playerLeft.png");
-        this.load.image("playerRight", "../../public/player/playerRight.png");
-        this.load.image("tree", "../../public/tree.png");
-        this.load.image("music", "../../public/houses/music.png");
-        this.load.image("science", "../../public/houses/science.png");
-        this.load.image("videoGame", "../../public/houses/vgs.png");
-        this.load.image("sport", "../../public/houses/sport.png");
-        this.load.image("history", "../../public/houses/history.png");
-        this.load.image("animal", "../../public/houses/animal.png");
-        this.load.image("bar", "../../public/badges/bar.png");
+        this.load.image("background", "../../backgrounds/goodpokeman.png");
+        this.load.image("playerUp", "../../player/playerUp.png");
+        this.load.image("playerDown", "../../player/playerDown.png");
+        this.load.image("playerLeft", "../../player/playerLeft.png");
+        this.load.image("playerRight", "../../player/playerRight.png");
+        this.load.image("tree", "../../tree.png");
+        this.load.image("music", "../../houses/music.png");
+        this.load.image("science", "../../houses/science.png");
+        this.load.image("videoGame", "../../houses/vgs.png");
+        this.load.image("sport", "../../houses/sport.png");
+        this.load.image("history", "../../houses/history.png");
+        this.load.image("animal", "../../houses/animal.png");
+        this.load.image("bar", "../../badges/bar.png");
       },
 
       create: function () {
@@ -412,6 +412,24 @@ const PhaserGame = () => {
         if (!player) return;
 
         player.setVelocity(0);
+
+        if (isMobile) {
+          if (movement.left) {
+            player.setVelocityX(-250);
+            player.setTexture("playerLeft");
+          } else if (movement.right) {
+            player.setVelocityX(250);
+            player.setTexture("playerRight");
+          }
+
+          if (movement.up) {
+            player.setVelocityY(-250);
+            player.setTexture("playerUp");
+          } else if (movement.down) {
+            player.setVelocityY(250);
+            player.setTexture("playerDown");
+          }
+        }
 
         if (cursors.left.isDown) {
           player.setVelocityX(-250);

@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+
+.mobile-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 80%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+}
+
+.control-btn {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  font-size: 20px;
+  border-radius: 50%;
+}
