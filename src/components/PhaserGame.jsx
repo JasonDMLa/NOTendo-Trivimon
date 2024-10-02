@@ -44,7 +44,10 @@ const PhaserGame = () => {
 
     const FirstScene = {
       preload: function () {
-        this.load.image("background", "../../public/backgrounds/map.png");
+        this.load.image(
+          "background",
+          "../../public/backgrounds/goodpokeman.png"
+        );
         this.load.image("playerUp", "../../public/player/playerUp.png");
         this.load.image("playerDown", "../../public/player/playerDown.png");
         this.load.image("playerLeft", "../../public/player/playerLeft.png");
@@ -65,12 +68,22 @@ const PhaserGame = () => {
 
         // Your existing create logic for FirstScene
         background = this.add
-          .image(400, 300, "background")
-          .setScale(2.7)
-          .setOrigin(0.5, 0.5);
+          .image(0, 0, "background")
+          .setScale(2)
+          .setOrigin(0, 0);
+
+        // Set camera bounds to match the background size
+        this.cameras.main.setBounds(
+          0,
+          0,
+          background.width * 2,
+          background.height * 2
+        );
+
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
-
+        // Make the camera follow the player
+        this.cameras.main.startFollow(player);
         music = this.physics.add.staticImage(190, 580, "music").setScale(0.1);
         science = this.physics.add
           .staticImage(190, 390, "science")
@@ -82,7 +95,9 @@ const PhaserGame = () => {
         history = this.physics.add
           .staticImage(617, 352, "history")
           .setScale(0.3);
-        animal = this.physics.add.staticImage(610, 580, "animal").setScale(0.07);
+        animal = this.physics.add
+          .staticImage(610, 580, "animal")
+          .setScale(0.07);
 
         // Keep hitbox logic unchanged
 
