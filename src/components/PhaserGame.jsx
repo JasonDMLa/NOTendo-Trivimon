@@ -6,7 +6,8 @@ import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
 import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
-
+import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
+import { addStaticImage } from "../utils/addStaticImage";
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
@@ -44,10 +45,7 @@ const PhaserGame = () => {
 
     const FirstScene = {
       preload: function () {
-        this.load.image(
-          "background",
-          "../../public/backgrounds/goodpokeman.png"
-        );
+        this.load.image("background", "../../public/backgrounds/map.png");
         this.load.image("playerUp", "../../public/player/playerUp.png");
         this.load.image("playerDown", "../../public/player/playerDown.png");
         this.load.image("playerLeft", "../../public/player/playerLeft.png");
@@ -68,74 +66,30 @@ const PhaserGame = () => {
 
         // Your existing create logic for FirstScene
         background = this.add
-          .image(0, 0, "background")
-          .setScale(2)
-          .setOrigin(0, 0);
-
-        // Set camera bounds to match the background size
-        this.cameras.main.setBounds(
-          0,
-          0,
-          background.width * 2,
-          background.height * 2
-        );
+          .image(400, 300, "background")
+          .setScale(2.7)
+          .setOrigin(0.5, 0.5);
 
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(true);
-        // Make the camera follow the player
-        this.cameras.main.startFollow(player);
-        music = this.physics.add.staticImage(190, 580, "music").setScale(0.1);
-        science = this.physics.add
-          .staticImage(190, 390, "science")
-          .setScale(0.1);
-        videoGame = this.physics.add
-          .staticImage(120, 200, "videoGame")
-          .setScale(0.3);
-        sport = this.physics.add.staticImage(610, 160, "sport").setScale(0.1);
-        history = this.physics.add
-          .staticImage(617, 352, "history")
-          .setScale(0.3);
-        animal = this.physics.add
-          .staticImage(610, 580, "animal")
-          .setScale(0.07);
+
+        // Create static images using the reusable function
+        music = addStaticImage(this, 190, 580, "music", 0.1);
+        science = addStaticImage(this, 190, 390, "science", 0.1);
+        videoGame = addStaticImage(this, 120, 200, "videoGame", 0.3);
+        sport = addStaticImage(this, 610, 160, "sport", 0.1);
+        history = addStaticImage(this, 617, 352, "history", 0.3);
+        animal = addStaticImage(this, 610, 580, "animal", 0.07);
 
         // Keep hitbox logic unchanged
 
-        music.body.setSize(music.width * 0.1, music.height * 0.1);
-        music.body.setOffset(
-          (music.width - music.width * 0.1) / 2,
-          (music.height - music.height * 0.1) / 2
-        );
-
-        science.body.setSize(science.width * 0.1, science.height * 0.1);
-        science.body.setOffset(
-          (science.width - science.width * 0.1) / 2,
-          (science.height - science.height * 0.1) / 2
-        );
-
-        videoGame.body.setSize(videoGame.width * 0.3, videoGame.height * 0.3);
-        videoGame.body.setOffset(
-          (videoGame.width - videoGame.width * 0.3) / 2,
-          (videoGame.height - videoGame.height * 0.3) / 2
-        );
-
-        sport.body.setSize(sport.width * 0.1, sport.height * 0.1);
-        sport.body.setOffset(
-          (sport.width - sport.width * 0.1) / 2,
-          (sport.height - sport.height * 0.1) / 2
-        );
-
-        history.body.setSize(history.width * 0.3, history.height * 0.3);
-        history.body.setOffset(
-          (history.width - history.width * 0.3) / 2,
-          (history.height - history.height * 0.3) / 2
-        );
-
-        animal.body.setSize(animal.width * 0.07, animal.height * 0.07);
-        animal.body.setOffset(
-          (animal.width - animal.width * 0.07) / 2,
-          (animal.height - animal.height * 0.07) / 2
-        );
+        ///////////////
+        setBodySizeAndOffset(music, 0.1, 0.1);
+        setBodySizeAndOffset(science, 0.1, 0.1);
+        setBodySizeAndOffset(videoGame, 0.3, 0.3);
+        setBodySizeAndOffset(sport, 0.1, 0.1);
+        setBodySizeAndOffset(history, 0.3, 0.3);
+        setBodySizeAndOffset(animal, 0.07, 0.07);
 
         if (!videoGameCompleted) {
           this.physics.add.overlap(player, videoGame, () => {
