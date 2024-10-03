@@ -5,22 +5,25 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
   return {
     preload: function () {
       // Preload assets like background image
-      this.load.image("background", "../../public/backgrounds/pokeman.jpg"); // Change the path accordingly
+      this.load.image("background", "../../public/triviaScenes/gym.png"); // Change the path accordingly
       this.load.image("heart", "../../public/triviaScenes/heart.png");
     },
 
     create: function () {
       // Initialize variables
+
+      this.add.image(400, 300, "background").setScale(1.71).setOrigin(0.5, 0.5);
+
       let currentQuestionIndex = 0;
       let score = 10;
       let wrongAnswer = 3;
       let correctAnswer = "";
-      let heart; 
+      let heart;
       const allSportQuestions = []; // Use a local variable
       //
       const heartX = 230;
-      const enemyHeartY = 32;
-      const playerHeartY = 95;
+      const enemyHeartY = 40;
+      const playerHeartY = 105;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
         .create(heartX, enemyHeartY, "heart")
@@ -75,28 +78,43 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
         .setScale(0.05)
         .refreshBody();
       // Display the score and wrong answer counters
+
       const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
-        fill: "#fff",
+        fill: "#ff0000",
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
-        fill: "#fff",
+        fill: "#00FF00", // Red text color
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       // Question text display
-      const questionText = this.add.text(100, 200, "", {
+      const questionText = this.add.text(100, 150, "", {
         fontSize: "28px",
         fill: "#fff",
-        wordWrap: { width: 600 }, // Wrap text to fit within the game window
+        wordWrap: { width: 600 },
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
-
       // Create answer buttons and store them in an array
       const answerButtons = [];
       for (let i = 0; i < 4; i++) {
         const button = this.add
-          .text(150, 300 + i * 50, "", {
+          .text(100, 320 + i * 50, "", {
             fontSize: "24px",
             fill: "#fff",
             backgroundColor: "#007bff",
@@ -174,11 +192,18 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
         }
 
         const enemyHearts = [
-          enemyHeart1, enemyHeart2, enemyHeart3, enemyHeart4, 
-          enemyHeart5, enemyHeart6, enemyHeart7, enemyHeart8, 
-          enemyHeart9, enemyHeart10
+          enemyHeart1,
+          enemyHeart2,
+          enemyHeart3,
+          enemyHeart4,
+          enemyHeart5,
+          enemyHeart6,
+          enemyHeart7,
+          enemyHeart8,
+          enemyHeart9,
+          enemyHeart10,
         ];
-        
+
         // Make the corresponding heart invisible based on the score
         if (score >= 0 && score <= 9) {
           enemyHearts[score].visible = false;

@@ -4,13 +4,13 @@ import { getAllAnimalQuestions } from "../data/animalsQuestions"; // Ensure you 
 const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
   return {
     preload: function () {
-      // Preload assets like background image
-      this.load.image("background", "../../public/backgrounds/pokeman.jpg"); // Change the path accordingly
+      this.load.image("background", "../../public/triviaScenes/animals.png")
       this.load.image("heart", "../../public/triviaScenes/heart.png");
     },
 
     create: function () {
       // Initialize variables
+      this.add.image(400, 300, "background").setScale(1.71).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
       let score = 10;
@@ -21,8 +21,8 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
 
       //
       const heartX = 230;
-      const enemyHeartY = 32;
-      const playerHeartY = 95;
+      const enemyHeartY = 40;
+      const playerHeartY = 105;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
         .create(heartX, enemyHeartY, "heart")
@@ -80,19 +80,33 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
       // Display the score and wrong answer counters
       const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
-        fill: "#fff",
+        fill: "#ff0000",
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
-        fill: "#fff",
+        fill: "#00FF00", // Red text color
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
-
       // Question text display
-      const questionText = this.add.text(100, 200, "", {
+      const questionText = this.add.text(100, 150, "", {
         fontSize: "28px",
         fill: "#fff",
-        wordWrap: { width: 600 }, // Wrap text to fit within the game window
+        wordWrap: { width: 600 },
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       // Create answer buttons and store them in an array
@@ -177,11 +191,18 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
         }
 
         const enemyHearts = [
-          enemyHeart1, enemyHeart2, enemyHeart3, enemyHeart4, 
-          enemyHeart5, enemyHeart6, enemyHeart7, enemyHeart8, 
-          enemyHeart9, enemyHeart10
+          enemyHeart1,
+          enemyHeart2,
+          enemyHeart3,
+          enemyHeart4,
+          enemyHeart5,
+          enemyHeart6,
+          enemyHeart7,
+          enemyHeart8,
+          enemyHeart9,
+          enemyHeart10,
         ];
-        
+
         // Make the corresponding heart invisible based on the score
         if (score >= 0 && score <= 9) {
           enemyHearts[score].visible = false;
@@ -220,6 +241,8 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
       //   setCurrentScene("FirstScene"); // Go back to the FirstScene
       // });
     },
+
+    update: function () {},
   };
 };
 
