@@ -9,14 +9,16 @@ export const questionData = async (amount, category, difficulty) => {
       .replace(/&reg/g, "©")
       .replace(/&amp;/g, "&")
       .replace(/&ouml;/g, "ö")
-      .replace(/&deg;/g, "°"),
+      .replace(/&deg;/g, "°")
+      .replace(/&eacute;/g, "é"),
     correctAnswer: currentQuestion.correct_answer
       .replace(/&quot;/g, '"')
       .replace(/&#039;/g, "'")
       .replace(/&reg/g, "©")
       .replace(/&amp;/g, "&")
       .replace(/&ouml;/g, "ö")
-      .replace(/&deg;/g, "°"),
+      .replace(/&deg;/g, "°")
+      .replace(/&eacute;/g, "é"),
     incorrectAnswers: currentQuestion.incorrect_answers.map((answer) =>
       answer
         .replace(/&quot;/g, '"')
@@ -25,6 +27,7 @@ export const questionData = async (amount, category, difficulty) => {
         .replace(/&amp;/g, "&")
         .replace(/&ouml;/g, "ö")
         .replace(/&deg;/g, "°")
+        .replace(/&eacute;/g, "é")
     ),
   }));
   return questions;

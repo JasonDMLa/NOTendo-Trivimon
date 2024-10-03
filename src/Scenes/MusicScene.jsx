@@ -5,12 +5,15 @@ const MusicScene = (setCurrentScene, setMusicCompleted) => {
   return {
     preload: function () {
       // Preload assets like background image
-      this.load.image("background", "../../public/backgrounds/pokeman.jpg");
+      this.load.image("background", "../../public/triviaScenes/music.png");
       this.load.image("heart", "../../public/triviaScenes/heart.png");
     },
 
     create: function () {
       // Initialize variables
+
+      this.add.image(400, 300, "background").setScale(1.73).setOrigin(0.5, 0.5);
+
       let currentQuestionIndex = 0;
       let score = 10;
       let wrongAnswer = 3;
@@ -19,8 +22,8 @@ const MusicScene = (setCurrentScene, setMusicCompleted) => {
       const allMusicQuestions = []; // Use a local variable
       //
       const heartX = 230;
-      const enemyHeartY = 32;
-      const playerHeartY = 95;
+      const enemyHeartY = 40;
+      const playerHeartY = 105;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
         .create(heartX, enemyHeartY, "heart")
@@ -78,19 +81,34 @@ const MusicScene = (setCurrentScene, setMusicCompleted) => {
       // Display the score and wrong answer counters
       const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
         fontSize: "32px",
-        fill: "#fff",
+        fill: "#ff0000",
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
-        fill: "#fff",
+        fill: "#00FF00", // Red text color
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       // Question text display
-      const questionText = this.add.text(100, 200, "", {
+      const questionText = this.add.text(100, 150, "", {
         fontSize: "28px",
         fill: "#fff",
-        wordWrap: { width: 600 }, // Wrap text to fit within the game window
+        wordWrap: { width: 600 },
+        backgroundColor: "#000000",
+        padding: {
+          x: 10,
+          y: 10,
+        },
       });
 
       // Create answer buttons and store them in an array
