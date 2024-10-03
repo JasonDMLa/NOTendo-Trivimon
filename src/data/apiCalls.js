@@ -10,7 +10,6 @@ export const getData = (amount, category, difficulty) => {
       `/api.php?amount=${amount.toString()}&category=${category.toString()}&difficulty=${difficulty}&type=multiple`
     )
     .then(({ data }) => {
-      console.log(data)
       return data.results;
     });
 };
