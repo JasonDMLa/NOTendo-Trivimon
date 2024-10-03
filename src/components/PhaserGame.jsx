@@ -45,7 +45,7 @@ const PhaserGame = () => {
 
     const FirstScene = {
       preload: function () {
-        this.load.image("background", "../../public/backgrounds/map.png");
+        this.load.image("background", "../../public/backgrounds/Trivimon.png");
         this.load.image("playerUp", "../../public/player/playerUp.png");
         this.load.image("playerDown", "../../public/player/playerDown.png");
         this.load.image("playerLeft", "../../public/player/playerLeft.png");
@@ -64,14 +64,27 @@ const PhaserGame = () => {
         //// cursor
         cursors = this.input.keyboard.createCursorKeys();
 
+
+
+
         // Your existing create logic for FirstScene
         background = this.add
-          .image(400, 300, "background")
+          .image(0, 0, "background")
           .setScale(2.7)
-          .setOrigin(0.5, 0.5);
+          .setOrigin(0, 0);
 
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
-        player.setCollideWorldBounds(true);
+        player.setCollideWorldBounds(false);
+
+        // Set camera bounds to match the background size
+        this.cameras.main.setBounds(
+          0,
+          0,
+          background.width * 2.7,
+          background.height * 2.7
+        );
+        // Make the camera follow the player
+        this.cameras.main.startFollow(player);
 
         // Create static images using the reusable function
         music = addStaticImage(this, 190, 580, "music", 0.1);
@@ -394,8 +407,8 @@ const PhaserGame = () => {
 
     const config = {
       type: Phaser.AUTO,
-      width: 800,
-      height: 600,
+      width: 1000,
+      height: 650,
       parent: gameRef.current,
       physics: {
         default: "arcade",
