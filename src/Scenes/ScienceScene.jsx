@@ -15,7 +15,7 @@ const ScienceScene = (setCurrentScene, setScienceCompleted) => {
       this.add.image(400, 300, "background").setScale(1.85).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 10;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;

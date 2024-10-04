@@ -15,7 +15,7 @@ const MusicScene = (setCurrentScene, setMusicCompleted) => {
       this.add.image(400, 300, "background").setScale(1.73).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 10;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
@@ -193,11 +193,18 @@ const MusicScene = (setCurrentScene, setMusicCompleted) => {
         }
 
         const enemyHearts = [
-          enemyHeart1, enemyHeart2, enemyHeart3, enemyHeart4, 
-          enemyHeart5, enemyHeart6, enemyHeart7, enemyHeart8, 
-          enemyHeart9, enemyHeart10
+          enemyHeart1,
+          enemyHeart2,
+          enemyHeart3,
+          enemyHeart4,
+          enemyHeart5,
+          enemyHeart6,
+          enemyHeart7,
+          enemyHeart8,
+          enemyHeart9,
+          enemyHeart10,
         ];
-        
+
         // Make the corresponding heart invisible based on the score
         if (score >= 0 && score <= 9) {
           enemyHearts[score].visible = false;
