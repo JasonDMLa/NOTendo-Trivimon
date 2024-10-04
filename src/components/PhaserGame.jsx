@@ -8,6 +8,7 @@ import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
+
 const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
@@ -76,6 +77,10 @@ const PhaserGame = () => {
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(false);
 
+        mouseText = this.add.text(10, 10, "", {
+          font: "16px Courier",
+          fill: "#ffffff",
+        });
         // Set camera bounds to match the background size
         this.cameras.main.setBounds(
           0,
@@ -369,10 +374,7 @@ const PhaserGame = () => {
         });
 
         cursors = this.input.keyboard.createCursorKeys();
-        mouseText = this.add.text(10, 10, "", {
-          font: "16px Courier",
-          fill: "#ffffff",
-        });
+        
       },
 
       update: function () {
