@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { findUser } from "../data/mongoApi"; 
 import CreateAccount from "./CreateAccount"; 
 
-const LoginAccount = ({ onStart }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginAccount = ({ onStart, username, setUsername,  password, setPassword, setSaveData }) => {
+  
   const [error, setError] = useState("");
   const [showCreateAccount, setShowCreateAccount] = useState(false); 
   const [loading, setLoading] = useState(false); 
@@ -19,6 +18,7 @@ const LoginAccount = ({ onStart }) => {
       const response = await findUser(username, password);
 
       if (response && response.data) {
+        setSaveData(response.data.saveData)
         onStart(); 
       } else {
         setError("User not found. Please check your username and password.");

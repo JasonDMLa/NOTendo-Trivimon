@@ -7,7 +7,9 @@ import CreateAccount from "./components/CreateAccount";
 
 function App() {
   const [isGameStarted, setIsGameStarted] = useState(false); // State to track if the game has started
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [saveData, setSaveData] = useState({});
   const handleLoginSuccess = () => {
     setIsGameStarted(true); // Change the state to start the game
   };
@@ -18,9 +20,16 @@ function App() {
 
       {/* <PhaserGame/> */}
       {!isGameStarted ? (
-        <LoginAccount onStart={handleLoginSuccess} />
+        <LoginAccount
+          onStart={handleLoginSuccess}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          setSaveData={setSaveData}
+        />
       ) : (
-        <PhaserGame />
+        <PhaserGame username={username} saveData={saveData} />
       )}
     </div>
   );
