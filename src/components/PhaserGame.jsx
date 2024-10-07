@@ -8,18 +8,30 @@ import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
-import { set } from "mongoose";
+import { updateUser, findUser } from "../data/mongoApi";
 
-const PhaserGame = () => {
+const PhaserGame = ({ username, saveData }) => {
+  console.log(saveData, "phaser");
+  //////
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
   ////
-  const [videoGameCompleted, setVideoGameCompleted] = useState(false);
-  const [scienceCompleted, setScienceCompleted] = useState(false);
-  const [musicCompleted, setMusicCompleted] = useState(false);
-  const [sportCompleted, setSportCompleted] = useState(false);
-  const [historyCompleted, setHistoryCompleted] = useState(false);
-  const [animalCompleted, setAnimalCompleted] = useState(false);
+  const [videoGameCompleted, setVideoGameCompleted] = useState(
+    saveData.videoGamesCompleted
+  );
+  const [scienceCompleted, setScienceCompleted] = useState(
+    saveData.scienceCompleted
+  );
+  const [musicCompleted, setMusicCompleted] = useState(saveData.musicCompleted);
+  const [sportCompleted, setSportCompleted] = useState(
+    saveData.sportsCompleted
+  );
+  const [historyCompleted, setHistoryCompleted] = useState(
+    saveData.historyCompleted
+  );
+  const [animalCompleted, setAnimalCompleted] = useState(
+    saveData.animalsCompleted
+  );
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -49,21 +61,26 @@ const PhaserGame = () => {
     let history;
     let animal;
     let bar;
+    let saveButton;
 
     const FirstScene = {
       preload: function () {
+        //////
         this.load.image("background", "../../backgrounds/Trivimon.png");
         this.load.image("playerUp", "../../player/playerUp.png");
         this.load.image("playerDown", "../../player/playerDown.png");
         this.load.image("playerLeft", "../../player/playerLeft.png");
         this.load.image("playerRight", "../../player/playerRight.png");
+        //////
         this.load.image("tree", "../../tree.png");
+        //////
         this.load.image("music", "../../houses/music.png");
         this.load.image("science", "../../houses/science.png");
         this.load.image("videoGame", "../../houses/vgs.png");
         this.load.image("sport", "../../houses/sport.png");
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
+        //////
         this.load.image("bar", "../../badges/bar.png");
         this.load.image("musicBadge", "../../badges/musicBadge.png");
         this.load.image("scienceBadge", "../../badges/scienceBadge.png");
@@ -71,9 +88,18 @@ const PhaserGame = () => {
         this.load.image("animalBadge", "../../badges/animalBadge.png");
         this.load.image("sportBadge", "../../badges/sportBadge.png");
         this.load.image("historyBadge", "../../badges/historyBadge.png");
+        //////
       },
 
       create: function () {
+        console.log({
+          animalCompleted,
+          historyCompleted,
+          musicCompleted,
+          scienceCompleted,
+          sportCompleted,
+          videoGameCompleted,
+        });
         //// cursor
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -82,9 +108,6 @@ const PhaserGame = () => {
           .image(0, 0, "background")
           .setScale(2.7)
           .setOrigin(0, 0);
-
-
-      
 
         if (enteredAnimal) {
           this.player = this.physics.add
@@ -434,6 +457,23 @@ const PhaserGame = () => {
         });
 
         cursors = this.input.keyboard.createCursorKeys();
+
+        saveButton = this.add
+          .image(800, 100, "tree")
+          .setScrollFactor(0)
+          .setScale(0.5)
+
+          .setInteractive();
+        saveButton.on("pointerdown", () => {
+          updateUser(username, {
+            animalsCompleted: animalCompleted,
+            historyCompleted,
+            musicCompleted,
+            scienceCompleted,
+            sportsCompleted: sportCompleted,
+            videoGamesCompleted: videoGameCompleted,
+          });
+        });
       },
 
       update: function () {

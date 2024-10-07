@@ -30,3 +30,13 @@ export const findUser = (username, password) => {
   }
 
 
+  export const updateUser = (username, saveData) => {
+    console.log(saveData, username)
+    return apiCall.patch(`/api/users/${username}`, saveData)
+    .then(({data})=>{
+      console.log(data)
+      return data
+    })
+  }
+
+
