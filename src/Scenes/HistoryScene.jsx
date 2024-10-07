@@ -15,7 +15,7 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
       this.add.image(400, 300, "background").setScale(1).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 10;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
@@ -89,7 +89,6 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
           y: 10,
         },
       });
-
 
       const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
         fontSize: "32px",
@@ -194,11 +193,18 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
         }
 
         const enemyHearts = [
-          enemyHeart1, enemyHeart2, enemyHeart3, enemyHeart4, 
-          enemyHeart5, enemyHeart6, enemyHeart7, enemyHeart8, 
-          enemyHeart9, enemyHeart10
+          enemyHeart1,
+          enemyHeart2,
+          enemyHeart3,
+          enemyHeart4,
+          enemyHeart5,
+          enemyHeart6,
+          enemyHeart7,
+          enemyHeart8,
+          enemyHeart9,
+          enemyHeart10,
         ];
-        
+
         // Make the corresponding heart invisible based on the score
         if (score >= 0 && score <= 9) {
           enemyHearts[score].visible = false;
@@ -208,7 +214,6 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
         if (wrongAnswer >= 0 && wrongAnswer <= 2) {
           playerHearts[wrongAnswer].visible = false;
         }
-
 
         currentQuestionIndex++;
         displayQuestion();

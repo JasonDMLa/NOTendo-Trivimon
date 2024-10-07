@@ -4,7 +4,7 @@ import { getAllAnimalQuestions } from "../data/animalsQuestions"; // Ensure you 
 const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
   return {
     preload: function () {
-      this.load.image("background", "../../public/triviaScenes/animals.png")
+      this.load.image("background", "../../public/triviaScenes/animals.png");
       this.load.image("heart", "../../public/triviaScenes/heart.png");
     },
 
@@ -13,7 +13,7 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
       this.add.image(400, 300, "background").setScale(1.71).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 10;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
