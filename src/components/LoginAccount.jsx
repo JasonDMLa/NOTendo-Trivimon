@@ -1,94 +1,69 @@
+// LoginAccount Component
 import React, { useState } from "react";
-import { findUser } from "../data/mongoApi"; // Ensure findUser function is correctly defined
-import CreateAccount from "./CreateAccount"; // Import CreateAccount component
+import { findUser } from "../data/mongoApi"; 
+import CreateAccount from "./CreateAccount"; 
 
 const LoginAccount = ({ onStart }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
-  const [showCreateAccount, setShowCreateAccount] = useState(false); // State to toggle between login and create account
+  const [showCreateAccount, setShowCreateAccount] = useState(false); 
+  const [loading, setLoading] = useState(false); // New loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError(""); 
+    setLoading(true); // Start loading
 
     try {
-      const response = await findUser(username, password); // Call the findUser function
+      const response = await findUser(username, password);
 
-      // Check if user data is returned
       if (response && response.data) {
-        setUserData(response.data);
-        onStart(); // Call onStart to transition to the game
+        onStart(); 
       } else {
-        // If no user data, set error
         setError("User not found. Please check your username and password.");
+        setUsername(""); // Clear username on error
+        setPassword(""); // Clear password on error
       }
     } catch (err) {
-      // Handle other errors, e.g., network issues
-      if (err.response) {
-        setError(err.response.data.message); // Error from backend
-      } else {
-        setError("An error occurred. Please try again."); // General error
-      }
+      setError("An error occurred. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
-  // Toggle between login and create account
   const handleCreateAccountClick = () => {
-    setShowCreateAccount(true);
+    setShowCreateAccount(true); 
   };
 
   if (showCreateAccount) {
-    return <CreateAccount />; // Render CreateAccount when button is clicked
+    return <CreateAccount setShowCreateAccount={setShowCreateAccount} />; 
   }
 
   return (
     <div>
       <h1>Welcome to Trivimon!</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-        <p>
-        Available Users:
-        <select id="users-bar" name="user" onClick={() => {
-          setUsername("James");
-          setPassword("NCPassword123");
-        }}>
-          <option>{"James"}</option>
-        </select>
-      </p>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit" disabled={loading}>Login</button>
       </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {userData && (
-        <div>
-          <h2>User Found:</h2>
-          <p>Username: {userData.username}</p>
-          {/* Add other user details here as needed */}
-        </div>
-      )}
-      <div>
-        <p>Don't have an account?</p>
-        <button onClick={handleCreateAccountClick}>Create Account Here</button>
-      </div>
+      {error && <p className="error-message">{error}</p>} {/* Using a CSS class */}
+      {loading && <p>Loading...</p>} {/* Show loading indicator */}
+      <p>Don't have an account?</p>
+      <button onClick={handleCreateAccountClick}>Create Account Here</button>
     </div>
   );
 };

@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       {/* <CreateAccount/> */}
-      <PhaserGame/>
+      {/* <PhaserGame/> */}
       {!isGameStarted ? (
         <LoginAccount onStart={handleLoginSuccess} />
       ) : (
