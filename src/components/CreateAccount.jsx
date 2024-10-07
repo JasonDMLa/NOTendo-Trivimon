@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { postUser, getAllUsers } from "../data/mongoApi"; 
 
-const CreateAccount = ({ setShowCreateAccount }) => {
+const CreateAccount = ({ setShowCreateAccount, selectedImage }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -18,7 +18,7 @@ const CreateAccount = ({ setShowCreateAccount }) => {
       const userExists = allUsers.some((user) => user.username === username);
 
       if (!userExists) {
-        await postUser(username, password);
+        await postUser(username, password, selectedImage);
         setSuccessMessage("Account created successfully!");
         setUsername("");
         setPassword("");
