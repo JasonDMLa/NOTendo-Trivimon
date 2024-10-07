@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 import { getAllVideoGameQuestions } from "../data/videoGamesQuestions"; // Ensure you import this correctly
 
 const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
@@ -7,11 +6,13 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
       // Preload assets like background image
       this.load.image("background", "../../public/triviaScenes/anotherVG.png"); // Change the path accordingly
       this.load.image("heart", "../../public/triviaScenes/heart.png");
+      this.load.image("displayBox", "../../public/triviaScenes/displayBox.png");
     },
 
     create: function () {
       // Initialize variables
       this.add.image(400, 300, "background").setScale(1.5).setOrigin(0.5, 0.5);
+      this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
       let score = 1;
@@ -20,9 +21,9 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
       let heart;
       const allVideoGameQuestions = []; // Use a local variable
       //
-      const heartX = 230;
-      const enemyHeartY = 40;
-      const playerHeartY = 105;
+      const heartX = 220;
+      const enemyHeartY = 35;
+      const playerHeartY = 100;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
         .create(heartX, enemyHeartY, "heart")
@@ -79,7 +80,7 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
       // Display the score and wrong answer counters
       const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
-        fontSize: "32px",
+        fontSize: "25px",
         fill: "#ff0000",
         backgroundColor: "#000000",
         padding: {
@@ -89,7 +90,7 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
       });
 
       const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
-        fontSize: "32px",
+        fontSize: "25px",
         fill: "#00FF00", // Red text color
         backgroundColor: "#000000",
         padding: {
@@ -99,30 +100,45 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
       });
 
       // Question text display
-      const questionText = this.add.text(100, 150, "", {
+      const questionText = this.add.text(150, 150, "", {
         fontSize: "28px",
         fill: "#fff",
-        wordWrap: { width: 600 },
+        wordWrap: { width: 700 },
         backgroundColor: "#000000",
         padding: {
-          x: 10,
-          y: 10,
+          x: 5,
+          y: 5,
         },
+        stroke: "#FFF",
+        strokeThickness: 1.2,
       });
 
       // Create answer buttons and store them in an array
       const answerButtons = [];
+      const buttonPadding = 20; // Padding between buttons
+      const buttonYStart = 350; // Starting Y position for the first button
+
       for (let i = 0; i < 4; i++) {
+        const letter = String.fromCharCode(65 + i); // Convert index to letter (A, B, C, D)
+
+        // Dynamically calculate vertical positions for buttons (one below the other)
+        const y = buttonYStart + i * (buttonPadding + 40); // Spacing between buttons
+
+        // Create the button with the letter label (A, B, C, D)
         const button = this.add
-          .text(150, 300 + i * 50, "", {
+          .text(120, y, `${letter}. `, {
             fontSize: "24px",
-            fill: "	#FFFFFF",
-            backgroundColor: "#0000CD",
+            fill: "#fff",
+            backgroundColor: "#007bff",
             padding: { left: 10, right: 10, top: 5, bottom: 5 },
+            stroke: "#FFF",
+            strokeThickness: 1.2,
           })
           .setInteractive()
-          .on("pointerdown", () => checkAnswer(i)); // Add interactivity
+          .on("pointerdown", () => checkAnswer(i));
 
+        // Store letter for later use
+        button.letter = letter;
         answerButtons.push(button);
       }
 
@@ -141,7 +157,8 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
           // Shuffle answers
           const shuffledAnswers = shuffleAnswers(questionData);
           answerButtons.forEach((button, index) => {
-            button.setText(shuffledAnswers[index]);
+            // Append the letter (A, B, C, D) to the shuffled answer
+            button.setText(`${button.letter}. ${shuffledAnswers[index]}`);
           });
 
           // Track the correct answer
@@ -168,7 +185,7 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
       // Function to check if the selected answer is correct
       const checkAnswer = (selectedIndex) => {
-        const selectedAnswer = answerButtons[selectedIndex].text;
+        const selectedAnswer = answerButtons[selectedIndex].text.slice(3);
 
         if (selectedAnswer === correctAnswer) {
           score--;
@@ -220,28 +237,9 @@ const VideoGameScene = (setCurrentScene, setVideoGameCompleted) => {
 
       // Function to end the game
       const endGame = () => {
-        this.add.text(150, 500, "Game Over!", {
-          fontSize: "48px",
-          fill: "#ff0000",
-        });
-
-        answerButtons.forEach((button) => button.disableInteractive());
+        setHistoryCompleted(true); // Mark history badge as completed
+        setCurrentScene("FirstScene"); // Return to the main scene
       };
-
-      // Optionally, add a back button to return to another scene
-      // const backButton = this.add
-      //   .text(400, 500, "Back to Phaser Game", {
-      //     fontSize: "32px",
-      //     fill: "#fff",
-      //     backgroundColor: "#000",
-      //   })
-      //   .setOrigin(0.5)
-      //   .setInteractive();
-
-      // backButton.on("pointerdown", () => {
-      //   console.log("Returning to Phaser Game (FirstScene)...");
-      //   setCurrentScene("FirstScene"); // Go back to the FirstScene
-      // });
     },
   };
 };

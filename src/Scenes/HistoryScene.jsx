@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 import { getAllHistoryQuestions } from "../data/historyQuestions.js";
 
 const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
@@ -13,8 +12,8 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
     create: function () {
       // Initialize variables
 
-      this.add.image(400, 300, "background").setScale(1).setOrigin(0.5, 0.5);
-      this.add.image(400, 230, "displayBox").setScale(0.58).setOrigin(0.5, 0.5);
+      this.add.image(400, 300, "background").setScale(1.4).setOrigin(0.5, 0.5);
+      this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
       let score = 10;
@@ -102,10 +101,10 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
       });
 
       // Question text display
-      const questionText = this.add.text(70, 150, "", {
+      const questionText = this.add.text(150, 150, "", {
         fontSize: "28px",
         fill: "#fff",
-        wordWrap: { width: 600 },
+        wordWrap: { width: 700 },
         backgroundColor: "#000000",
         padding: {
           x: 5,
@@ -128,7 +127,7 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
 
         // Create the button with the letter label (A, B, C, D)
         const button = this.add
-          .text(70, y, `${letter}. `, {
+          .text(120, y, `${letter}. `, {
             fontSize: "24px",
             fill: "#fff",
             backgroundColor: "#007bff",
@@ -194,7 +193,7 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
           scoreText.setText(`HP: ${score}/10`);
         } else {
           wrongAnswer--;
-          wrongText.setText(`Wrong: ${wrongAnswer}/3`);
+          wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
         if (score === 0) {

@@ -46,26 +46,26 @@ const PhaserGame = () => {
     const FirstScene = {
       preload: function () {
         this.load.image("background", "../../backgrounds/Trivimon.png");
-        this.load.spritesheet("playerUp", "../../player/AplayerUp.png", {
+        this.load.spritesheet("playerUp", "../../player/CplayerUp.png", {
           frameWidth: 15,
           frameHeight: 21.33,
         });
-        this.load.spritesheet("playerDown", "../../player/AplayerDown.png", {
+        this.load.spritesheet("playerDown", "../../player/CplayerDown.png", {
           frameWidth: 15,
           frameHeight: 21.33,
         });
-        this.load.spritesheet("playerLeft", "../../player/AplayerLeft.png", {
+        this.load.spritesheet("playerLeft", "../../player/CplayerLeft.png", {
           frameWidth: 15,
           frameHeight: 21.33,
         });
-        this.load.spritesheet("playerRight", "../../player/AplayerRight.png", {
+        this.load.spritesheet("playerRight", "../../player/CplayerRight.png", {
           frameWidth: 15,
           frameHeight: 21.33,
         });
 
         this.load.spritesheet(
           "playerUpRight",
-          "../../player/AplayerUpRight.png",
+          "../../player/CplayerUpRight.png",
           {
             frameWidth: 15,
             frameHeight: 21.33,
@@ -74,7 +74,7 @@ const PhaserGame = () => {
 
         this.load.spritesheet(
           "playerDownRight",
-          "../../player/AplayerDownRight.png",
+          "../../player/CplayerDownRight.png",
           {
             frameWidth: 15,
             frameHeight: 21.33,
@@ -83,7 +83,7 @@ const PhaserGame = () => {
 
         this.load.spritesheet(
           "playerUpLeft",
-          "../../player/AplayerUpLeft.png",
+          "../../player/CplayerUpLeft.png",
           {
             frameWidth: 15,
             frameHeight: 21.33,
@@ -92,7 +92,7 @@ const PhaserGame = () => {
 
         this.load.spritesheet(
           "playerDownLeft",
-          "../../player/AplayerDownLeft.png",
+          "../../player/CplayerDownLeft.png",
           {
             frameWidth: 15,
             frameHeight: 21.33,
