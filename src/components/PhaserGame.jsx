@@ -1,23 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
-import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
+import ScienceScene from "../Scenes/ScienceScene";
+import VideoGameScene from "../Scenes/VideoGameScene";
 import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
 import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
-const PhaserGame = () => {
+import { updateUser, findUser } from "../data/mongoApi";
+
+const PhaserGame = ({ username, saveData }) => {
+  console.log(saveData, "phaser");
+  //////
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
   ////
-  const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
-  const [scienceCompleted, setScienceCompleted] = useState(false);
-  const [musicCompleted, setMusicCompleted] = useState(false);
-  const [sportCompleted, setSportCompleted] = useState(false);
-  const [historyCompleted, setHistoryCompleted] = useState(false);
-  const [animalCompleted, setAnimalCompleted] = useState(false);
+  const [videoGameCompleted, setVideoGameCompleted] = useState(
+    saveData.videoGamesCompleted
+  );
+  const [scienceCompleted, setScienceCompleted] = useState(
+    saveData.scienceCompleted
+  );
+  const [musicCompleted, setMusicCompleted] = useState(saveData.musicCompleted);
+  const [sportCompleted, setSportCompleted] = useState(
+    saveData.sportsCompleted
+  );
+  const [historyCompleted, setHistoryCompleted] = useState(
+    saveData.historyCompleted
+  );
+  const [animalCompleted, setAnimalCompleted] = useState(
+    saveData.animalsCompleted
+  );
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -26,7 +40,12 @@ const PhaserGame = () => {
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
-  // State to track if the right button was clicked in the ScienceScene
+  let [enteredScience, setEnteredScience] = useState(false);
+  let [enteredVideoGame, setEnteredVideoGame] = useState(false);
+  let [enteredHistory, setEnteredHistory] = useState(false);
+  let [enteredAnimal, setEnteredAnimal] = useState(false);
+  let [enteredMusic, setEnteredMusic] = useState(false);
+  let [enteredSport, setEnteredSport] = useState(false);
 
   useEffect(() => {
     let player;
@@ -42,10 +61,13 @@ const PhaserGame = () => {
     let history;
     let animal;
     let bar;
+    let saveButton;
 
     const FirstScene = {
       preload: function () {
+        //////
         this.load.image("background", "../../backgrounds/Trivimon.png");
+
         this.load.spritesheet("playerUp", "../../player/AplayerUp.png", {
           frameWidth: 15,
           frameHeight: 21.33,
@@ -99,13 +121,16 @@ const PhaserGame = () => {
           }
         );
 
+
         this.load.image("tree", "../../tree.png");
+        //////
         this.load.image("music", "../../houses/music.png");
         this.load.image("science", "../../houses/science.png");
         this.load.image("videoGame", "../../houses/vgs.png");
         this.load.image("sport", "../../houses/sport.png");
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
+        //////
         this.load.image("bar", "../../badges/bar.png");
         this.load.image("musicBadge", "../../badges/musicBadge.png");
         this.load.image("scienceBadge", "../../badges/scienceBadge.png");
@@ -113,9 +138,18 @@ const PhaserGame = () => {
         this.load.image("animalBadge", "../../badges/animalBadge.png");
         this.load.image("sportBadge", "../../badges/sportBadge.png");
         this.load.image("historyBadge", "../../badges/historyBadge.png");
+        //////
       },
 
       create: function () {
+        console.log({
+          animalCompleted,
+          historyCompleted,
+          musicCompleted,
+          scienceCompleted,
+          sportCompleted,
+          videoGameCompleted,
+        });
         //// cursor
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -125,8 +159,9 @@ const PhaserGame = () => {
           .setScale(2.7)
           .setOrigin(0, 0);
 
+
         this.player = this.physics.add
-          .sprite(862, 1400, "playerDown")
+          .sprite(862, 750, "playerDown")
           .setScale(2.5);
         this.player.setCollideWorldBounds(false);
 
@@ -212,6 +247,50 @@ const PhaserGame = () => {
           repeat: -1,
         });
 
+
+        if (enteredAnimal) {
+          this.player = this.physics.add
+            .sprite(2220, 1720, "playerDown")
+            .setScale(0.8);
+        } else if (enteredHistory) {
+          this.player = this.physics.add
+            .sprite(750, 1410, "playerDown")
+            .setScale(0.8);
+        } else if (enteredMusic) {
+          this.player = this.physics.add
+            .sprite(925, 2170, "playerDown")
+            .setScale(0.8);
+        } else if (enteredVideoGame) {
+          this.player = this.physics.add
+            .sprite(2800, 1490, "playerDown")
+            .setScale(0.8);
+        } else if (enteredScience) {
+          this.player = this.physics.add
+            .sprite(1650, 1070, "playerDown")
+            .setScale(0.8);
+        } else if (enteredSport) {
+          this.player = this.physics.add
+            .sprite(2260, 940, "playerDown")
+            .setScale(0.8);
+        } else {
+          this.player = this.physics.add
+            .sprite(862, 767, "playerDown")
+            .setScale(0.8);
+        }
+        setEnteredAnimal(false);
+        setEnteredMusic(false);
+        setEnteredScience(false);
+        setEnteredVideoGame(false);
+        setEnteredHistory(false);
+        setEnteredSport(false);
+
+        this.player.setCollideWorldBounds(false);
+
+        mouseText = this.add.text(10, 10, "", {
+          font: "16px Courier",
+          fill: "#ffffff",
+        });
+
         // Set camera bounds to match the background size
         this.cameras.main.setBounds(
           0,
@@ -247,14 +326,14 @@ const PhaserGame = () => {
             );
             if (!videoGameQuestionsLoaded) {
               console.log("Loading music questions...");
-              setVideoGameQuestionsLoaded(true); // Set flag to true
+              setVideoGameQuestionsLoaded(true); // Set loaded to true
               setCurrentScene("VideoGameScene"); // Change to MusicScene
               //});
             } else {
               console.log(
                 "VideoGame questions already loaded, changing to MusicScene..."
               );
-              setCurrentScene("VideoGameScene"); // Change to MusicScene if already loaded
+              setCurrentScene("VideoGameScene"); // Change to videogame if already loaded
             }
           });
         } else {
@@ -380,6 +459,7 @@ const PhaserGame = () => {
         ///////////////////////
 
         if (!historyCompleted) {
+          setEnteredHistory(false);
           this.physics.add.overlap(this.player, history, () => {
             console.log("Player hit history! Teleporting to HistoryScene...");
             if (!historyQuestionsLoaded) {
@@ -517,9 +597,22 @@ const PhaserGame = () => {
         });
 
         cursors = this.input.keyboard.createCursorKeys();
-        mouseText = this.add.text(10, 10, "", {
-          font: "16px Courier",
-          fill: "#ffffff",
+
+        saveButton = this.add
+          .image(800, 100, "tree")
+          .setScrollFactor(0)
+          .setScale(0.5)
+
+          .setInteractive();
+        saveButton.on("pointerdown", () => {
+          updateUser(username, {
+            animalsCompleted: animalCompleted,
+            historyCompleted,
+            musicCompleted,
+            scienceCompleted,
+            sportsCompleted: sportCompleted,
+            videoGamesCompleted: videoGameCompleted,
+          });
         });
       },
 
@@ -623,17 +716,21 @@ const PhaserGame = () => {
         currentScene === "FirstScene" ? (
           FirstScene
         ) : currentScene === "ScienceScene" ? (
-          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
+          ScienceScene(setCurrentScene, setScienceCompleted, setEnteredScience) // Call your ScienceScene
         ) : currentScene === "VideoGameScene" ? (
-          VideoGameScene(setCurrentScene, setVideoGameCompleted)
+          VideoGameScene(
+            setCurrentScene,
+            setVideoGameCompleted,
+            setEnteredVideoGame
+          )
         ) : currentScene === "MusicScene" ? (
-          MusicScene(setCurrentScene, setMusicCompleted) // Call VideoGameScene here
+          MusicScene(setCurrentScene, setMusicCompleted, setEnteredMusic)
         ) : currentScene === "SportScene" ? (
-          SportScene(setCurrentScene, setSportCompleted) // Call VideoGameScene here
+          SportScene(setCurrentScene, setSportCompleted, setEnteredSport)
         ) : currentScene === "HistoryScene" ? (
-          HistoryScene(setCurrentScene, setHistoryCompleted) // Call VideoGameScene here (
+          HistoryScene(setCurrentScene, setHistoryCompleted, setEnteredHistory)
         ) : currentScene === "AnimalScene" ? (
-          AnimalScene(setCurrentScene, setAnimalCompleted)
+          AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : (
           <h1>nope</h1>
         ),
@@ -644,7 +741,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); // Added sportCompleted to dependencies
+  }, [currentScene]);
 
   return <div ref={gameRef}></div>;
 };
