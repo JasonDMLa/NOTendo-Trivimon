@@ -70,27 +70,27 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
 
         this.load.image("background", "../../backgrounds/Trivimon.png");
 
-        this.load.spritesheet("playerUp", "../../player/CplayerUp.png", {
+        this.load.spritesheet("playerUp", `../../player/${characterSelected}playerUp.png`, {
 
           frameWidth: 15,
           frameHeight: 21.33,
         });
-        this.load.spritesheet("playerDown", "../../player/CplayerDown.png", {
+        this.load.spritesheet("playerDown", `../../player/${characterSelected}playerDown.png`, {
           frameWidth: 15,
           frameHeight: 21.33,
         });
-        this.load.spritesheet("playerLeft", "../../player/CplayerLeft.png", {
+        this.load.spritesheet("playerLeft", `../../player/${characterSelected}playerLeft.png`, {
           frameWidth: 15,
           frameHeight: 21.33,
         });
-        this.load.spritesheet("playerRight", "../../player/CplayerRight.png", {
+        this.load.spritesheet("playerRight", `../../player/${characterSelected}playerRight.png`, {
           frameWidth: 15,
           frameHeight: 21.33,
         });
 
         this.load.spritesheet(
           "playerUpRight",
-          "../../player/CplayerUpRight.png",
+          `../../player/${characterSelected}playerUpRight.png`,
           {
             frameWidth: 15,
             frameHeight: 21.33,
@@ -99,7 +99,7 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
 
         this.load.spritesheet(
           "playerDownRight",
-          "../../player/CplayerDownRight.png",
+          `../../player/${characterSelected}playerDownRight.png`,
           {
             frameWidth: 15,
             frameHeight: 21.33,
@@ -108,7 +108,7 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
 
         this.load.spritesheet(
           "playerUpLeft",
-          "../../player/CplayerUpLeft.png",
+          `../../player/${characterSelected}playerUpLeft.png`,
           {
             frameWidth: 15,
             frameHeight: 21.33,
@@ -117,7 +117,7 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
 
         this.load.spritesheet(
           "playerDownLeft",
-          "../../player/CplayerDownLeft.png",
+          `../../player/${characterSelected}playerDownLeft.png`,
           {
             frameWidth: 15,
             frameHeight: 21.33,
