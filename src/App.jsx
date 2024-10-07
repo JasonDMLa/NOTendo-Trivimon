@@ -18,12 +18,10 @@ function App() {
 
       {/* <PhaserGame/> */}
       {!isGameStarted ? (
-
-   
         <LoginAccount onStart={handleLoginSuccess} />
       ) : (
         <PhaserGame />
-      )} */}
+      )}
     </div>
   );
 }

@@ -59,6 +59,15 @@ const LoginAccount = ({ onStart }) => {
           required
         />
         <button type="submit" disabled={loading}>Login</button>
+        <p>
+        Available Users:
+        <select id="users-bar" name="user" onClick={() => {
+          setUsername("James");
+          setPassword("NCPassword123");
+        }}>
+          <option>{"James"}</option>
+        </select>
+      </p>
       </form>
       {error && <p className="error-message">{error}</p>} 
       {loading && <p>Loading...</p>} 
