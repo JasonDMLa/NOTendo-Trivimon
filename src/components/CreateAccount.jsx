@@ -23,7 +23,7 @@ const CreateAccount = ({ setShowCreateAccount }) => {
         setUsername("");
         setPassword("");
         setTimeout(() => {
-          setShowCreateAccount(false); // Redirect back to Login
+          setShowCreateAccount(false); 
         }, 2000); 
       } else {
         setError("Username already exists. Please choose another.");
@@ -53,8 +53,8 @@ const CreateAccount = ({ setShowCreateAccount }) => {
         />
         <button type="submit">Create Account</button>
       </form>
-      {error && <p className="error-message">{error}</p>} {/* Using a CSS class */}
-      {successMessage && <p className="success-message">{successMessage}</p>} {/* Using a CSS class */}
+      {error && <p className="error-message">{error}</p>} 
+      {successMessage && <p className="success-message">{successMessage}</p>} 
       <button onClick={() => setShowCreateAccount(false)}>Back to Login</button>
     </div>
   );

@@ -8,12 +8,12 @@ const LoginAccount = ({ onStart }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showCreateAccount, setShowCreateAccount] = useState(false); 
-  const [loading, setLoading] = useState(false); // New loading state
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); 
-    setLoading(true); // Start loading
+    setLoading(true); 
 
     try {
       const response = await findUser(username, password);
@@ -22,13 +22,13 @@ const LoginAccount = ({ onStart }) => {
         onStart(); 
       } else {
         setError("User not found. Please check your username and password.");
-        setUsername(""); // Clear username on error
-        setPassword(""); // Clear password on error
+        setUsername(""); 
+        setPassword(""); 
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); 
     }
   };
 
@@ -60,8 +60,8 @@ const LoginAccount = ({ onStart }) => {
         />
         <button type="submit" disabled={loading}>Login</button>
       </form>
-      {error && <p className="error-message">{error}</p>} {/* Using a CSS class */}
-      {loading && <p>Loading...</p>} {/* Show loading indicator */}
+      {error && <p className="error-message">{error}</p>} 
+      {loading && <p>Loading...</p>} 
       <p>Don't have an account?</p>
       <button onClick={handleCreateAccountClick}>Create Account Here</button>
     </div>
