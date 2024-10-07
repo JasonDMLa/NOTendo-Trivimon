@@ -12,9 +12,14 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted,setEnteredHistory) =>
 
     create: function () {
       // Initialize variables
+
+
+      this.add.image(400, 300, "background").setScale(1.2).setOrigin(0.5, 0.5);
+
       setEnteredHistory(true)
-      this.add.image(400, 300, "background").setScale(1).setOrigin(0.5, 0.5);
-      this.add.image(400, 230, "displayBox").setScale(0.58).setOrigin(0.5, 0.5);
+
+     // this.add.image(400, 230, "displayBox").setScale(0.58).setOrigin(0.5, 0.5);
+
 
       let currentQuestionIndex = 0;
       let score = 10;

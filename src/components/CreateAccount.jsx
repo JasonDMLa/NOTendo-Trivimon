@@ -1,109 +1,61 @@
+// CreateAccount Component
 import React, { useState } from "react";
-import { postUser } from "../data/mongoApi"; // Ensure postUser is defined
-import { getAllUsers } from "../data/mongoApi";
-import LoginAccount from "./LoginAccount";
+import { postUser, getAllUsers } from "../data/mongoApi"; 
 
-const CreateAccount = () => {
+const CreateAccount = ({ setShowCreateAccount }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
-  const [showLoginAccount, setShowLoginAccount] = useState(false);
-  const [createSuccess, setCreateSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
-    setSuccessMessage(""); // Clear previous success messages
-
-    // Frontend error handling
-    if (!username || !password) {
-      setError("Both username and password are required.");
-      return;
-    }
+    setError("");
+    setSuccessMessage("");
 
     try {
-      // Attempt to create a user
-      getAllUsers().then((allUsers) => {
-        let listUsers = allUsers.map((user) => {
-          return user.username;
-        });
-        console.log(listUsers);
+      const allUsers = await getAllUsers();
+      const userExists = allUsers.some((user) => user.username === username);
 
-        if (username !== "" && !listUsers.includes(username)) {
-          const response = postUser(username, password);
-
-          // If the response indicates success
-          setSuccessMessage("Account created successfully!"); // Display success message
-          setUsername(""); // Clear username input
-          setPassword(""); // Clear password input
-          setCreateSuccess(true);
-        } else {
-          setError("Username already exists. Please choose another.");
-        }
-      });
-    } catch (err) {
-      // Error handling for existing username or other issues
-      if (
-        err.response &&
-        err.response.data.error.includes("Username already exists")
-      ) {
-        setError("Username already exists. Please choose another.");
+      if (!userExists) {
+        await postUser(username, password);
+        setSuccessMessage("Account created successfully!");
+        setUsername("");
+        setPassword("");
+        setTimeout(() => {
+          setShowCreateAccount(false); 
+        }, 2000); 
       } else {
-        setError("An error occurred. Please try again.");
+        setError("Username already exists. Please choose another.");
       }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
     }
-  };
-
-  const handleLoginAccountClick = () => {
-    setShowLoginAccount(true);
-  };
-
-  if (showLoginAccount && createSuccess) {
-    return <LoginAccount />; // Render CreateAccount when button is clicked
-  }
-
-  const handleBackToLogin = (e) => {
-    return <LoginAccount />;
   };
 
   return (
     <div>
       <h1>Create a New Account</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" onClick={handleLoginAccountClick}>
-          Create Account
-        </button>
-        <div>
-          <button onClick={handleBackToLogin}>
-            Back to Login
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Create Account</button>
       </form>
-
-      {/* Display Error if exists */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Display Success Message */}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {error && <p className="error-message">{error}</p>} 
+      {successMessage && <p className="success-message">{successMessage}</p>} 
+      <button onClick={() => setShowCreateAccount(false)}>Back to Login</button>
     </div>
   );
 };
