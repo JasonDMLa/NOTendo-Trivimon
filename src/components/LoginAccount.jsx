@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { findUser } from "../data/mongoApi"; 
 import CreateAccount from "./CreateAccount"; 
 
-const LoginAccount = ({ onStart, username, setUsername,  password, setPassword, setSaveData }) => {
+const LoginAccount = ({ onStart, username, setUsername,  password, setPassword, setSaveData, setCharacterSelected }) => {
   
   const [error, setError] = useState("");
   const [showCreateAccount, setShowCreateAccount] = useState(false); 
@@ -19,6 +19,7 @@ const LoginAccount = ({ onStart, username, setUsername,  password, setPassword, 
 
       if (response && response.data) {
         setSaveData(response.data.saveData)
+        setCharacterSelected(response.data.selectedImage)
         onStart(); 
       } else {
         setError("User not found. Please check your username and password.");
@@ -62,10 +63,10 @@ const LoginAccount = ({ onStart, username, setUsername,  password, setPassword, 
         <p>
         Available Users:
         <select id="users-bar" name="user" onClick={() => {
-          setUsername("James");
-          setPassword("NCPassword123");
+          setUsername("fred");
+          setPassword("asd");
         }}>
-          <option>{"James"}</option>
+          <option>{"fred"}</option>
         </select>
       </p>
       </form>
