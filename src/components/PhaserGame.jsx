@@ -48,11 +48,12 @@ const PhaserGame = () => {
     let collisionMap = [];
     let boundaries = [];
 
-    for (let i = 0; i < collisionTiles.length; i+=70) {
+    console.log(collisionTiles.length)
+    for (let i = 0; i < collisionTiles.length; i+=100) {
       collisionMap.push(collisionTiles.slice(i, 100 + i))
     }
 
-    
+    console.log(collisionMap.length)
     
     class Boundary {
       static width = 12
@@ -64,27 +65,29 @@ const PhaserGame = () => {
       }
 
       draw(group){
-        group.create(this.position.x, this.position.y, "collision").setScale(1).refreshBody();
+        group.create(this.position.x, this.position.y, "collision").setScale(2.7).setVisible(false).refreshBody();
       }
     }
 
-    for (const row of collisionMap) {
-      for (const symbol of row){
-        if (symbol === 1025){
+    console.log(collisionMap)
+    for (let i = 0; i < collisionMap.length; i++) {
+      for (let j = 0; j < collisionMap[i].length; j++){
+        if (collisionMap[i][j] !== 0){
           boundaries.push(
             new Boundary({position: {
-              x: 400 - 7.33 + row.indexOf(symbol)* 12,
-              y: 300 - 56.67 + collisionMap.indexOf(row) * 12 
+              x: (j * 12)*2.7,
+              y: (i * 12)*2.7, 
             }})
           )
         }
       }
     }
+
     console.log(boundaries)
 
     const FirstScene = {
       preload: function () {
-        this.load.image("background", "../../public/backgrounds/Trivimon.png");
+        this.load.image("background", "../../public/backgrounds/trivimon.png");
         this.load.image("collision", "../../public/backgrounds/collision.png");
         this.load.spritesheet("playerUp", "../../player/playerUp.png", { frameWidth: 43, frameHeight: 68 });
         this.load.spritesheet("playerDown", "../../player/playerDown.png", { frameWidth: 43, frameHeight: 68 });
@@ -112,7 +115,7 @@ const PhaserGame = () => {
           .setScale(2.7)
           .setOrigin(0, 0);
 
-        player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
+        player = this.physics.add.sprite(850, 620, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(false);
 
         this.anims.create({
@@ -499,7 +502,7 @@ const PhaserGame = () => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true,
+          debug: false,
         },
       },
       scene:
