@@ -8,6 +8,7 @@ import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
+import { collisionTiles } from "../data/collisions";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
@@ -35,6 +36,7 @@ const PhaserGame = () => {
     let cursors;
     let background;
     let obstacles;
+    let collide;
     let mouseText;
     let music;
     let videoGame;
@@ -43,14 +45,51 @@ const PhaserGame = () => {
     let history;
     let animal;
     let bar;
+    let collisionMap = [];
+    let boundaries = [];
+
+    for (let i = 0; i < collisionTiles.length; i+=70) {
+      collisionMap.push(collisionTiles.slice(i, 100 + i))
+    }
+
+    
+    
+    class Boundary {
+      static width = 12
+      static height = 12
+      constructor({position}){
+        this.position = position
+        this.width = 12
+        this.height = 12
+      }
+
+      draw(group){
+        group.create(this.position.x, this.position.y, "collision").setScale(1).refreshBody();
+      }
+    }
+
+    for (const row of collisionMap) {
+      for (const symbol of row){
+        if (symbol === 1025){
+          boundaries.push(
+            new Boundary({position: {
+              x: 400 - 7.33 + row.indexOf(symbol)* 12,
+              y: 300 - 56.67 + collisionMap.indexOf(row) * 12 
+            }})
+          )
+        }
+      }
+    }
+    console.log(boundaries)
 
     const FirstScene = {
       preload: function () {
         this.load.image("background", "../../public/backgrounds/Trivimon.png");
-        this.load.image("playerUp", "../../public/player/playerUp.png");
-        this.load.image("playerDown", "../../public/player/playerDown.png");
-        this.load.image("playerLeft", "../../public/player/playerLeft.png");
-        this.load.image("playerRight", "../../public/player/playerRight.png");
+        this.load.image("collision", "../../public/backgrounds/collision.png");
+        this.load.spritesheet("playerUp", "../../player/playerUp.png", { frameWidth: 43, frameHeight: 68 });
+        this.load.spritesheet("playerDown", "../../player/playerDown.png", { frameWidth: 43, frameHeight: 68 });
+        this.load.spritesheet("playerLeft", "../../player/playerLeft.png", { frameWidth: 43, frameHeight: 68 });
+        this.load.spritesheet("playerRight", "../../player/playerRight.png", { frameWidth: 43, frameHeight: 68 });
         this.load.image("tree", "../../public/tree.png");
         this.load.image("music", "../../public/houses/music.png");
         this.load.image("science", "../../public/houses/science.png");
@@ -61,12 +100,11 @@ const PhaserGame = () => {
         this.load.image("bar", "../../public/badges/bar.png");
       },
 
+      
+
       create: function () {
         //// cursor
         cursors = this.input.keyboard.createCursorKeys();
-
-
-
 
         // Your existing create logic for FirstScene
         background = this.add
@@ -76,6 +114,34 @@ const PhaserGame = () => {
 
         player = this.physics.add.sprite(400, 300, "playerDown").setScale(0.8);
         player.setCollideWorldBounds(false);
+
+        this.anims.create({
+          key: 'down',
+          frames: this.anims.generateFrameNumbers("playerDown", { start: 0, end: 3 }),
+          frameRate: 10,
+          repeat: -1
+        })
+
+        this.anims.create({
+          key: 'up',
+          frames: this.anims.generateFrameNumbers("playerUp", { start: 0, end: 3 }),
+          frameRate: 10,
+          repeat: -1
+        })
+        
+        this.anims.create({
+          key: 'left',
+          frames: this.anims.generateFrameNumbers("playerLeft", { start: 0, end: 3 }),
+          frameRate: 10,
+          repeat: -1
+        })
+
+        this.anims.create({
+          key: 'right',
+          frames: this.anims.generateFrameNumbers("playerRight", { start: 0, end: 3 }),
+          frameRate: 10,
+          repeat: -1
+        })
 
         mouseText = this.add.text(10, 10, "", {
           font: "16px Courier",
@@ -330,6 +396,12 @@ const PhaserGame = () => {
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
+        collide = this.physics.add.staticGroup();
+        
+        boundaries.forEach(boundary => {
+          boundary.draw(collide)
+        });
+
         const badgeX = 204;
         const badgeY = 553;
 
@@ -373,6 +445,9 @@ const PhaserGame = () => {
           console.log("Player hit an obstacle!");
         });
 
+        this.physics.add.collider(player, collide, () => {
+          console.log("Player hit an wall!");
+        });
         cursors = this.input.keyboard.createCursorKeys();
         
       },
@@ -380,23 +455,31 @@ const PhaserGame = () => {
       update: function () {
         if (!player) return;
 
-        player.setVelocity(0);
+        
+        player.setVelocityY(0);
 
         if (cursors.left.isDown) {
           player.setVelocityX(-250);
-          player.setTexture("playerLeft");
+          player.anims.play("left");
         } else if (cursors.right.isDown) {
           player.setVelocityX(250);
-          player.setTexture("playerRight");
+          player.anims.play("right");
+        } else {
+          player.setVelocityX(0);
         }
 
         if (cursors.up.isDown) {
           player.setVelocityY(-250);
-          player.setTexture("playerUp");
-        } else if (cursors.down.isDown) {
+          player.anims.play("up", true);
+        } 
+        else if (cursors.down.isDown) {
           player.setVelocityY(250);
-          player.setTexture("playerDown");
+          player.anims.play("down", true);
         }
+        else {
+          player.setVelocityY(0);
+        }
+
 
         const pointer = this.input.activePointer;
         mouseText.setText(

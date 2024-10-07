@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { findUser } from "../../mongoDB/mongoDB.js";
+//import { findUser } from "../../mongoDB/mongoDB.js";
 
 const Login = () => {
   const [input, setInput] = useState("");

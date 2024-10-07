@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div className="App">
-      <Login/>
+      <PhaserGame/>
       {/* <AccountLogin/> */}
       {/* {!isGameStarted ? (
         <StartScreen onStart={() => setIsGameStarted(true)} />
