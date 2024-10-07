@@ -67,11 +67,61 @@ const PhaserGame = ({ username, saveData }) => {
       preload: function () {
         //////
         this.load.image("background", "../../backgrounds/Trivimon.png");
-        this.load.image("playerUp", "../../player/playerUp.png");
-        this.load.image("playerDown", "../../player/playerDown.png");
-        this.load.image("playerLeft", "../../player/playerLeft.png");
-        this.load.image("playerRight", "../../player/playerRight.png");
-        //////
+
+        this.load.spritesheet("playerUp", "../../player/AplayerUp.png", {
+          frameWidth: 15,
+          frameHeight: 21.33,
+        });
+        this.load.spritesheet("playerDown", "../../player/AplayerDown.png", {
+          frameWidth: 15,
+          frameHeight: 21.33,
+        });
+        this.load.spritesheet("playerLeft", "../../player/AplayerLeft.png", {
+          frameWidth: 15,
+          frameHeight: 21.33,
+        });
+        this.load.spritesheet("playerRight", "../../player/AplayerRight.png", {
+          frameWidth: 15,
+          frameHeight: 21.33,
+        });
+
+        this.load.spritesheet(
+          "playerUpRight",
+          "../../player/AplayerUpRight.png",
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+
+        this.load.spritesheet(
+          "playerDownRight",
+          "../../player/AplayerDownRight.png",
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+
+        this.load.spritesheet(
+          "playerUpLeft",
+          "../../player/AplayerUpLeft.png",
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+
+        this.load.spritesheet(
+          "playerDownLeft",
+          "../../player/AplayerDownLeft.png",
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+
+
         this.load.image("tree", "../../tree.png");
         //////
         this.load.image("music", "../../houses/music.png");
@@ -108,6 +158,95 @@ const PhaserGame = ({ username, saveData }) => {
           .image(0, 0, "background")
           .setScale(2.7)
           .setOrigin(0, 0);
+
+
+        this.player = this.physics.add
+          .sprite(862, 750, "playerDown")
+          .setScale(2.5);
+        this.player.setCollideWorldBounds(false);
+
+        // Create animations for each direction
+        this.anims.create({
+          key: "walkDown",
+          frames: this.anims.generateFrameNumbers("playerDown", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10, // Adjust frame rate for smooth animation
+          repeat: -1, // Loop animation
+        });
+
+        this.anims.create({
+          key: "walkLeft",
+          frames: this.anims.generateFrameNumbers("playerLeft", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkRight",
+          frames: this.anims.generateFrameNumbers("playerRight", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkUp",
+          frames: this.anims.generateFrameNumbers("playerUp", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        // Diagonal directions
+        this.anims.create({
+          key: "walkUpLeft",
+          frames: this.anims.generateFrameNumbers("playerUpLeft", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkUpRight",
+          frames: this.anims.generateFrameNumbers("playerUpRight", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkDownLeft",
+          frames: this.anims.generateFrameNumbers("playerDownLeft", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkDownRight",
+          frames: this.anims.generateFrameNumbers("playerDownRight", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
 
         if (enteredAnimal) {
           this.player = this.physics.add
@@ -151,6 +290,7 @@ const PhaserGame = ({ username, saveData }) => {
           font: "16px Courier",
           fill: "#ffffff",
         });
+
         // Set camera bounds to match the background size
         this.cameras.main.setBounds(
           0,
@@ -481,22 +621,51 @@ const PhaserGame = ({ username, saveData }) => {
 
         this.player.setVelocity(0);
 
-        if (cursors.left.isDown) {
+        // Diagonal movement first
+        if (cursors.up.isDown && cursors.left.isDown) {
           this.player.setVelocityX(-250);
-          this.player.setTexture("playerLeft");
-        } else if (cursors.right.isDown) {
-          this.player.setVelocityX(250);
-          this.player.setTexture("playerRight");
-        }
-
-        if (cursors.up.isDown) {
           this.player.setVelocityY(-250);
-          this.player.setTexture("playerUp");
-        } else if (cursors.down.isDown) {
+          this.player.anims.play("walkUpLeft", true);
+        } else if (cursors.up.isDown && cursors.right.isDown) {
+          this.player.setVelocityX(250);
+          this.player.setVelocityY(-250);
+          this.player.anims.play("walkUpRight", true);
+        } else if (cursors.down.isDown && cursors.left.isDown) {
+          this.player.setVelocityX(-250);
           this.player.setVelocityY(250);
-          this.player.setTexture("playerDown");
+          this.player.anims.play("walkDownLeft", true);
+        } else if (cursors.down.isDown && cursors.right.isDown) {
+          this.player.setVelocityX(250);
+          this.player.setVelocityY(250);
+          this.player.anims.play("walkDownRight", true);
+        } else {
+          // Handle single direction movement
+          if (cursors.left.isDown) {
+            this.player.setVelocityX(-250);
+            this.player.anims.play("walkLeft", true);
+          } else if (cursors.right.isDown) {
+            this.player.setVelocityX(250);
+            this.player.anims.play("walkRight", true);
+          }
+
+          if (cursors.up.isDown) {
+            this.player.setVelocityY(-250);
+            this.player.anims.play("walkUp", true);
+          } else if (cursors.down.isDown) {
+            this.player.setVelocityY(250);
+            this.player.anims.play("walkDown", true);
+          }
         }
 
+        // Stop animation when no movement
+        if (
+          cursors.left.isUp &&
+          cursors.right.isUp &&
+          cursors.up.isUp &&
+          cursors.down.isUp
+        ) {
+          this.player.anims.stop(); // Stop animation if no keys pressed
+        }
         // Update the coordinates display to stick with the player
         this.coordText.setText(
           "Coordinates: (" +
