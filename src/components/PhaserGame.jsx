@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import ScienceScene from "../Scenes/ScienceScene"; // Import your ScienceScene component
-import VideoGameScene from "../Scenes/VideoGameScene"; // Import your VideoGameScene component
+import ScienceScene from "../Scenes/ScienceScene"; 
+import VideoGameScene from "../Scenes/VideoGameScene";
 import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
 import HistoryScene from "../Scenes/HistoryScene";
@@ -13,7 +13,7 @@ const PhaserGame = () => {
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
   ////
-  const [videoGameCompleted, setVideoGameCompleted] = useState(false); // Flag for videoGame teleport
+  const [videoGameCompleted, setVideoGameCompleted] = useState(false);
   const [scienceCompleted, setScienceCompleted] = useState(false);
   const [musicCompleted, setMusicCompleted] = useState(false);
   const [sportCompleted, setSportCompleted] = useState(false);
@@ -27,7 +27,7 @@ const PhaserGame = () => {
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
-  // State to track if the right button was clicked in the ScienceScene
+
 
   useEffect(() => {
     let player;
@@ -121,14 +121,14 @@ const PhaserGame = () => {
             );
             if (!videoGameQuestionsLoaded) {
               console.log("Loading music questions...");
-              setVideoGameQuestionsLoaded(true); // Set flag to true
+              setVideoGameQuestionsLoaded(true); // Set loaded to true
               setCurrentScene("VideoGameScene"); // Change to MusicScene
               //});
             } else {
               console.log(
                 "VideoGame questions already loaded, changing to MusicScene..."
               );
-              setCurrentScene("VideoGameScene"); // Change to MusicScene if already loaded
+              setCurrentScene("VideoGameScene"); // Change to videogame if already loaded
             }
           });
         } else {
@@ -462,15 +462,15 @@ const PhaserGame = () => {
         currentScene === "FirstScene" ? (
           FirstScene
         ) : currentScene === "ScienceScene" ? (
-          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene here
+          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene
         ) : currentScene === "VideoGameScene" ? (
           VideoGameScene(setCurrentScene, setVideoGameCompleted)
         ) : currentScene === "MusicScene" ? (
-          MusicScene(setCurrentScene, setMusicCompleted) // Call VideoGameScene here
+          MusicScene(setCurrentScene, setMusicCompleted) 
         ) : currentScene === "SportScene" ? (
-          SportScene(setCurrentScene, setSportCompleted) // Call VideoGameScene here
+          SportScene(setCurrentScene, setSportCompleted) 
         ) : currentScene === "HistoryScene" ? (
-          HistoryScene(setCurrentScene, setHistoryCompleted) // Call VideoGameScene here (
+          HistoryScene(setCurrentScene, setHistoryCompleted) 
         ) : currentScene === "AnimalScene" ? (
           AnimalScene(setCurrentScene, setAnimalCompleted)
         ) : (
@@ -483,7 +483,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); // Added sportCompleted to dependencies
+  }, [currentScene]); 
 
   return <div ref={gameRef}></div>;
 };
