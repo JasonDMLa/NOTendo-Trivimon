@@ -4,6 +4,7 @@ import PhaserGame from "./components/PhaserGame";
 import LoginAccount from "./components/LoginAccount";
 import { Create } from "phaser";
 import CreateAccount from "./components/CreateAccount";
+import CharacterSelection from "./components/CharacterSelection";
 
 function App() {
   const [isGameStarted, setIsGameStarted] = useState(false); // State to track if the game has started
@@ -16,10 +17,11 @@ function App() {
 
   return (
     <div className="App">
+      <CharacterSelection/>
       {/* <CreateAccount/> */}
 
       {/* <PhaserGame/> */}
-      {!isGameStarted ? (
+      {/* {!isGameStarted ? (
         <LoginAccount
           onStart={handleLoginSuccess}
           username={username}
@@ -30,7 +32,7 @@ function App() {
         />
       ) : (
         <PhaserGame username={username} saveData={saveData} />
-      )}
+      )} */}
     </div>
   );
 }

@@ -13,9 +13,9 @@ export const findUser = (username, password) => {
 
   
 
-  export const postUser = ( username, password) => {
+  export const postUser = ( username, password, selectedImage) => {
     return apiCall
-      .post(`/api/users`,{username,password})
+      .post(`/api/users`,{username,password, selectedImage})
       .then(({ data }) => {
         return data;
       });
