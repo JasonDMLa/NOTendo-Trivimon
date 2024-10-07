@@ -16,11 +16,11 @@ function App() {
     <div className="App">
       {/* <CreateAccount/> */}
       <PhaserGame/>
-      {!isGameStarted ? (
+      {/* {!isGameStarted ? (
         <LoginAccount onStart={handleLoginSuccess} />
       ) : (
         <PhaserGame />
-      )}
+      )} */}
     </div>
   );
 }

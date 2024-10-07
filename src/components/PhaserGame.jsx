@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import ScienceScene from "../Scenes/ScienceScene"; 
+import ScienceScene from "../Scenes/ScienceScene";
 import VideoGameScene from "../Scenes/VideoGameScene";
 import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
@@ -8,6 +8,7 @@ import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
+import { set } from "mongoose";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
@@ -27,7 +28,12 @@ const PhaserGame = () => {
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
-
+  let [enteredScience, setEnteredScience] = useState(false);
+  let [enteredVideoGame, setEnteredVideoGame] = useState(false);
+  let [enteredHistory, setEnteredHistory] = useState(false);
+  let [enteredAnimal, setEnteredAnimal] = useState(false);
+  let [enteredMusic, setEnteredMusic] = useState(false);
+  let [enteredSport, setEnteredSport] = useState(false);
 
   useEffect(() => {
     let player;
@@ -77,9 +83,41 @@ const PhaserGame = () => {
           .setScale(2.7)
           .setOrigin(0, 0);
 
-        this.player = this.physics.add
-          .sprite(862, 767, "playerDown")
-          .setScale(0.8);
+        if (enteredAnimal) {
+          this.player = this.physics.add
+            .sprite(2220, 1720, "playerDown")
+            .setScale(0.8);
+        } else if (enteredHistory) {
+          this.player = this.physics.add
+            .sprite(750, 1410, "playerDown")
+            .setScale(0.8);
+        } else if (enteredMusic) {
+          this.player = this.physics.add
+            .sprite(925, 2170, "playerDown")
+            .setScale(0.8);
+        } else if (enteredVideoGame) {
+          this.player = this.physics.add
+            .sprite(2800, 1490, "playerDown")
+            .setScale(0.8);
+        } else if (enteredScience) {
+          this.player = this.physics.add
+            .sprite(1650, 1070, "playerDown")
+            .setScale(0.8);
+        } else if (enteredSport) {
+          this.player = this.physics.add
+            .sprite(2260, 940, "playerDown")
+            .setScale(0.8);
+        } else {
+          this.player = this.physics.add
+            .sprite(862, 767, "playerDown")
+            .setScale(0.8);
+        }
+        setEnteredAnimal(false);
+        setEnteredMusic(false);
+        setEnteredScience(false);
+        setEnteredVideoGame(false);
+        setEnteredHistory(false);
+        setEnteredSport(false);
         this.player.setCollideWorldBounds(false);
 
         mouseText = this.add.text(10, 10, "", {
@@ -254,6 +292,7 @@ const PhaserGame = () => {
         ///////////////////////
 
         if (!historyCompleted) {
+          setEnteredHistory(false);
           this.physics.add.overlap(this.player, history, () => {
             console.log("Player hit history! Teleporting to HistoryScene...");
             if (!historyQuestionsLoaded) {
@@ -389,7 +428,6 @@ const PhaserGame = () => {
         });
 
         cursors = this.input.keyboard.createCursorKeys();
-        
       },
 
       update: function () {
@@ -462,17 +500,21 @@ const PhaserGame = () => {
         currentScene === "FirstScene" ? (
           FirstScene
         ) : currentScene === "ScienceScene" ? (
-          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene
+          ScienceScene(setCurrentScene, setScienceCompleted, setEnteredScience) // Call your ScienceScene
         ) : currentScene === "VideoGameScene" ? (
-          VideoGameScene(setCurrentScene, setVideoGameCompleted)
+          VideoGameScene(
+            setCurrentScene,
+            setVideoGameCompleted,
+            setEnteredVideoGame
+          )
         ) : currentScene === "MusicScene" ? (
-          MusicScene(setCurrentScene, setMusicCompleted) 
+          MusicScene(setCurrentScene, setMusicCompleted, setEnteredMusic)
         ) : currentScene === "SportScene" ? (
-          SportScene(setCurrentScene, setSportCompleted) 
+          SportScene(setCurrentScene, setSportCompleted, setEnteredSport)
         ) : currentScene === "HistoryScene" ? (
-          HistoryScene(setCurrentScene, setHistoryCompleted) 
+          HistoryScene(setCurrentScene, setHistoryCompleted, setEnteredHistory)
         ) : currentScene === "AnimalScene" ? (
-          AnimalScene(setCurrentScene, setAnimalCompleted)
+          AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : (
           <h1>nope</h1>
         ),
@@ -483,7 +525,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); 
+  }, [currentScene]);
 
   return <div ref={gameRef}></div>;
 };

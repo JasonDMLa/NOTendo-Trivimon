@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { getAllHistoryQuestions } from "../data/historyQuestions.js"; // Ensure you import this correctly
 
-const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
+const HistoryScene = (setCurrentScene, setHistoryCompleted,setEnteredHistory) => {
   return {
     preload: function () {
       // Preload assets like background image
@@ -11,7 +11,7 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted) => {
 
     create: function () {
       // Initialize variables
-
+      setEnteredHistory(true)
       this.add.image(400, 300, "background").setScale(1).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
