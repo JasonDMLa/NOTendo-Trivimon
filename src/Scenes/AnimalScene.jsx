@@ -1,6 +1,6 @@
 import { getAllAnimalQuestions } from "../data/animalsQuestions"; // Ensure you import this correctly
 
-const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
+const AnimalScene = (setCurrentScene, setAnimalCompleted,setEnteredAnimal) => {
   return {
     preload: function () {
       this.load.image("background", "../../public/triviaScenes/animals.png");
@@ -10,6 +10,7 @@ const AnimalScene = (setCurrentScene, setAnimalCompleted) => {
 
     create: function () {
       // Initialize variables
+      setEnteredAnimal(true)
       this.add.image(400, 300, "background").setScale(1.71).setOrigin(0.5, 0.5);
       this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
 

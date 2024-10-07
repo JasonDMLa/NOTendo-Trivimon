@@ -8,7 +8,7 @@ const OldScienceScene = (setCurrentScene, disableScience) => {
     },
 
     create: function () {
-      // Add background image
+      
       this.add.image(400, 300, "background").setScale(0.8).setOrigin(0.5, 0.5);
 
       // Button to teleport back to the FirstScene (no science teleport disabling)

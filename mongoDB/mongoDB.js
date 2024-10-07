@@ -1,4 +1,5 @@
-const { MongoClient } = require("mongodb");
+// mongoDB.js
+import { MongoClient } from "mongodb";
 
 // Replace the uri string with your connection string.
 const uri =
@@ -6,8 +7,8 @@ const uri =
 
 const client = new MongoClient(uri);
 
-const findUser = (username, password) => {
-  client
+export const findUser = (username, password) => {
+  return client
     .connect()
     .then(() => {
       const database = client.db("users_test");
@@ -17,22 +18,20 @@ const findUser = (username, password) => {
       return users.findOne(filter);
     })
     .catch((error) => {
-      console.error("Error occured while connecting");
+      console.error("Error occurred while connecting to MongoDB", error);
     })
     .finally(() => {
       client.close();
     });
 };
 
-const createUser = (username, password) => {
-  client
+export const createUser = (username, password) => {
+  return client
     .connect()
     .then(() => {
-      // Connect to the "users_test" database and access its "users" collection
       const database = client.db("users_test");
       const users = database.collection("users");
 
-      // Create a document to insert
       const user = {
         username,
         password,
@@ -46,7 +45,6 @@ const createUser = (username, password) => {
         },
       };
 
-      // Insert the defined document into the "users" collection
       return users.insertOne(user);
     })
     .catch((error) => {
@@ -56,12 +54,11 @@ const createUser = (username, password) => {
       );
     })
     .finally(() => {
-      // Close the MongoDB client connection
       client.close();
     });
 };
 
-const updateUser = (username, saveDataStates) => {
+export const updateUser = (username, saveDataStates) => {
   const {
     animalsCompleted,
     historyCompleted,
@@ -70,19 +67,16 @@ const updateUser = (username, saveDataStates) => {
     sportsCompleted,
     videoGamesCompleted,
   } = saveDataStates;
-  client
+
+  return client
     .connect()
     .then(() => {
       const database = client.db("users_test");
       const users = database.collection("users");
 
-      // Create a filter for the user with the specified username
       const filter = { username };
-
-      // Specify the update using the $set operator
       const updateDoc = {
         $set: {
-          // Use $set to update specific fields
           saveData: {
             animalsCompleted,
             historyCompleted,
@@ -94,7 +88,6 @@ const updateUser = (username, saveDataStates) => {
         },
       };
 
-      // Update the first document that matches the filter
       return users.updateOne(filter, updateDoc);
     })
     .catch((error) => {
@@ -104,9 +97,6 @@ const updateUser = (username, saveDataStates) => {
       );
     })
     .finally(() => {
-      // Close the connection after the operation completes
       client.close();
     });
 };
-
-module.exports = { findUser, createUser, updateUser };

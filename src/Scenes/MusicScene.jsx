@@ -1,6 +1,6 @@
 import { getAllMusicQuestions } from "../data/musicQuestions.js"; // Ensure you import this correctly
 
-const MusicScene = (setCurrentScene, setMusicCompleted) => {
+const MusicScene = (setCurrentScene, setMusicCompleted, setEnteredMusic) => {
   return {
     preload: function () {
       // Preload assets like background image
@@ -11,7 +11,7 @@ const MusicScene = (setCurrentScene, setMusicCompleted) => {
 
     create: function () {
       // Initialize variables
-
+      setEnteredMusic(true);
       this.add.image(400, 300, "background").setScale(1.73).setOrigin(0.5, 0.5);
       this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
 

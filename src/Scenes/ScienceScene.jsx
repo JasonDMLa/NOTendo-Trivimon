@@ -1,6 +1,6 @@
 import { getAllScienceQuestions } from "../data/scienceQuestions"; // Ensure you import this correctly
 
-const ScienceScene = (setCurrentScene, setScienceCompleted) => {
+const ScienceScene = (setCurrentScene, setScienceCompleted,setEnteredScience) => {
   return {
     preload: function () {
       // Preload assets like background image
@@ -11,12 +11,12 @@ const ScienceScene = (setCurrentScene, setScienceCompleted) => {
 
     create: function () {
       // Initialize variables
-
+      setEnteredScience(true)
       this.add.image(400, 300, "background").setScale(1.85).setOrigin(0.5, 0.5);
       this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 1;
+      let score = 10;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
