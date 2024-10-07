@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { getAllSportsQuestions } from "../data/sportsQuestions.js"; // Ensure you import this correctly
 
-const SportScene = (setCurrentScene, setSportCompleted) => {
+const SportScene = (setCurrentScene, setSportCompleted, setEnteredSport) => {
   return {
     preload: function () {
       // Preload assets like background image
@@ -11,7 +11,7 @@ const SportScene = (setCurrentScene, setSportCompleted) => {
 
     create: function () {
       // Initialize variables
-
+      setEnteredSport(true);
       this.add.image(400, 300, "background").setScale(1.71).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
