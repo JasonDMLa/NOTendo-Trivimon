@@ -10,6 +10,7 @@ import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
 
+
 const PhaserGame = ({ username, saveData }) => {
   console.log(saveData, "phaser");
   //////
@@ -66,6 +67,9 @@ const PhaserGame = ({ username, saveData }) => {
     const FirstScene = {
       preload: function () {
         //////
+        
+
+
         this.load.image("background", "../../backgrounds/Trivimon.png");
 
         this.load.spritesheet("playerUp", "../../player/AplayerUp.png", {
@@ -123,6 +127,7 @@ const PhaserGame = ({ username, saveData }) => {
 
 
         this.load.image("tree", "../../tree.png");
+        this.load.image("block", "../../collision.png");
         //////
         this.load.image("music", "../../houses/music.png");
         this.load.image("science", "../../houses/science.png");
@@ -139,6 +144,7 @@ const PhaserGame = ({ username, saveData }) => {
         this.load.image("sportBadge", "../../badges/sportBadge.png");
         this.load.image("historyBadge", "../../badges/historyBadge.png");
         //////
+        this.load.audio('backgroundMusic', '../../music/lake.mp3')
       },
 
       create: function () {
@@ -158,12 +164,15 @@ const PhaserGame = ({ username, saveData }) => {
           .image(0, 0, "background")
           .setScale(2.7)
           .setOrigin(0, 0);
+          
+          this.music = this.sound.add('backgroundMusic', { 
+            loop: true,  // Loops the music
+            volume: 0  // Set volume (0 to 1)
+          });
+          
+          this.music.play();
 
-
-        this.player = this.physics.add
-          .sprite(862, 750, "playerDown")
-          .setScale(2.5);
-        this.player.setCollideWorldBounds(false);
+     
 
         // Create animations for each direction
         this.anims.create({
@@ -251,31 +260,31 @@ const PhaserGame = ({ username, saveData }) => {
         if (enteredAnimal) {
           this.player = this.physics.add
             .sprite(2220, 1720, "playerDown")
-            .setScale(0.8);
+            .setScale(2.5);
         } else if (enteredHistory) {
           this.player = this.physics.add
             .sprite(750, 1410, "playerDown")
-            .setScale(0.8);
+            .setScale(2.5);
         } else if (enteredMusic) {
           this.player = this.physics.add
             .sprite(925, 2170, "playerDown")
-            .setScale(0.8);
+            .setScale(2.5);
         } else if (enteredVideoGame) {
           this.player = this.physics.add
             .sprite(2800, 1490, "playerDown")
-            .setScale(0.8);
+            .setScale(2.5);
         } else if (enteredScience) {
           this.player = this.physics.add
             .sprite(1650, 1070, "playerDown")
-            .setScale(0.8);
+            .setScale(2.5);
         } else if (enteredSport) {
           this.player = this.physics.add
             .sprite(2260, 940, "playerDown")
-            .setScale(0.8);
+            .setScale(2.5);
         } else {
           this.player = this.physics.add
-            .sprite(862, 767, "playerDown")
-            .setScale(0.8);
+          .sprite(862, 750, "playerDown")
+          .setScale(2.5);
         }
         setEnteredAnimal(false);
         setEnteredMusic(false);
@@ -284,6 +293,7 @@ const PhaserGame = ({ username, saveData }) => {
         setEnteredHistory(false);
         setEnteredSport(false);
 
+        
         this.player.setCollideWorldBounds(false);
 
         mouseText = this.add.text(10, 10, "", {
@@ -533,11 +543,32 @@ const PhaserGame = ({ username, saveData }) => {
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
+
+
+
+        let block1 = obstacles.create(530, 738, "block").setScale(0.5).refreshBody();
+        block1.body.setSize(
+          block1.width * 0.07,
+          block1.height * 25
+        );
+        let house = obstacles.create(860, 535, "block").setScale(0.5).refreshBody();
+        house.body.setSize(
+          house.width * 21,
+          house.height * 32
+        );
+
+
+
+
         // Set position bar
         this.bar = this.add
           .image(700, 600, "bar")
           .setScrollFactor(0)
           .setScale(0.7);
+
+
+
+
 
         // Create a group for badges, add them without physics, and set fixed position
         this.badges = this.add.group();
@@ -709,7 +740,7 @@ const PhaserGame = ({ username, saveData }) => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true,
+          debug: false,
         },
       },
       scene:
