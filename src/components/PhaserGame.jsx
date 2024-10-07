@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
-import ScienceScene from "../Scenes/ScienceScene"; 
+import ScienceScene from "../Scenes/ScienceScene";
 import VideoGameScene from "../Scenes/VideoGameScene";
 import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
@@ -8,6 +8,7 @@ import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
+import { set } from "mongoose";
 
 const PhaserGame = () => {
   const gameRef = useRef(null);
@@ -27,7 +28,12 @@ const PhaserGame = () => {
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
-
+  let [enteredScience, setEnteredScience] = useState(false);
+  let [enteredVideoGame, setEnteredVideoGame] = useState(false);
+  let [enteredHistory, setEnteredHistory] = useState(false);
+  let [enteredAnimal, setEnteredAnimal] = useState(false);
+  let [enteredMusic, setEnteredMusic] = useState(false);
+  let [enteredSport, setEnteredSport] = useState(false);
 
   useEffect(() => {
     let player;
@@ -77,9 +83,45 @@ const PhaserGame = () => {
           .setScale(2.7)
           .setOrigin(0, 0);
 
-        this.player = this.physics.add
-          .sprite(862, 767, "playerDown")
-          .setScale(0.8);
+
+      
+
+        if (enteredAnimal) {
+          this.player = this.physics.add
+            .sprite(2220, 1720, "playerDown")
+            .setScale(0.8);
+        } else if (enteredHistory) {
+          this.player = this.physics.add
+            .sprite(750, 1410, "playerDown")
+            .setScale(0.8);
+        } else if (enteredMusic) {
+          this.player = this.physics.add
+            .sprite(925, 2170, "playerDown")
+            .setScale(0.8);
+        } else if (enteredVideoGame) {
+          this.player = this.physics.add
+            .sprite(2800, 1490, "playerDown")
+            .setScale(0.8);
+        } else if (enteredScience) {
+          this.player = this.physics.add
+            .sprite(1650, 1070, "playerDown")
+            .setScale(0.8);
+        } else if (enteredSport) {
+          this.player = this.physics.add
+            .sprite(2260, 940, "playerDown")
+            .setScale(0.8);
+        } else {
+          this.player = this.physics.add
+            .sprite(862, 767, "playerDown")
+            .setScale(0.8);
+        }
+        setEnteredAnimal(false);
+        setEnteredMusic(false);
+        setEnteredScience(false);
+        setEnteredVideoGame(false);
+        setEnteredHistory(false);
+        setEnteredSport(false);
+
         this.player.setCollideWorldBounds(false);
 
         mouseText = this.add.text(10, 10, "", {
@@ -254,6 +296,7 @@ const PhaserGame = () => {
         ///////////////////////
 
         if (!historyCompleted) {
+          setEnteredHistory(false);
           this.physics.add.overlap(this.player, history, () => {
             console.log("Player hit history! Teleporting to HistoryScene...");
             if (!historyQuestionsLoaded) {
@@ -323,61 +366,63 @@ const PhaserGame = () => {
 
         /////////////////////////////////////////////////
 
-        // Set position bar
-        this.bar = this.physics.add.image(700, 600, "bar").setScale(0.7);
-        this.bar.body.setSize(this.bar.width * 0.7, this.bar.height * 0.4);
-
         obstacles = this.physics.add.staticGroup();
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
-        this.badges = this.physics.add.group();
+        // Set position bar
+        this.bar = this.add
+          .image(700, 600, "bar")
+          .setScrollFactor(0)
+          .setScale(0.7);
+
+        // Create a group for badges, add them without physics, and set fixed position
+        this.badges = this.add.group();
         let badgeX = 700;
         const badgeY = 600;
 
         if (scienceCompleted) {
-          const scienceBadge = this.badges
-            .create(badgeX, badgeY, "scienceBadge")
+          const scienceBadge = this.add
+            .image(badgeX - 120, badgeY, "scienceBadge")
             .setScale(0.3)
-            .refreshBody();
-          scienceBadge.initialXOffset = -120;
+            .setScrollFactor(0); // Lock to the screen
+          this.badges.add(scienceBadge);
         }
         if (sportCompleted) {
-          const sportBadge = this.badges
-            .create(badgeX, badgeY, "sportBadge")
+          const sportBadge = this.add
+            .image(badgeX - 60, badgeY, "sportBadge")
             .setScale(0.3)
-            .refreshBody();
-          sportBadge.initialXOffset = -60;
+            .setScrollFactor(0);
+          this.badges.add(sportBadge);
         }
         if (videoGameCompleted) {
-          const videogameBadge = this.badges
-            .create(badgeX, badgeY, "videogameBadge")
+          const videogameBadge = this.add
+            .image(badgeX - 10, badgeY, "videogameBadge")
             .setScale(0.3)
-            .refreshBody();
-          videogameBadge.initialXOffset = -10;
+            .setScrollFactor(0);
+          this.badges.add(videogameBadge);
         }
         if (musicCompleted) {
-          const musicBadge = this.badges
-            .create(badgeX, badgeY, "musicBadge")
+          const musicBadge = this.add
+            .image(badgeX + 40, badgeY, "musicBadge")
             .setScale(0.3)
-            .refreshBody();
-          musicBadge.initialXOffset = 40;
+            .setScrollFactor(0);
+          this.badges.add(musicBadge);
         }
         if (animalCompleted) {
-          const animalBadge = this.badges
-            .create(badgeX, badgeY, "animalBadge")
+          const animalBadge = this.add
+            .image(badgeX + 100, badgeY, "animalBadge")
             .setScale(0.3)
-            .refreshBody();
-          animalBadge.initialXOffset = 100;
+            .setScrollFactor(0);
+          this.badges.add(animalBadge);
         }
         if (historyCompleted) {
-          const historyBadge = this.badges
-            .create(badgeX, badgeY, "historyBadge")
+          const historyBadge = this.add
+            .image(badgeX + 150, badgeY, "historyBadge")
             .setScale(0.3)
-            .refreshBody();
-          historyBadge.initialXOffset = 150;
+            .setScrollFactor(0);
+          this.badges.add(historyBadge);
         }
-        // badges.create(540, 68, "sports").setScale(0.5).refreshBody();
 
         this.physics.add.collider(this.player, obstacles, () => {
           console.log("Player hit an obstacle!");
@@ -389,7 +434,6 @@ const PhaserGame = () => {
         });
 
         cursors = this.input.keyboard.createCursorKeys();
-        
       },
 
       update: function () {
@@ -425,18 +469,19 @@ const PhaserGame = () => {
         // Make the text follow the player by setting its position relative to the player
         this.coordText.setPosition(this.player.x - 50, this.player.y - 50);
 
-        // Make bar move
-        const camera = this.cameras.main;
+        // // Make bar move
+        // const camera = this.cameras.main;
 
-        this.bar.setPosition(camera.scrollX + 700, camera.scrollY + 600);
+        // this.bar.setPosition(camera.scrollX + 700, camera.scrollY + 600);
 
-        this.badges.getChildren().forEach((badge) => {
-          // Adjust the badge position based on camera scroll (offset on screen)
-          badge.setPosition(
-            camera.scrollX + 700 + badge.initialXOffset, // Adjust based on initial X offset
-            camera.scrollY + 550 // Fixed Y position
-          );
-        });
+        // this.badges.getChildren().forEach((badge) => {
+        //   // Adjust the badge position based on camera scroll (offset on screen)
+        //   badge.setPosition(
+        //     camera.scrollX + 700 + badge.initialXOffset, // Adjust based on initial X offset
+        //     camera.scrollY + 550 // Fixed Y position
+        //   );
+        // });
+
         // const pointer = this.input.activePointer;
         // mouseText.setText(
         //   `Mouse X: ${pointer.worldX.toFixed(
@@ -462,17 +507,21 @@ const PhaserGame = () => {
         currentScene === "FirstScene" ? (
           FirstScene
         ) : currentScene === "ScienceScene" ? (
-          ScienceScene(setCurrentScene, setScienceCompleted) // Call your ScienceScene
+          ScienceScene(setCurrentScene, setScienceCompleted, setEnteredScience) // Call your ScienceScene
         ) : currentScene === "VideoGameScene" ? (
-          VideoGameScene(setCurrentScene, setVideoGameCompleted)
+          VideoGameScene(
+            setCurrentScene,
+            setVideoGameCompleted,
+            setEnteredVideoGame
+          )
         ) : currentScene === "MusicScene" ? (
-          MusicScene(setCurrentScene, setMusicCompleted) 
+          MusicScene(setCurrentScene, setMusicCompleted, setEnteredMusic)
         ) : currentScene === "SportScene" ? (
-          SportScene(setCurrentScene, setSportCompleted) 
+          SportScene(setCurrentScene, setSportCompleted, setEnteredSport)
         ) : currentScene === "HistoryScene" ? (
-          HistoryScene(setCurrentScene, setHistoryCompleted) 
+          HistoryScene(setCurrentScene, setHistoryCompleted, setEnteredHistory)
         ) : currentScene === "AnimalScene" ? (
-          AnimalScene(setCurrentScene, setAnimalCompleted)
+          AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : (
           <h1>nope</h1>
         ),
@@ -483,7 +532,7 @@ const PhaserGame = () => {
     return () => {
       game.destroy(true);
     };
-  }, [currentScene]); 
+  }, [currentScene]);
 
   return <div ref={gameRef}></div>;
 };

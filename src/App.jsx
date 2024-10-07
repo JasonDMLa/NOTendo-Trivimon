@@ -15,12 +15,15 @@ function App() {
   return (
     <div className="App">
       {/* <CreateAccount/> */}
+
       {/* <PhaserGame/> */}
       {!isGameStarted ? (
+
+   
         <LoginAccount onStart={handleLoginSuccess} />
       ) : (
         <PhaserGame />
-      )}
+      )} */}
     </div>
   );
 }
