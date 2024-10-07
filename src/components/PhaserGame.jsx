@@ -77,7 +77,7 @@ const PhaserGame = () => {
           .setOrigin(0, 0);
 
         this.player = this.physics.add
-          .sprite(862, 767, "playerDown")
+          .sprite(862, 1400, "playerDown")
           .setScale(0.8);
         this.player.setCollideWorldBounds(false);
 
@@ -318,61 +318,63 @@ const PhaserGame = () => {
 
         /////////////////////////////////////////////////
 
-        // Set position bar
-        this.bar = this.physics.add.image(700, 600, "bar").setScale(0.7);
-        this.bar.body.setSize(this.bar.width * 0.7, this.bar.height * 0.4);
-
         obstacles = this.physics.add.staticGroup();
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
-        this.badges = this.physics.add.group();
+        // Set position bar
+        this.bar = this.add
+          .image(700, 600, "bar")
+          .setScrollFactor(0)
+          .setScale(0.7);
+
+        // Create a group for badges, add them without physics, and set fixed position
+        this.badges = this.add.group();
         let badgeX = 700;
         const badgeY = 600;
 
         if (scienceCompleted) {
-          const scienceBadge = this.badges
-            .create(badgeX, badgeY, "scienceBadge")
+          const scienceBadge = this.add
+            .image(badgeX - 120, badgeY, "scienceBadge")
             .setScale(0.3)
-            .refreshBody();
-          scienceBadge.initialXOffset = -120;
+            .setScrollFactor(0); // Lock to the screen
+          this.badges.add(scienceBadge);
         }
         if (sportCompleted) {
-          const sportBadge = this.badges
-            .create(badgeX, badgeY, "sportBadge")
+          const sportBadge = this.add
+            .image(badgeX - 60, badgeY, "sportBadge")
             .setScale(0.3)
-            .refreshBody();
-          sportBadge.initialXOffset = -60;
+            .setScrollFactor(0);
+          this.badges.add(sportBadge);
         }
         if (videoGameCompleted) {
-          const videogameBadge = this.badges
-            .create(badgeX, badgeY, "videogameBadge")
+          const videogameBadge = this.add
+            .image(badgeX - 10, badgeY, "videogameBadge")
             .setScale(0.3)
-            .refreshBody();
-          videogameBadge.initialXOffset = -10;
+            .setScrollFactor(0);
+          this.badges.add(videogameBadge);
         }
         if (musicCompleted) {
-          const musicBadge = this.badges
-            .create(badgeX, badgeY, "musicBadge")
+          const musicBadge = this.add
+            .image(badgeX + 40, badgeY, "musicBadge")
             .setScale(0.3)
-            .refreshBody();
-          musicBadge.initialXOffset = 40;
+            .setScrollFactor(0);
+          this.badges.add(musicBadge);
         }
         if (animalCompleted) {
-          const animalBadge = this.badges
-            .create(badgeX, badgeY, "animalBadge")
+          const animalBadge = this.add
+            .image(badgeX + 100, badgeY, "animalBadge")
             .setScale(0.3)
-            .refreshBody();
-          animalBadge.initialXOffset = 100;
+            .setScrollFactor(0);
+          this.badges.add(animalBadge);
         }
         if (historyCompleted) {
-          const historyBadge = this.badges
-            .create(badgeX, badgeY, "historyBadge")
+          const historyBadge = this.add
+            .image(badgeX + 150, badgeY, "historyBadge")
             .setScale(0.3)
-            .refreshBody();
-          historyBadge.initialXOffset = 150;
+            .setScrollFactor(0);
+          this.badges.add(historyBadge);
         }
-        // badges.create(540, 68, "sports").setScale(0.5).refreshBody();
 
         this.physics.add.collider(this.player, obstacles, () => {
           console.log("Player hit an obstacle!");
@@ -423,18 +425,19 @@ const PhaserGame = () => {
         // Make the text follow the player by setting its position relative to the player
         this.coordText.setPosition(this.player.x - 50, this.player.y - 50);
 
-        // Make bar move
-        const camera = this.cameras.main;
+        // // Make bar move
+        // const camera = this.cameras.main;
 
-        this.bar.setPosition(camera.scrollX + 700, camera.scrollY + 600);
+        // this.bar.setPosition(camera.scrollX + 700, camera.scrollY + 600);
 
-        this.badges.getChildren().forEach((badge) => {
-          // Adjust the badge position based on camera scroll (offset on screen)
-          badge.setPosition(
-            camera.scrollX + 700 + badge.initialXOffset, // Adjust based on initial X offset
-            camera.scrollY + 550 // Fixed Y position
-          );
-        });
+        // this.badges.getChildren().forEach((badge) => {
+        //   // Adjust the badge position based on camera scroll (offset on screen)
+        //   badge.setPosition(
+        //     camera.scrollX + 700 + badge.initialXOffset, // Adjust based on initial X offset
+        //     camera.scrollY + 550 // Fixed Y position
+        //   );
+        // });
+
         // const pointer = this.input.activePointer;
         // mouseText.setText(
         //   `Mouse X: ${pointer.worldX.toFixed(
