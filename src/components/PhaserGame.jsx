@@ -707,7 +707,7 @@ const PhaserGame = ({
         }
         if (historyCompleted) {
           if (showHistory) {
-            setDisplayText("Well Done! Music Badge Earned!");
+            setDisplayText("Well Done! History Badge Earned!");
             setShowHistory(false);
           }
 

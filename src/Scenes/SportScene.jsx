@@ -7,6 +7,10 @@ const SportScene = (setCurrentScene, setSportCompleted, setEnteredSport) => {
       this.load.image("background", "../../public/triviaScenes/gym.png"); // Change the path accordingly
       this.load.image("heart", "../../public/triviaScenes/heart.png");
       this.load.image("displayBox", "../../public/triviaScenes/displayBox.png");
+      this.load.audio("correct", "../../music/correct.mp3");
+      this.load.audio("wrong","../../music/wrong.mp3")
+      this.load.audio("win","../../music/win.mp3")
+      this.load.audio("fail","../../music/fail.mp3")
     },
 
     create: function () {
@@ -188,14 +192,34 @@ const SportScene = (setCurrentScene, setSportCompleted, setEnteredSport) => {
         const selectedAnswer = answerButtons[selectedIndex].text.slice(3);
 
         if (selectedAnswer === correctAnswer) {
+          this.music = this.sound.add("correct", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+  
+          this.music.play();
           score--;
           scoreText.setText(`HP: ${score}/10`);
         } else {
+          this.music = this.sound.add("wrong", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+  
+          this.music.play();
           wrongAnswer--;
           wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
         if (score === 0) {
+          this.music = this.sound.add("win", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+          this.music.play();
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => {
             setCurrentScene("FirstScene");
@@ -204,6 +228,12 @@ const SportScene = (setCurrentScene, setSportCompleted, setEnteredSport) => {
         }
 
         if (wrongAnswer === 0) {
+          this.music = this.sound.add("fail", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+          this.music.play();
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
         }
