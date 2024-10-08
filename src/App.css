@@ -5,6 +5,63 @@
   text-align: center;
 }
 
+/* Login Page */
+h1 {
+  font-size: 5em;
+  line-height: 1.1;
+  color: rgb(43, 40, 40);
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form {
+  place-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-input {
+  margin: 0.5rem auto;
+  padding: 0.3rem;
+  width: 25%;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.3em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+.account-button {
+  margin: 0 auto;
+  width: 13rem;
+}
+
+.create-account-text, .loading-text {
+  color: black;
+  font-weight: 1000;
+}
+
+.error-message {
+  color: red;
+  font-weight: 1000;
+}
+/* Account Creation Page */
 .image-container {
   display: flex;
   flex-direction: row;
@@ -13,9 +70,58 @@
 .CharImage {
   height: 60%;
   width: 20%;
+  transition: outline 0.3s;
+}
+.CharImage:hover {
+  outline: 3px solid #646cff; /* Outline the image with a blue border */
+  outline-offset: 2px; /* Optional: Creates space between the image and the outline */
 }
 
-.logo {
+.selected .CharImage {
+  outline: 2px solid #646cff; /* Change this to your desired selected color */
+}
+
+/* .CharImage:hover {
+  border-color: #646cff;
+}
+.CharImage:focus,
+.CharImage:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+} */
+
+.create-account-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-account-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-account-input {
+  margin: 0.5rem auto;
+  padding: 0.3rem;
+  width: 25%;
+}
+
+.select-character-text {
+  color: black;
+  font-weight: 1000;
+}
+
+.create-account-button {
+  margin: 0.3rem auto;
+  width: 13rem;
+  padding: 0.3em 1.2em;
+}
+
+.back-to-login-button {
+  margin: 0.3rem auto;
+  width: 13rem;
+  padding: 0.3em 1.2em;
+}
+/* .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
@@ -26,7 +132,7 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
-}
+} */
 
 @keyframes logo-spin {
   from {

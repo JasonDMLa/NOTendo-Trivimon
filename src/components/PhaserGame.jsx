@@ -10,9 +10,9 @@ import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
 
-const PhaserGame = ({ username, saveData ,characterSelected}) => {
+const PhaserGame = ({ username, saveData, characterSelected }) => {
   console.log(saveData, "phaser");
-  console.log(characterSelected)
+  console.log(characterSelected);
   //////
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
@@ -70,23 +70,38 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
 
         this.load.image("background", "../../backgrounds/Trivimon.png");
 
-        this.load.spritesheet("playerUp", `../../player/${characterSelected}playerUp.png`, {
-
-          frameWidth: 15,
-          frameHeight: 21.33,
-        });
-        this.load.spritesheet("playerDown", `../../player/${characterSelected}playerDown.png`, {
-          frameWidth: 15,
-          frameHeight: 21.33,
-        });
-        this.load.spritesheet("playerLeft", `../../player/${characterSelected}playerLeft.png`, {
-          frameWidth: 15,
-          frameHeight: 21.33,
-        });
-        this.load.spritesheet("playerRight", `../../player/${characterSelected}playerRight.png`, {
-          frameWidth: 15,
-          frameHeight: 21.33,
-        });
+        this.load.spritesheet(
+          "playerUp",
+          `../../player/${characterSelected}playerUp.png`,
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+        this.load.spritesheet(
+          "playerDown",
+          `../../player/${characterSelected}playerDown.png`,
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+        this.load.spritesheet(
+          "playerLeft",
+          `../../player/${characterSelected}playerLeft.png`,
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
+        this.load.spritesheet(
+          "playerRight",
+          `../../player/${characterSelected}playerRight.png`,
+          {
+            frameWidth: 15,
+            frameHeight: 21.33,
+          }
+        );
 
         this.load.spritesheet(
           "playerUpRight",
@@ -147,14 +162,10 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
       },
 
       create: function () {
-        console.log({
-          animalCompleted,
-          historyCompleted,
-          musicCompleted,
-          scienceCompleted,
-          sportCompleted,
-          videoGameCompleted,
-        });
+        
+
+        // Set the line style (thickness, color)
+
         //// cursor
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -163,7 +174,7 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
           .image(0, 0, "background")
           .setScale(2.7)
           .setOrigin(0, 0);
-
+        
         this.music = this.sound.add("calmMusic", {
           loop: true, // Loops the music
           volume: 0, // Set volume (0 to 1)

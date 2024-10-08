@@ -1,6 +1,6 @@
 // CreateAccount Component
 import React, { useState } from "react";
-import { postUser, getAllUsers } from "../data/mongoApi"; 
+import { postUser, getAllUsers } from "../data/mongoApi";
 import CharacterSelection from "./CharacterSelection";
 
 const CreateAccount = ({ setShowCreateAccount }) => {
@@ -14,26 +14,25 @@ const CreateAccount = ({ setShowCreateAccount }) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
-    console.log(username,password,selectedImage)
+    console.log(username, password, selectedImage);
 
     try {
       const allUsers = await getAllUsers();
       const userExists = allUsers.some((user) => user.username === username);
 
       if (!userExists) {
-        if(selectedImage !== ""){
-          console.log("posted")
-        await postUser(username, password, selectedImage);
-        setSuccessMessage("Account created successfully!");
-        setUsername("");
-        setPassword("");
-        setTimeout(() => {
-          setShowCreateAccount(false); 
-        }, 2000); 
+        if (selectedImage !== "") {
+          console.log("posted");
+          await postUser(username, password, selectedImage);
+          setSuccessMessage("Account created successfully!");
+          setUsername("");
+          setPassword("");
+          setTimeout(() => {
+            setShowCreateAccount(false);
+          }, 2000);
         } else {
-          setError("Character not selected")
+          setError("Character not selected");
         }
-        
       } else {
         setError("Username already exists. Please choose another.");
       }
@@ -44,34 +43,37 @@ const CreateAccount = ({ setShowCreateAccount }) => {
 
   return (
     <>
-   
-    <div>
-      <h1>Create a New Account</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Create Account</button>
-        <p>select a character</p>
-      <CharacterSelection setSelectedImage={setSelectedImage}/>
-      </form>
-      
-      {error && <p className="error-message">{error}</p>} 
-      {successMessage && <p className="success-message">{successMessage}</p>} 
-      <button onClick={() => setShowCreateAccount(false)}>Back to Login</button>
-    </div>
-    
+      <div className="create-account-page">
+        <h1>Create a New Account</h1>
+        <form className="create-account-form" onSubmit={handleSubmit}>
+          <input
+            className="create-account-input"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            className="create-account-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          
+          <p className="select-character-text">Select a Character</p>
+          <CharacterSelection setSelectedImage={setSelectedImage} />
+          <button className = "create-account-button"type="submit">Create Account</button>
+        </form>
+        {error && <p className="error-message">{error}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        
+        <button className="back-to-login-button" onClick={() => setShowCreateAccount(false)}>
+          Back to Login
+        </button>
+      </div>
     </>
   );
 };
