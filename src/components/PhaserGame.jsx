@@ -9,6 +9,7 @@ import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
+
 import { collisionTiles } from "../data/collisions";
 
 const PhaserGame = ({
@@ -17,6 +18,7 @@ const PhaserGame = ({
   characterSelected,
   setDisplayText,
 }) => {
+
   console.log(saveData, "phaser");
   console.log(characterSelected);
   //////
@@ -83,8 +85,10 @@ const PhaserGame = ({
       preload: function () {
         //////
 
+
         this.load.image("background", "../../backgrounds/trivimon.png");
         this.load.image("collision", "../../collision.png");
+
 
         this.load.spritesheet(
           "playerUp",
@@ -180,14 +184,10 @@ const PhaserGame = ({
       },
 
       create: function () {
-        console.log({
-          animalCompleted,
-          historyCompleted,
-          musicCompleted,
-          scienceCompleted,
-          sportCompleted,
-          videoGameCompleted,
-        });
+        
+
+        // Set the line style (thickness, color)
+
         //// cursor
         cursors = this.input.keyboard.createCursorKeys();
         // setDisplayText("")
@@ -198,7 +198,9 @@ const PhaserGame = ({
           .setScale(2.7)
           .setOrigin(0, 0);
 
+
         this.music = this.sound.add("calm", {
+
           loop: true, // Loops the music
           volume: 0.0, // Set volume (0 to 1)
         });
