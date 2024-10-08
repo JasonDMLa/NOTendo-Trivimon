@@ -9,6 +9,7 @@ import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
+import { collisionTiles } from "../data/collisions";
 
 const PhaserGame = ({ username, saveData ,characterSelected}) => {
   console.log(saveData, "phaser");
@@ -63,12 +64,53 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
     let animal;
     let bar;
     let saveButton;
+    let collide;
+    let collisionMap = [];
+    let boundaries = [];
+
+    console.log(collisionTiles.length)
+    for (let i = 0; i < collisionTiles.length; i+=100) {
+      collisionMap.push(collisionTiles.slice(i, 100 + i))
+    }
+
+    console.log(collisionMap.length)
+
+    class Boundary {
+      static width = 12
+      static height = 12
+      constructor({position}){
+        this.position = position
+        this.width = 12
+        this.height = 12
+      }
+
+      draw(group){
+        group.create(this.position.x, this.position.y, "collision").setScale(2.7).setVisible(false).refreshBody();
+      }
+    }
+
+    console.log(collisionMap)
+    for (let i = 0; i < collisionMap.length; i++) {
+      for (let j = 0; j < collisionMap[i].length; j++){
+        if (collisionMap[i][j] !== 0){
+          boundaries.push(
+            new Boundary({position: {
+              x: (j * 12)*2.7,
+              y: (i * 12)*2.7, 
+            }})
+          )
+        }
+      }
+    }
+
+    console.log(boundaries)
 
     const FirstScene = {
       preload: function () {
         //////
-
-        this.load.image("background", "../../backgrounds/Trivimon.png");
+        this.load.image("background", "../../public/backgrounds/trivimon.png");
+        this.load.image("collision", "../../public/backgrounds/collision.png");
+        // this.load.image("background", "../../backgrounds/Trivimon.png");
 
         this.load.spritesheet("playerUp", `../../player/${characterSelected}playerUp.png`, {
 
@@ -541,6 +583,16 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
+        collide = this.physics.add.staticGroup();
+
+        boundaries.forEach(boundary => {
+          boundary.draw(collide)
+        });
+
+        this.physics.add.collider(player, collide, () => {
+          console.log("Player hit an wall!");
+        });
+
         let block1 = obstacles
           .create(530, 738, "block")
           .setScale(0.5)
@@ -728,7 +780,7 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: false,
+          debug: true,
         },
       },
       scene:
