@@ -6,13 +6,13 @@ import MusicScene from "../Scenes/MusicScene";
 import SportScene from "../Scenes/SportScene";
 import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
+import BossScene from "../Scenes/BossScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
 
 const PhaserGame = ({ username, saveData, characterSelected }) => {
-  console.log(saveData, "phaser");
-  console.log(characterSelected);
+  
   //////
   const gameRef = useRef(null);
   const [currentScene, setCurrentScene] = useState("FirstScene"); // Track current scene
@@ -33,6 +33,7 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
   const [animalCompleted, setAnimalCompleted] = useState(
     saveData.animalsCompleted
   );
+  const [bossCompleted, setBossCompleted] = useState(false)
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -41,12 +42,15 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
+  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false)
+  ////
   let [enteredScience, setEnteredScience] = useState(false);
   let [enteredVideoGame, setEnteredVideoGame] = useState(false);
   let [enteredHistory, setEnteredHistory] = useState(false);
   let [enteredAnimal, setEnteredAnimal] = useState(false);
   let [enteredMusic, setEnteredMusic] = useState(false);
   let [enteredSport, setEnteredSport] = useState(false);
+  let [enteredBoss, setEnteredBoss] = useState(false)
 
   useEffect(() => {
     let player;
@@ -61,6 +65,7 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
     let sport;
     let history;
     let animal;
+    let boss;
     let bar;
     let saveButton;
 
@@ -148,6 +153,7 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
         this.load.image("sport", "../../houses/sport.png");
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
+        
         //////
         this.load.image("bar", "../../badges/bar.png");
         this.load.image("musicBadge", "../../badges/musicBadge.png");
@@ -327,6 +333,7 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
         sport = addStaticImage(this, 2260, 870, "sport", 0.1);
         history = addStaticImage(this, 750, 1300, "history", 0.3);
         animal = addStaticImage(this, 2220, 1670, "animal", 0.07);
+        boss = addStaticImage(this, 800, 1400, "tree", 0.1)
 
         // Keep hitbox logic unchanged
 
@@ -337,7 +344,45 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
         setBodySizeAndOffset(sport, 0.1, 0.1);
         setBodySizeAndOffset(history, 0.3, 0.3);
         setBodySizeAndOffset(animal, 0.07, 0.07);
+        setBodySizeAndOffset(boss, 0.1, 0.1)
+        //////
+        if (!bossCompleted) {
+          this.physics.add.overlap(this.player, boss, () => {
+            console.log(
+              "Player hit videoGame! Teleporting to videoGameScene..."
+            );
+            if (!bossQuestionsLoaded) {
+              console.log("Loading music questions...");
+              setBossQuestionsLoaded(true); // Set loaded to true
+              setCurrentScene("BossScene"); // Change to MusicScene
+              //});
+            } else {
+              console.log(
+                "VideoGame questions already loaded, changing to MusicScene..."
+              );
+              setCurrentScene("BossScene"); // Change to videogame if already loaded
+            }
+          });
+        } else {
+          // Keep the logic to handle static videoGame if disabled
+          const staticBoss = this.physics.add
+            .staticImage(2800, 1360, "tree")
+            .setScale(0.1);
+            staticBoss.body.setSize(
+              staticBoss.width * 0.1,
+              staticBoss.height * 0.1
+          );
+          staticBoss.body.setOffset(
+            (staticBoss.width - staticBoss.width * 0.1) / 2,
+            (staticBoss.height - staticBoss.height * 0.1) / 2
+          );
+          this.physics.add.collider(this.player, staticBoss, () => {
+            console.log("Player collided with the static videoGame");
+          });
+        }
 
+
+        //////
         if (!videoGameCompleted) {
           this.physics.add.overlap(this.player, videoGame, () => {
             console.log(
@@ -761,7 +806,9 @@ const PhaserGame = ({ username, saveData, characterSelected }) => {
           HistoryScene(setCurrentScene, setHistoryCompleted, setEnteredHistory)
         ) : currentScene === "AnimalScene" ? (
           AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
-        ) : (
+        ) : currentScene === "BossScene" ? (
+          BossScene(setCurrentScene, setBossCompleted, setEnteredBoss)
+        ): (
           <h1>nope</h1>
         ),
     };

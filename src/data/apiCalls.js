@@ -13,3 +13,15 @@ export const getData = (amount, category, difficulty) => {
       return data.results;
     });
 };
+
+
+export const getBossData = (amount, difficulty) => {
+  return apiCall
+    .get(
+      `/api.php?amount=${amount.toString()}&difficulty=${difficulty}&type=multiple`
+    )
+    .then(({ data }) => {
+      console.log(data, "<--- bossdata")
+      return data.results;
+    });
+};
