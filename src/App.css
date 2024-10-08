@@ -5,6 +5,7 @@
   text-align: center;
 }
 
+
 /* Login Page */
 h1 {
   font-size: 5em;
@@ -62,6 +63,14 @@ button:focus-visible {
   font-weight: 1000;
 }
 /* Account Creation Page */
+
+#phaser-container canvas {
+  z-index: 1; /* Lower than the display box */
+  position: relative; /* Ensure the canvas respects the layout */
+}
+
+
+
 .image-container {
   display: flex;
   flex-direction: row;
