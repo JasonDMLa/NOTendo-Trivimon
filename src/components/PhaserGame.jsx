@@ -753,7 +753,7 @@ const PhaserGame = ({ username, saveData ,characterSelected}) => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: false,
+          debug: true,
         },
       },
       scene:
