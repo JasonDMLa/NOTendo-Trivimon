@@ -12,7 +12,8 @@ import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
 
 
-import { collisionTiles } from "../data/collisions";
+// import { collisionTiles } from "../data/collisions";
+import { collisionTiles } from "../data/collisionsNew";
 
 const PhaserGame = ({
   username,
@@ -890,7 +891,7 @@ const PhaserGame = ({
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: false,
+          debug: true,
         },
       },
       scene:
