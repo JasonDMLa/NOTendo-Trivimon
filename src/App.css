@@ -5,6 +5,12 @@
   text-align: center;
 }
 
+#phaser-container canvas {
+  z-index: 1; /* Lower than the display box */
+  position: relative; /* Ensure the canvas respects the layout */
+}
+
+
 .image-container {
   display: flex;
   flex-direction: row;

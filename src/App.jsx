@@ -5,6 +5,7 @@ import LoginAccount from "./components/LoginAccount";
 import { Create } from "phaser";
 import CreateAccount from "./components/CreateAccount";
 import CharacterSelection from "./components/CharacterSelection";
+import DisplayBox from "./components/DisplayBox";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const handleLoginSuccess = () => {
     setIsGameStarted(true); // Change the state to start the game
   };
+  const [displayText, setDisplayText] = useState("Welcome to the game!");
 
   return (
     <div className="App">
@@ -34,8 +36,14 @@ function App() {
           setCharacterSelected={setCharacterSelected}
         />
       ) : (
-        <PhaserGame username={username} saveData={saveData} characterSelected={characterSelected}/>
-      )}
+        <div className="app-container">
+        <PhaserGame username={username} saveData={saveData} characterSelected={characterSelected} setDisplayText={setDisplayText}/>
+        <DisplayBox text={displayText}/>
+        </div>
+      )
+      
+      
+      }
     </div>
   );
 }

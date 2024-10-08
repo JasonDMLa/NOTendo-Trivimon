@@ -25,7 +25,7 @@ const HistoryScene = (setCurrentScene, setHistoryCompleted,setEnteredHistory) =>
 
 
       let currentQuestionIndex = 0;
-      let score = 10;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
