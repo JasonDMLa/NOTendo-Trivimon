@@ -620,16 +620,16 @@ const PhaserGame = ({
           console.log("Player hit an wall!");
         });
 
-        let block1 = obstacles
-          .create(530, 738, "block")
-          .setScale(0.5)
-          .refreshBody();
-        block1.body.setSize(block1.width * 0.07, block1.height * 25);
-        let house = obstacles
-          .create(860, 500, "block")
-          .setScale(0.5)
-          .refreshBody();
-        house.body.setSize(house.width * 21, house.height * 32);
+        // let block1 = obstacles
+        //   .create(530, 738, "block")
+        //   .setScale(0.5)
+        //   .refreshBody();
+        // block1.body.setSize(block1.width * 0.07, block1.height * 25);
+        // let house = obstacles
+        //   .create(860, 500, "block")
+        //   .setScale(0.5)
+        //   .refreshBody();
+        // house.body.setSize(house.width * 21, house.height * 32);
 
         // Set position bar
         this.bar = this.add
