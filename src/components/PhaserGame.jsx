@@ -18,7 +18,6 @@ const PhaserGame = ({
   characterSelected,
   setDisplayText,
 }) => {
-
   console.log(saveData, "phaser");
   console.log(characterSelected);
   //////
@@ -85,10 +84,8 @@ const PhaserGame = ({
       preload: function () {
         //////
 
-
         this.load.image("background", "../../backgrounds/trivimon.png");
         this.load.image("collision", "../../collision.png");
-
 
         this.load.spritesheet(
           "playerUp",
@@ -185,8 +182,6 @@ const PhaserGame = ({
       },
 
       create: function () {
-        
-
         // Set the line style (thickness, color)
 
         //// cursor
@@ -199,9 +194,7 @@ const PhaserGame = ({
           .setScale(2.7)
           .setOrigin(0, 0);
 
-
         this.music = this.sound.add("calm", {
-
           loop: true, // Loops the music
           volume: 0.0, // Set volume (0 to 1)
         });
@@ -603,42 +596,31 @@ const PhaserGame = ({
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
         collide = this.physics.add.staticGroup();
-        for (let i = 0; i < collisionTiles.length; i+=100) {
-          collisionMap.push(collisionTiles.slice(i, 100 + i))
+        for (let i = 0; i < collisionTiles.length; i += 100) {
+          collisionMap.push(collisionTiles.slice(i, 100 + i));
         }
 
         for (let i = 0; i < collisionMap.length; i++) {
-          for (let j = 0; j < collisionMap[i].length; j++){
-            if (collisionMap[i][j] !== 0){
-              collide.create((j * 12)*2.7,(i * 12)*2.7, "collision").setScale(2.7).setVisible(false).refreshBody();
+          for (let j = 0; j < collisionMap[i].length; j++) {
+            if (collisionMap[i][j] !== 0) {
+              collide
+                .create(j * 12 * 2.7, i * 12 * 2.7, "collision")
+                .setScale(2.7)
+                .setVisible(false)
+                .refreshBody();
             }
           }
         }
-
-        // boundaries.forEach(boundary => {
-        //   boundary.draw(collide)
-        // });
 
         this.physics.add.collider(this.player, collide, () => {
           console.log("Player hit an wall!");
         });
 
-        // let block1 = obstacles
-        //   .create(530, 738, "block")
-        //   .setScale(0.5)
-        //   .refreshBody();
-        // block1.body.setSize(block1.width * 0.07, block1.height * 25);
-        // let house = obstacles
-        //   .create(860, 500, "block")
-        //   .setScale(0.5)
-        //   .refreshBody();
-        // house.body.setSize(house.width * 21, house.height * 32);
-
         // Set position bar
         this.bar = this.add
-          .image(700, 600, "bar")
+          .image(700, 585, "bar")
           .setScrollFactor(0)
-          .setScale(0.7);
+          .setScale(1);
 
         // Create a group for badges, add them without physics, and set fixed position
         this.badges = this.add.group();
@@ -652,8 +634,8 @@ const PhaserGame = ({
           }
 
           const scienceBadge = this.add
-            .image(badgeX - 120, badgeY, "scienceBadge")
-            .setScale(0.3)
+            .image(badgeX - 133, badgeY, "scienceBadge")
+            .setScale(1)
             .setScrollFactor(0); // Lock to the screen
           this.badges.add(scienceBadge);
         }
@@ -664,8 +646,8 @@ const PhaserGame = ({
           }
 
           const sportBadge = this.add
-            .image(badgeX - 60, badgeY, "sportBadge")
-            .setScale(0.3)
+            .image(badgeX - 80, badgeY, "sportBadge")
+            .setScale(0.122)
             .setScrollFactor(0);
           this.badges.add(sportBadge);
         }
@@ -676,8 +658,8 @@ const PhaserGame = ({
           }
 
           const videogameBadge = this.add
-            .image(badgeX - 10, badgeY, "videogameBadge")
-            .setScale(0.3)
+            .image(badgeX - 26, badgeY, "videogameBadge")
+            .setScale(0.84)
             .setScrollFactor(0);
           this.badges.add(videogameBadge);
         }
@@ -688,8 +670,8 @@ const PhaserGame = ({
           }
 
           const musicBadge = this.add
-            .image(badgeX + 40, badgeY, "musicBadge")
-            .setScale(0.3)
+            .image(badgeX + 29, badgeY, "musicBadge")
+            .setScale(0.6)
             .setScrollFactor(0);
           this.badges.add(musicBadge);
         }
@@ -700,8 +682,8 @@ const PhaserGame = ({
           }
 
           const animalBadge = this.add
-            .image(badgeX + 100, badgeY, "animalBadge")
-            .setScale(0.3)
+            .image(badgeX + 80, badgeY, "animalBadge")
+            .setScale(1.15)
             .setScrollFactor(0);
           this.badges.add(animalBadge);
         }
@@ -712,8 +694,8 @@ const PhaserGame = ({
           }
 
           const historyBadge = this.add
-            .image(badgeX + 150, badgeY, "historyBadge")
-            .setScale(0.3)
+            .image(badgeX + 135, badgeY, "historyBadge")
+            .setScale(0.7)
             .setScrollFactor(0);
           this.badges.add(historyBadge);
         }
@@ -743,24 +725,24 @@ const PhaserGame = ({
             scienceCompleted,
             sportsCompleted: sportCompleted,
             videoGamesCompleted: videoGameCompleted,
-          }).then(()=>{
-            this.music = this.sound.add("save", {
-              loop: false, // Loops the music
-              volume: 0.5, // Set volume (0 to 1)
-
-            });
-    
-            this.music.play();
-            setDisplayText("Game Saved Successfully!")
-          }).catch(()=>{
-            this.music = this.sound.add("error", {
-              loop: false, // Loops the music
-              volume: 0.5, // Set volume (0 to 1)
-            });  
-            this.music.play();
-            setDisplayText("Save Failed")
           })
+            .then(() => {
+              this.music = this.sound.add("save", {
+                loop: false, // Loops the music
+                volume: 0.5, // Set volume (0 to 1)
+              });
 
+              this.music.play();
+              setDisplayText("Game Saved Successfully!");
+            })
+            .catch(() => {
+              this.music = this.sound.add("error", {
+                loop: false, // Loops the music
+                volume: 0.5, // Set volume (0 to 1)
+              });
+              this.music.play();
+              setDisplayText("Save Failed");
+            });
         });
 
         if (
