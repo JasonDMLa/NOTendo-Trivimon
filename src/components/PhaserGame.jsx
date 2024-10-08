@@ -9,6 +9,7 @@ import AnimalScene from "../Scenes/AnimalScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
+import { collisionTiles } from "../data/collisions";
 
 const PhaserGame = ({
   username,
@@ -74,13 +75,16 @@ const PhaserGame = ({
     let history;
     let animal;
     let bar;
+    let collide;
     let saveButton;
+    let collisionMap = [];
 
     const FirstScene = {
       preload: function () {
         //////
 
-        this.load.image("background", "../../backgrounds/Trivimon.png");
+        this.load.image("background", "../../backgrounds/trivimon.png");
+        this.load.image("collision", "../../collision.png");
 
         this.load.spritesheet(
           "playerUp",
@@ -595,16 +599,37 @@ const PhaserGame = ({
         obstacles.create(280, 68, "tree").setScale(0.5).refreshBody();
         obstacles.create(540, 68, "tree").setScale(0.5).refreshBody();
 
-        let block1 = obstacles
-          .create(530, 738, "block")
-          .setScale(0.5)
-          .refreshBody();
-        block1.body.setSize(block1.width * 0.07, block1.height * 25);
-        let house = obstacles
-          .create(860, 500, "block")
-          .setScale(0.5)
-          .refreshBody();
-        house.body.setSize(house.width * 21, house.height * 32);
+        collide = this.physics.add.staticGroup();
+        for (let i = 0; i < collisionTiles.length; i+=100) {
+          collisionMap.push(collisionTiles.slice(i, 100 + i))
+        }
+
+        for (let i = 0; i < collisionMap.length; i++) {
+          for (let j = 0; j < collisionMap[i].length; j++){
+            if (collisionMap[i][j] !== 0){
+              collide.create((j * 12)*2.7,(i * 12)*2.7, "collision").setScale(2.7).setVisible(false).refreshBody();
+            }
+          }
+        }
+
+        // boundaries.forEach(boundary => {
+        //   boundary.draw(collide)
+        // });
+
+        this.physics.add.collider(this.player, collide, () => {
+          console.log("Player hit an wall!");
+        });
+
+        // let block1 = obstacles
+        //   .create(530, 738, "block")
+        //   .setScale(0.5)
+        //   .refreshBody();
+        // block1.body.setSize(block1.width * 0.07, block1.height * 25);
+        // let house = obstacles
+        //   .create(860, 500, "block")
+        //   .setScale(0.5)
+        //   .refreshBody();
+        // house.body.setSize(house.width * 21, house.height * 32);
 
         // Set position bar
         this.bar = this.add
