@@ -293,36 +293,36 @@ const PhaserGame = ({
         if (enteredAnimal) {
           setDisplayText("Animal defeated you, Try Again?");
           this.player = this.physics.add
-            .sprite(2220, 1760, "playerDown")
+            .sprite(2200, 1660, "playerDown")
             .setScale(2.5);
         } else if (enteredHistory) {
           setDisplayText("History defeated you, Try Again?");
           this.player = this.physics.add
-            .sprite(750, 1410, "playerDown")
+            .sprite(730, 1310, "playerDown")
             .setScale(2.5);
         } else if (enteredMusic) {
           setDisplayText("Music defeated you, Try Again?");
           this.player = this.physics.add
-            .sprite(925, 2170, "playerDown")
+            .sprite(905, 2070, "playerDown")
             .setScale(2.5);
         } else if (enteredVideoGame) {
           setDisplayText("Video Games defeated you, Try Again?");
           this.player = this.physics.add
-            .sprite(2800, 1490, "playerDown")
+            .sprite(2780, 1390, "playerDown")
             .setScale(2.5);
         } else if (enteredScience) {
           setDisplayText("Science defeated you, Try Again?");
           this.player = this.physics.add
-            .sprite(1650, 1070, "playerDown")
+            .sprite(1630, 970, "playerDown")
             .setScale(2.5);
         } else if (enteredSport) {
           setDisplayText("Sport defeated you, Try Again?");
           this.player = this.physics.add
-            .sprite(2260, 940, "playerDown")
+            .sprite(2240, 840, "playerDown")
             .setScale(2.5);
         } else {
           this.player = this.physics.add
-            .sprite(862, 750, "playerDown")
+            .sprite(862, 630, "playerDown")
             .setScale(2.5);
         }
         setEnteredAnimal(false);
@@ -350,19 +350,19 @@ const PhaserGame = ({
         this.cameras.main.startFollow(this.player);
 
         // Create static images using the reusable function
-        music = addStaticImage(this, 925, 2100, "music", 0.1);
-        science = addStaticImage(this, 1650, 1000, "science", 0.1);
-        videoGame = addStaticImage(this, 2800, 1360, "videoGame", 0.1);
-        sport = addStaticImage(this, 2260, 870, "sport", 0.1);
-        history = addStaticImage(this, 750, 1300, "history", 0.3);
-        animal = addStaticImage(this, 2220, 1670, "animal", 0.07);
+        music = addStaticImage(this, 905, 1950, "music", 0.1);
+        science = addStaticImage(this, 1630, 890, "science", 0.1);
+        videoGame = addStaticImage(this, 2780, 1210, "videoGame", 0.1);
+        sport = addStaticImage(this, 2240, 720, "sport", 0.1);
+        history = addStaticImage(this, 730, 1150, "history", 0.3);
+        animal = addStaticImage(this, 2200, 1510, "animal", 0.07);
 
         // Keep hitbox logic unchanged
 
         ///////////////
         setBodySizeAndOffset(music, 0.1, 0.1);
         setBodySizeAndOffset(science, 0.1, 0.1);
-        setBodySizeAndOffset(videoGame, 0.3, 0.3);
+        setBodySizeAndOffset(videoGame, 0.1, 0.1);
         setBodySizeAndOffset(sport, 0.1, 0.1);
         setBodySizeAndOffset(history, 0.3, 0.3);
         setBodySizeAndOffset(animal, 0.07, 0.07);
@@ -390,7 +390,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticVideoGame = this.physics.add
-            .staticImage(2800, 1360, "videoGame")
+            .staticImage(2780, 1210, "videoGame")
             .setScale(0.1);
           staticVideoGame.body.setSize(
             staticVideoGame.width * 0.1,
@@ -427,7 +427,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static science if disabled
           const staticScience = this.physics.add
-            .staticImage(1650, 1000, "science")
+            .staticImage(1630, 890, "science")
             .setScale(0.1);
           staticScience.body.setSize(
             staticScience.width * 0.1,
@@ -465,7 +465,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticMusic = this.physics.add
-            .staticImage(925, 2100, "music")
+            .staticImage(905, 1950, "music")
             .setScale(0.1);
           staticMusic.body.setSize(
             staticMusic.width * 0.1,
@@ -501,7 +501,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticSport = this.physics.add
-            .staticImage(2260, 870, "sport")
+            .staticImage(2240, 720, "sport")
             .setScale(0.1);
           staticSport.body.setSize(
             staticSport.width * 0.1,
@@ -540,7 +540,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticHistory = this.physics.add
-            .staticImage(750, 1300, "history")
+            .staticImage(730, 1150, "history")
             .setScale(0.3);
           staticHistory.body.setSize(
             staticHistory.width * 0.3,
@@ -577,7 +577,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static animal if disabled
           const staticAnimal = this.physics.add
-            .staticImage(2220, 1670, "animal")
+            .staticImage(2200, 1510, "animal")
             .setScale(0.07);
 
           staticAnimal.body.setSize(
@@ -844,7 +844,7 @@ const PhaserGame = ({
 
     const config = {
       type: Phaser.AUTO,
-      width: 1000,
+      width: 890,
       height: 650,
       parent: gameRef.current,
       physics: {
