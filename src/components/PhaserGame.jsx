@@ -48,12 +48,9 @@ const PhaserGame = () => {
     let collisionMap = [];
     let boundaries = [];
 
-    console.log(collisionTiles.length)
     for (let i = 0; i < collisionTiles.length; i+=100) {
       collisionMap.push(collisionTiles.slice(i, 100 + i))
     }
-
-    console.log(collisionMap.length)
     
     class Boundary {
       static width = 12
@@ -83,7 +80,6 @@ const PhaserGame = () => {
       }
     }
 
-    console.log(boundaries)
 
     const FirstScene = {
       preload: function () {
@@ -502,7 +498,7 @@ const PhaserGame = () => {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: false,
+          debug: true,
         },
       },
       scene:
