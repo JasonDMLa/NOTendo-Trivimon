@@ -169,13 +169,14 @@ const PhaserGame = ({
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
         //////
-        this.load.image("bar", "../../badges/bar.png");
-        this.load.image("musicBadge", "../../badges/musicBadge.png");
-        this.load.image("scienceBadge", "../../badges/scienceBadge.png");
-        this.load.image("videogameBadge", "../../badges/videogameBadge.png");
-        this.load.image("animalBadge", "../../badges/animalBadge.png");
-        this.load.image("sportBadge", "../../badges/sportBadge.png");
-        this.load.image("historyBadge", "../../badges/historyBadge.png");
+        this.load.image("bar", "../../badges/BadgePlaceholder.png");
+        this.load.image("musicBadge", "../../badges/Music.png");
+        this.load.image("scienceBadge", "../../badges/Science.png");
+        this.load.image("videogameBadge", "../../badges/videoGame.png");
+        this.load.image("animalBadge", "../../badges/Animal.png");
+        this.load.image("sportBadge", "../../badges/Sports.png");
+        this.load.image("historyBadge", "../../badges/History.png");
+        this.load.image("saveDisc", "../../badges/saveDisc.png");
         //////
         this.load.audio("lake", "../../music/lake.mp3");
         this.load.audio("calm", "../../music/calmMusic.mp3");
@@ -729,7 +730,7 @@ const PhaserGame = ({
         cursors = this.input.keyboard.createCursorKeys();
 
         saveButton = this.add
-          .image(800, 100, "tree")
+          .image(800, 100, "saveDisc")
           .setScrollFactor(0)
           .setScale(0.5)
 
@@ -853,7 +854,7 @@ const PhaserGame = ({
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true,
+          debug: false,
         },
       },
       scene:
