@@ -44,6 +44,7 @@ const PhaserGame = ({
     saveData.animalsCompleted
   );
   const [bossCompleted, setBossCompleted] = useState(false);
+  const [bossCompleted, setBossCompleted] = useState(false);
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -53,6 +54,7 @@ const PhaserGame = ({
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
   const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
+  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
   ////
   let [enteredScience, setEnteredScience] = useState(false);
   let [enteredVideoGame, setEnteredVideoGame] = useState(false);
@@ -61,6 +63,7 @@ const PhaserGame = ({
   let [enteredMusic, setEnteredMusic] = useState(false);
   let [enteredSport, setEnteredSport] = useState(false);
 
+  let [enteredBoss, setEnteredBoss] = useState(false);
   let [enteredBoss, setEnteredBoss] = useState(false);
 
   ///////
@@ -178,6 +181,7 @@ const PhaserGame = ({
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
 
+
         //////
         this.load.image("bar", "../../badges/BadgePlaceholder.png");
         this.load.image("musicBadge", "../../badges/Music.png");
@@ -254,7 +258,7 @@ const PhaserGame = ({
             .setScale(2.5);
         } else {
           this.player = this.physics.add
-            .sprite(862, 630, "playerDown")
+            .sprite(835, 1222, "playerDown")
             .setScale(2.5);
         }
         setEnteredAnimal(false);
@@ -910,7 +914,7 @@ const PhaserGame = ({
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true,
+          debug: false,
         },
       },
       scene:
@@ -939,6 +943,7 @@ const PhaserGame = ({
           AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : currentScene === "BossScene" ? (
           BossScene(setCurrentScene, setBossCompleted, setEnteredBoss)
+        ) : (
         ) : (
           <h1>nope</h1>
         ),
