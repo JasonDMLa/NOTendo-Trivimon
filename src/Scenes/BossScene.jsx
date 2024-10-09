@@ -4,7 +4,7 @@ import { getAllBossQuestions } from "../data/bossQuestions";
 const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
   return {
     preload: function () {
-    //   this.load.image("background", "../../public/triviaScenes/animals.png");
+    this.load.image("background", "../../public/triviaScenes/boss.png");
       this.load.image("heart", "../../public/triviaScenes/heart.png");
       this.load.image("displayBox", "../../public/triviaScenes/displayBox.png");
     },
@@ -16,7 +16,7 @@ const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
       this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 15;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
@@ -240,10 +240,16 @@ const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
           enemyHeart8,
           enemyHeart9,
           enemyHeart10,
+          enemyHeart11,
+          enemyHeart12,
+          enemyHeart13,
+          enemyHeart14,
+          enemyHeart15
+
         ];
 
         // Make the corresponding heart invisible based on the score
-        if (score >= 0 && score <= 9) {
+        if (score >= 0 && score <= 14) {
           enemyHearts[score].visible = false;
         }
 

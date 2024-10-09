@@ -11,7 +11,6 @@ import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
 
-
 // import { collisionTiles } from "../data/collisions";
 import { collisionTiles } from "../data/collisionsNew";
 
@@ -44,7 +43,7 @@ const PhaserGame = ({
   const [animalCompleted, setAnimalCompleted] = useState(
     saveData.animalsCompleted
   );
-  const [bossCompleted, setBossCompleted] = useState(false)
+  const [bossCompleted, setBossCompleted] = useState(false);
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -53,7 +52,7 @@ const PhaserGame = ({
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
-  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false)
+  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
   ////
   let [enteredScience, setEnteredScience] = useState(false);
   let [enteredVideoGame, setEnteredVideoGame] = useState(false);
@@ -62,7 +61,7 @@ const PhaserGame = ({
   let [enteredMusic, setEnteredMusic] = useState(false);
   let [enteredSport, setEnteredSport] = useState(false);
 
-  let [enteredBoss, setEnteredBoss] = useState(false)
+  let [enteredBoss, setEnteredBoss] = useState(false);
 
   ///////
   let [showSport, setShowSport] = useState(true);
@@ -72,6 +71,7 @@ const PhaserGame = ({
   let [showMusic, setShowMusic] = useState(true);
   let [showHistory, setShowHistory] = useState(true);
 
+  const [finishedBadges, setFinishedBadges] = useState(false);
 
   useEffect(() => {
     let player;
@@ -177,7 +177,7 @@ const PhaserGame = ({
         this.load.image("sport", "../../houses/sport.png");
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
-        
+
         //////
         this.load.image("bar", "../../badges/BadgePlaceholder.png");
         this.load.image("musicBadge", "../../badges/Music.png");
@@ -217,88 +217,6 @@ const PhaserGame = ({
         this.music.setLoop(true);
         this.music.play();
 
-        // Create animations for each direction
-        this.anims.create({
-          key: "walkDown",
-          frames: this.anims.generateFrameNumbers("playerDown", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10, // Adjust frame rate for smooth animation
-          repeat: -1, // Loop animation
-        });
-
-        this.anims.create({
-          key: "walkLeft",
-          frames: this.anims.generateFrameNumbers("playerLeft", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "walkRight",
-          frames: this.anims.generateFrameNumbers("playerRight", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "walkUp",
-          frames: this.anims.generateFrameNumbers("playerUp", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        // Diagonal directions
-        this.anims.create({
-          key: "walkUpLeft",
-          frames: this.anims.generateFrameNumbers("playerUpLeft", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "walkUpRight",
-          frames: this.anims.generateFrameNumbers("playerUpRight", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "walkDownLeft",
-          frames: this.anims.generateFrameNumbers("playerDownLeft", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "walkDownRight",
-          frames: this.anims.generateFrameNumbers("playerDownRight", {
-            start: 0,
-            end: 2,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
         if (enteredAnimal) {
           setDisplayText("Animal defeated you, Try Again?");
           this.player = this.physics.add
@@ -329,6 +247,11 @@ const PhaserGame = ({
           this.player = this.physics.add
             .sprite(2240, 840, "playerDown")
             .setScale(2.5);
+        } else if (enteredBoss) {
+          setDisplayText("Boss defeated you, Try Again?");
+          this.player = this.physics.add
+            .sprite(2914, 720, "playerDown")
+            .setScale(2.5);
         } else {
           this.player = this.physics.add
             .sprite(862, 630, "playerDown")
@@ -340,6 +263,7 @@ const PhaserGame = ({
         setEnteredVideoGame(false);
         setEnteredHistory(false);
         setEnteredSport(false);
+        setEnteredBoss(false);
 
         this.player.setCollideWorldBounds(false);
 
@@ -360,15 +284,12 @@ const PhaserGame = ({
 
         // Create static images using the reusable function
 
-        boss = addStaticImage(this, 800, 1400, "tree", 0.1)
-
         music = addStaticImage(this, 905, 1950, "music", 0.1);
         science = addStaticImage(this, 1630, 890, "science", 0.1);
         videoGame = addStaticImage(this, 2780, 1210, "videoGame", 0.1);
         sport = addStaticImage(this, 2240, 720, "sport", 0.1);
         history = addStaticImage(this, 730, 1150, "history", 0.3);
         animal = addStaticImage(this, 2200, 1510, "animal", 0.07);
-
 
         // Keep hitbox logic unchanged
 
@@ -379,43 +300,7 @@ const PhaserGame = ({
         setBodySizeAndOffset(sport, 0.1, 0.1);
         setBodySizeAndOffset(history, 0.3, 0.3);
         setBodySizeAndOffset(animal, 0.07, 0.07);
-        setBodySizeAndOffset(boss, 0.1, 0.1)
-        //////
-        if (!bossCompleted) {
-          this.physics.add.overlap(this.player, boss, () => {
-            console.log(
-              "Player hit videoGame! Teleporting to videoGameScene..."
-            );
-            if (!bossQuestionsLoaded) {
-              console.log("Loading music questions...");
-              setBossQuestionsLoaded(true); // Set loaded to true
-              setCurrentScene("BossScene"); // Change to MusicScene
-              //});
-            } else {
-              console.log(
-                "VideoGame questions already loaded, changing to MusicScene..."
-              );
-              setCurrentScene("BossScene"); // Change to videogame if already loaded
-            }
-          });
-        } else {
-          // Keep the logic to handle static videoGame if disabled
-          const staticBoss = this.physics.add
-            .staticImage(2800, 1360, "tree")
-            .setScale(0.1);
-            staticBoss.body.setSize(
-              staticBoss.width * 0.1,
-              staticBoss.height * 0.1
-          );
-          staticBoss.body.setOffset(
-            (staticBoss.width - staticBoss.width * 0.1) / 2,
-            (staticBoss.height - staticBoss.height * 0.1) / 2
-          );
-          this.physics.add.collider(this.player, staticBoss, () => {
-            console.log("Player collided with the static videoGame");
-          });
-        }
-
+      
 
         //////
         if (!videoGameCompleted) {
@@ -808,17 +693,151 @@ const PhaserGame = ({
           scienceCompleted &&
           animalCompleted
         ) {
+          setFinishedBadges(true);
           this.time.delayedCall(2000, () => {
+
             setDisplayText("All Badges Earned, Game Complete !!!");
+            boss = addStaticImage(this, 2914, 638, "tree", 0.1);
+            boss.setVisible(true);
+            setBodySizeAndOffset(boss, 0.1, 0.1);
+
+            if (!bossCompleted) {
+              this.physics.add.overlap(this.player, boss, () => {
+                setDisplayText("Boss Time...");
+                console.log(
+                  "Player hit videoGame! Teleporting to videoGameScene..."
+                );
+                if (!bossQuestionsLoaded) {
+                  console.log("Loading music questions...");
+                  setBossQuestionsLoaded(true); // Set loaded to true
+                  setCurrentScene("BossScene"); // Change to MusicScene
+                  //});
+                } else {
+                  console.log(
+                    "VideoGame questions already loaded, changing to MusicScene..."
+                  );
+                  setCurrentScene("BossScene"); // Change to videogame if already loaded
+                }
+              });
+            } else {
+              // Keep the logic to handle static videoGame if disabled
+              setDisplayText("You beat the boss, Well Done")
+              const staticBoss = this.physics.add
+                .staticImage(2914, 638, "tree")
+                .setScale(0.1);
+              staticBoss.body.setSize(
+                staticBoss.width * 0.1,
+                staticBoss.height * 0.1
+              );
+              staticBoss.body.setOffset(
+                (staticBoss.width - staticBoss.width * 0.1) / 2,
+                (staticBoss.height - staticBoss.height * 0.1) / 2
+              );
+              this.physics.add.collider(this.player, staticBoss, () => {
+                console.log("Player collided with the static videoGame");
+              });
+            }
           });
         } else {
           this.time.delayedCall(3000, () => {
             setDisplayText("");
           });
         }
+
+
+
+        // Create animations for each direction
+        this.anims.create({
+          key: "walkDown",
+          frames: this.anims.generateFrameNumbers("playerDown", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10, // Adjust frame rate for smooth animation
+          repeat: -1, // Loop animation
+        });
+
+        this.anims.create({
+          key: "walkLeft",
+          frames: this.anims.generateFrameNumbers("playerLeft", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkRight",
+          frames: this.anims.generateFrameNumbers("playerRight", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkUp",
+          frames: this.anims.generateFrameNumbers("playerUp", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        // Diagonal directions
+        this.anims.create({
+          key: "walkUpLeft",
+          frames: this.anims.generateFrameNumbers("playerUpLeft", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkUpRight",
+          frames: this.anims.generateFrameNumbers("playerUpRight", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkDownLeft",
+          frames: this.anims.generateFrameNumbers("playerDownLeft", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "walkDownRight",
+          frames: this.anims.generateFrameNumbers("playerDownRight", {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
       },
 
       update: function () {
+        // if (finishedBadges) {
+        //   // boss.x = 991,
+        //   // boss.y = 726
+        //   (boss.x = 991), (boss.y = 726);
+         
+        //   setBodySizeAndOffset(boss, 0, 5);
+        // }
+
         if (!this.player) return;
 
         this.player.setVelocity(0);
@@ -920,7 +939,7 @@ const PhaserGame = ({
           AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : currentScene === "BossScene" ? (
           BossScene(setCurrentScene, setBossCompleted, setEnteredBoss)
-        ): (
+        ) : (
           <h1>nope</h1>
         ),
     };
