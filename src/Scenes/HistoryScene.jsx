@@ -28,7 +28,7 @@ const HistoryScene = (
       // Initialize variables
 
       this.add.image(400, 300, "background").setScale(1.4).setOrigin(0.5, 0.5);
-      this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
+      this.add.image(445, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
       this.add.image(150, 40, "HP").setScale(0.3).setOrigin(0.5, 0.5);
       this.add.image(140, 100, "PHP").setScale(0.3).setOrigin(0.5, 0.5);
 
@@ -45,7 +45,7 @@ const HistoryScene = (
 
       const heartX = 87;
       const enemyHeartY = 38;
-      const playerHeartY = 101;
+      const playerHeartY = 97;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
         .create(heartX, enemyHeartY, "HP1")
@@ -87,42 +87,22 @@ const HistoryScene = (
         .create(heartX + 174, enemyHeartY, "HP3")
         .setScale(0.31)
         .refreshBody();
+      //////////
       const playerHeart1 = heart
         .create(heartX + 20, playerHeartY, "PHP1")
         .setScale(0.31)
         .refreshBody();
       const playerHeart2 = heart
-        .create(heartX + 70, playerHeartY, "PHP2")
+        .create(heartX + 77, playerHeartY, "PHP2")
         .setScale(0.31)
         .refreshBody();
       const playerHeart3 = heart
-        .create(heartX + 139, playerHeartY, "PHP3")
+        .create(heartX + 135, playerHeartY, "PHP3")
         .setScale(0.31)
         .refreshBody();
 
-      // Display the score and wrong answer counters
-      // const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
-      //   fontSize: "25px",
-      //   fill: "#ff0000",
-      //   backgroundColor: "#000000",
-      //   padding: {
-      //     x: 10,
-      //     y: 10,
-      //   },
-      // });
-
-      // const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
-      //   fontSize: "25px",
-      //   fill: "#00FF00", // Green text color
-      //   backgroundColor: "#000000",
-      //   padding: {
-      //     x: 10,
-      //     y: 10,
-      //   },
-      // });
-
       // Question text display
-      const questionText = this.add.text(150, 150, "", {
+      const questionText = this.add.text(100, 150, "", {
         fontSize: "28px",
         fill: "#fff",
         wordWrap: { width: 700 },
@@ -148,7 +128,7 @@ const HistoryScene = (
 
         // Create the button with the letter label (A, B, C, D)
         const button = this.add
-          .text(120, y, `${letter}. `, {
+          .text(70, y, `${letter}. `, {
             fontSize: "24px",
             fill: "#fff",
             backgroundColor: "#007bff",
@@ -217,7 +197,6 @@ const HistoryScene = (
 
           this.music.play();
           score--;
-          // scoreText.setText(`HP: ${score}/10`);
         } else {
           this.music = this.sound.add("wrong", {
             loop: false, // Loops the music
