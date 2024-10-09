@@ -1,127 +1,117 @@
-
 import { getAllBossQuestions } from "../data/bossQuestions";
 
-const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
+const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
   return {
     preload: function () {
-    this.load.image("background", "../../public/triviaScenes/boss.png");
-      this.load.image("heart", "../../public/triviaScenes/heart.png");
+      this.load.image("background", "../../public/triviaScenes/boss.png");
       this.load.image("displayBox", "../../public/triviaScenes/displayBox.png");
+      this.load.image("HP", "../triviaScenes/BossHealth.png");
+      this.load.image("HP1", "../triviaScenes/heartbar1.png");
+      this.load.image("HP2", "../triviaScenes/heartbar.png");
+      this.load.image("HP3", "../triviaScenes/heartbarend.png");
+      this.load.image("PHP", "../triviaScenes/PlayerBar.png");
+      this.load.image("PHP1", "../triviaScenes/playerBar1.png");
+      this.load.image("PHP2", "../triviaScenes/playerBar2.png");
+      this.load.image("PHP3", "../triviaScenes/playerBar3.png");
     },
 
     create: function () {
       // Initialize variables
-      setEnteredBoss(true)
-      this.add.image(400, 300, "background").setScale(1.71).setOrigin(0.5, 0.5);
-      this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
+      setEnteredBoss(true);
+      this.add.image(400, 300, "background").setScale(1.3).setOrigin(0.5, 0.5);
+      this.add.image(445, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
+      this.add.image(200, 40, "HP").setScale(0.3).setOrigin(0.5, 0.5);
+      this.add.image(140, 100, "PHP").setScale(0.3).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 1;
+      let score = 15;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
       const allBossQuestions = []; // Use a local variable
 
       //
-      const heartX = 220;
-      const enemyHeartY = 35;
-      const playerHeartY = 100;
+      const heartX = 87;
+      const enemyHeartY = 38;
+      const playerHeartY = 97;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
-        .create(heartX, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX, enemyHeartY, "HP1")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart2 = heart
-        .create(heartX + 30, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 20, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart3 = heart
-        .create(heartX + 60, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 39, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart4 = heart
-        .create(heartX + 90, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 58, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart5 = heart
-        .create(heartX + 120, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 77, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart6 = heart
-        .create(heartX + 150, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 96, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart7 = heart
-        .create(heartX + 180, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 115, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart8 = heart
-        .create(heartX + 210, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 134, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart9 = heart
-        .create(heartX + 240, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 153, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart10 = heart
-        .create(heartX + 270, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 174, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
-        const enemyHeart11 = heart
-        .create(heartX + 300, enemyHeartY, "heart")
-        .setScale(0.05)
+      const enemyHeart11 = heart
+        .create(heartX + 193, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
-        const enemyHeart12 = heart
-        .create(heartX + 330, enemyHeartY, "heart")
-        .setScale(0.05)
+      const enemyHeart12 = heart
+        .create(heartX + 212, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
-        const enemyHeart13 = heart
-        .create(heartX + 360, enemyHeartY, "heart")
-        .setScale(0.05)
+      const enemyHeart13 = heart
+        .create(heartX + 231, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
-        const enemyHeart14 = heart
-        .create(heartX + 390, enemyHeartY, "heart")
-        .setScale(0.05)
+      const enemyHeart14 = heart
+        .create(heartX + 250, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
-        const enemyHeart15 = heart
-        .create(heartX + 420, enemyHeartY, "heart")
-        .setScale(0.05)
+      const enemyHeart15 = heart
+        .create(heartX + 269, enemyHeartY, "HP3")
+        .setScale(0.31)
         .refreshBody();
+
+      //////////
       const playerHeart1 = heart
-        .create(heartX, playerHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 20, playerHeartY, "PHP1")
+        .setScale(0.31)
         .refreshBody();
       const playerHeart2 = heart
-        .create(heartX + 30, playerHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 77, playerHeartY, "PHP2")
+        .setScale(0.31)
         .refreshBody();
       const playerHeart3 = heart
-        .create(heartX + 60, playerHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 135, playerHeartY, "PHP3")
+        .setScale(0.31)
         .refreshBody();
 
-      // Display the score and wrong answer counters
-      const scoreText = this.add.text(16, 16, `HP: ${score}/15`, {
-        fontSize: "32px",
-        fill: "#ff0000",
-        backgroundColor: "#000000",
-        padding: {
-          x: 10,
-          y: 10,
-        },
-      });
-
-      const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
-        fontSize: "32px",
-        fill: "#00FF00", // Red text color
-        backgroundColor: "#000000",
-        padding: {
-          x: 10,
-          y: 10,
-        },
-      });
       // Question text display
-      const questionText = this.add.text(150, 150, "", {
+      const questionText = this.add.text(100, 150, "", {
         fontSize: "28px",
         fill: "#fff",
         wordWrap: { width: 700 },
@@ -147,7 +137,7 @@ const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
 
         // Create the button with the letter label (A, B, C, D)
         const button = this.add
-          .text(120, y, `${letter}. `, {
+          .text(70, y, `${letter}. `, {
             fontSize: "24px",
             fill: "#fff",
             backgroundColor: "#007bff",
@@ -210,10 +200,8 @@ const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
 
         if (selectedAnswer === correctAnswer) {
           score--;
-          scoreText.setText(`HP: ${score}/15`);
         } else {
           wrongAnswer--;
-          wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
         if (score === 0) {
@@ -244,8 +232,7 @@ const BossScene = (setCurrentScene, setBossCompleted,setEnteredBoss) => {
           enemyHeart12,
           enemyHeart13,
           enemyHeart14,
-          enemyHeart15
-
+          enemyHeart15,
         ];
 
         // Make the corresponding heart invisible based on the score
