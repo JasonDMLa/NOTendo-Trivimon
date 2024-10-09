@@ -44,7 +44,7 @@ const PhaserGame = ({
     saveData.animalsCompleted
   );
   const [bossCompleted, setBossCompleted] = useState(false);
-  const [bossCompleted, setBossCompleted] = useState(false);
+
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -54,7 +54,7 @@ const PhaserGame = ({
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
   const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
-  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
+  
   ////
   let [enteredScience, setEnteredScience] = useState(false);
   let [enteredVideoGame, setEnteredVideoGame] = useState(false);
@@ -64,7 +64,7 @@ const PhaserGame = ({
   let [enteredSport, setEnteredSport] = useState(false);
 
   let [enteredBoss, setEnteredBoss] = useState(false);
-  let [enteredBoss, setEnteredBoss] = useState(false);
+ 
 
   ///////
   let [showSport, setShowSport] = useState(true);
@@ -258,7 +258,7 @@ const PhaserGame = ({
             .setScale(2.5);
         } else {
           this.player = this.physics.add
-            .sprite(835, 1222, "playerDown")
+            .sprite(843, 606, "playerDown")
             .setScale(2.5);
         }
         setEnteredAnimal(false);
@@ -943,7 +943,7 @@ const PhaserGame = ({
           AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : currentScene === "BossScene" ? (
           BossScene(setCurrentScene, setBossCompleted, setEnteredBoss)
-        ) : (
+     
         ) : (
           <h1>nope</h1>
         ),
