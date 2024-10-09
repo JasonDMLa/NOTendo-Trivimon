@@ -13,6 +13,10 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
       this.load.image("PHP1", "../triviaScenes/playerBar1.png");
       this.load.image("PHP2", "../triviaScenes/playerBar2.png");
       this.load.image("PHP3", "../triviaScenes/playerBar3.png");
+      this.load.audio("correct", "../../music/correct.mp3");
+      this.load.audio("wrong","../../music/wrong.mp3")
+      this.load.audio("win","../../music/win.mp3")
+      this.load.audio("fail","../../music/fail.mp3")
     },
 
     create: function () {
@@ -199,20 +203,46 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
         const selectedAnswer = answerButtons[selectedIndex].text.slice(3);
 
         if (selectedAnswer === correctAnswer) {
+          this.music = this.sound.add("correct", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+  
+          this.music.play();
           score--;
         } else {
+          this.music = this.sound.add("wrong", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+  
+          this.music.play();
           wrongAnswer--;
         }
 
         if (score === 0) {
+          this.music = this.sound.add("win", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+          this.music.play();
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => {
             setCurrentScene("FirstScene");
-            setBossCompleted(true);
+            setAnimalCompleted(true);
           }, 2000); // 2000 ms = 2 seconds
         }
 
         if (wrongAnswer === 0) {
+          this.music = this.sound.add("fail", {
+            loop: false, // Loops the music
+            volume: 0.5, // Set volume (0 to 1)
+
+          });
+          this.music.play();
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => setCurrentScene("FirstScene"), 1000); // 1 second delay
         }
@@ -233,6 +263,7 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
           enemyHeart13,
           enemyHeart14,
           enemyHeart15,
+
         ];
 
         // Make the corresponding heart invisible based on the score
