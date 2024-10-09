@@ -11,7 +11,6 @@ import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
 
-
 // import { collisionTiles } from "../data/collisions";
 import { collisionTiles } from "../data/collisionsNew";
 
@@ -44,7 +43,7 @@ const PhaserGame = ({
   const [animalCompleted, setAnimalCompleted] = useState(
     saveData.animalsCompleted
   );
-  const [bossCompleted, setBossCompleted] = useState(false)
+  const [bossCompleted, setBossCompleted] = useState(false);
   ////
   const [scienceQuestionsLoaded, setScienceQuestionsLoaded] = useState(false);
   const [musicQuestionsLoaded, setMusicQuestionsLoaded] = useState(false);
@@ -53,7 +52,7 @@ const PhaserGame = ({
   const [sportQuestionsLoaded, setSportQuestionsLoaded] = useState(false);
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
-  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false)
+  const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
   ////
   let [enteredScience, setEnteredScience] = useState(false);
   let [enteredVideoGame, setEnteredVideoGame] = useState(false);
@@ -62,7 +61,7 @@ const PhaserGame = ({
   let [enteredMusic, setEnteredMusic] = useState(false);
   let [enteredSport, setEnteredSport] = useState(false);
 
-  let [enteredBoss, setEnteredBoss] = useState(false)
+  let [enteredBoss, setEnteredBoss] = useState(false);
 
   ///////
   let [showSport, setShowSport] = useState(true);
@@ -71,7 +70,6 @@ const PhaserGame = ({
   let [showVideoGame, setShowVideoGame] = useState(true);
   let [showMusic, setShowMusic] = useState(true);
   let [showHistory, setShowHistory] = useState(true);
-
 
   useEffect(() => {
     let player;
@@ -177,7 +175,7 @@ const PhaserGame = ({
         this.load.image("sport", "../../houses/sport.png");
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
-        
+
         //////
         this.load.image("bar", "../../badges/BadgePlaceholder.png");
         this.load.image("musicBadge", "../../badges/Music.png");
@@ -331,7 +329,7 @@ const PhaserGame = ({
             .setScale(2.5);
         } else {
           this.player = this.physics.add
-            .sprite(862, 630, "playerDown")
+            .sprite(835, 1222, "playerDown")
             .setScale(2.5);
         }
         setEnteredAnimal(false);
@@ -360,7 +358,7 @@ const PhaserGame = ({
 
         // Create static images using the reusable function
 
-        boss = addStaticImage(this, 800, 1400, "tree", 0.1)
+        boss = addStaticImage(this, 800, 1400, "tree", 0.1);
 
         music = addStaticImage(this, 905, 1950, "music", 0.1);
         science = addStaticImage(this, 1630, 890, "science", 0.1);
@@ -368,7 +366,6 @@ const PhaserGame = ({
         sport = addStaticImage(this, 2240, 720, "sport", 0.1);
         history = addStaticImage(this, 730, 1150, "history", 0.3);
         animal = addStaticImage(this, 2200, 1510, "animal", 0.07);
-
 
         // Keep hitbox logic unchanged
 
@@ -379,7 +376,7 @@ const PhaserGame = ({
         setBodySizeAndOffset(sport, 0.1, 0.1);
         setBodySizeAndOffset(history, 0.3, 0.3);
         setBodySizeAndOffset(animal, 0.07, 0.07);
-        setBodySizeAndOffset(boss, 0.1, 0.1)
+        setBodySizeAndOffset(boss, 0.1, 0.1);
         //////
         if (!bossCompleted) {
           this.physics.add.overlap(this.player, boss, () => {
@@ -403,9 +400,9 @@ const PhaserGame = ({
           const staticBoss = this.physics.add
             .staticImage(2800, 1360, "tree")
             .setScale(0.1);
-            staticBoss.body.setSize(
-              staticBoss.width * 0.1,
-              staticBoss.height * 0.1
+          staticBoss.body.setSize(
+            staticBoss.width * 0.1,
+            staticBoss.height * 0.1
           );
           staticBoss.body.setOffset(
             (staticBoss.width - staticBoss.width * 0.1) / 2,
@@ -415,7 +412,6 @@ const PhaserGame = ({
             console.log("Player collided with the static videoGame");
           });
         }
-
 
         //////
         if (!videoGameCompleted) {
@@ -891,7 +887,7 @@ const PhaserGame = ({
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
-          debug: true,
+          debug: false,
         },
       },
       scene:
@@ -920,7 +916,7 @@ const PhaserGame = ({
           AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : currentScene === "BossScene" ? (
           BossScene(setCurrentScene, setBossCompleted, setEnteredBoss)
-        ): (
+        ) : (
           <h1>nope</h1>
         ),
     };
