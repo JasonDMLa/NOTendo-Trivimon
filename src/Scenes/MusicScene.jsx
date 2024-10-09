@@ -5,107 +5,96 @@ const MusicScene = (setCurrentScene, setMusicCompleted, setEnteredMusic) => {
     preload: function () {
       // Preload assets like background image
       this.load.image("background", "../../public/triviaScenes/music.png");
-      this.load.image("heart", "../../public/triviaScenes/heart.png");
       this.load.image("displayBox", "../../public/triviaScenes/displayBox.png");
       this.load.audio("correct", "../../music/correct.mp3");
       this.load.audio("wrong","../../music/wrong.mp3")
       this.load.audio("win","../../music/win.mp3")
       this.load.audio("fail","../../music/fail.mp3")
+      this.load.image("HP", "../triviaScenes/GymHealth.png");
+      this.load.image("HP1", "../triviaScenes/heartbar1.png");
+      this.load.image("HP2", "../triviaScenes/heartbar.png");
+      this.load.image("HP3", "../triviaScenes/heartbarend.png");
+      this.load.image("PHP", "../triviaScenes/PlayerBar.png");
+      this.load.image("PHP1", "../triviaScenes/playerBar1.png");
+      this.load.image("PHP2", "../triviaScenes/playerBar2.png");
+      this.load.image("PHP3", "../triviaScenes/playerBar3.png");
     },
 
     create: function () {
       // Initialize variables
       setEnteredMusic(true);
       this.add.image(400, 300, "background").setScale(1.73).setOrigin(0.5, 0.5);
-      this.add.image(490, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
+      this.add.image(445, 230, "displayBox").setScale(0.57).setOrigin(0.5, 0.5);
+      this.add.image(150, 40, "HP").setScale(0.3).setOrigin(0.5, 0.5);
+      this.add.image(140, 100, "PHP").setScale(0.3).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 1;
+      let score = 10;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
       const allMusicQuestions = []; // Use a local variable
       //
-      const heartX = 220;
-      const enemyHeartY = 35;
-      const playerHeartY = 100;
+      const heartX = 87;
+      const enemyHeartY = 38;
+      const playerHeartY = 97;
       heart = this.physics.add.staticGroup();
       const enemyHeart1 = heart
-        .create(heartX, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX, enemyHeartY, "HP1")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart2 = heart
-        .create(heartX + 30, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 20, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart3 = heart
-        .create(heartX + 60, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 39, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart4 = heart
-        .create(heartX + 90, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 58, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart5 = heart
-        .create(heartX + 120, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 77, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart6 = heart
-        .create(heartX + 150, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 96, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart7 = heart
-        .create(heartX + 180, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 115, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart8 = heart
-        .create(heartX + 210, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 134, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart9 = heart
-        .create(heartX + 240, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 153, enemyHeartY, "HP2")
+        .setScale(0.31)
         .refreshBody();
       const enemyHeart10 = heart
-        .create(heartX + 270, enemyHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 174, enemyHeartY, "HP3")
+        .setScale(0.31)
         .refreshBody();
+      //////////
       const playerHeart1 = heart
-        .create(heartX, playerHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 20, playerHeartY, "PHP1")
+        .setScale(0.31)
         .refreshBody();
       const playerHeart2 = heart
-        .create(heartX + 30, playerHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 77, playerHeartY, "PHP2")
+        .setScale(0.31)
         .refreshBody();
       const playerHeart3 = heart
-        .create(heartX + 60, playerHeartY, "heart")
-        .setScale(0.05)
+        .create(heartX + 135, playerHeartY, "PHP3")
+        .setScale(0.31)
         .refreshBody();
 
-      // Display the score and wrong answer counters
-      const scoreText = this.add.text(16, 16, `HP: ${score}/10`, {
-        fontSize: "25px",
-        fill: "#ff0000",
-        backgroundColor: "#000000",
-        padding: {
-          x: 10,
-          y: 10,
-        },
-      });
-
-      const wrongText = this.add.text(16, 80, `HP: ${wrongAnswer}/3`, {
-        fontSize: "25px",
-        fill: "#00FF00", // Red text color
-        backgroundColor: "#000000",
-        padding: {
-          x: 10,
-          y: 10,
-        },
-      });
-
       // Question text display
-      const questionText = this.add.text(150, 150, "", {
+      const questionText = this.add.text(100, 150, "", {
         fontSize: "28px",
         fill: "#fff",
         wordWrap: { width: 700 },
@@ -131,7 +120,7 @@ const MusicScene = (setCurrentScene, setMusicCompleted, setEnteredMusic) => {
 
         // Create the button with the letter label (A, B, C, D)
         const button = this.add
-          .text(120, y, `${letter}. `, {
+          .text(70, y, `${letter}. `, {
             fontSize: "24px",
             fill: "#fff",
             backgroundColor: "#007bff",
@@ -201,7 +190,6 @@ const MusicScene = (setCurrentScene, setMusicCompleted, setEnteredMusic) => {
   
           this.music.play();
           score--;
-          scoreText.setText(`HP: ${score}/10`);
         } else {
           this.music = this.sound.add("wrong", {
             loop: false, // Loops the music
@@ -211,7 +199,6 @@ const MusicScene = (setCurrentScene, setMusicCompleted, setEnteredMusic) => {
   
           this.music.play();
           wrongAnswer--;
-          wrongText.setText(`HP: ${wrongAnswer}/3`);
         }
 
         if (score === 0) {

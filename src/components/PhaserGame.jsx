@@ -10,8 +10,6 @@ import BossScene from "../Scenes/BossScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
-
-// import { collisionTiles } from "../data/collisions";
 import { collisionTiles } from "../data/collisionsNew";
 
 const PhaserGame = ({
@@ -763,7 +761,7 @@ const PhaserGame = ({
         cursors = this.input.keyboard.createCursorKeys();
 
         saveButton = this.add
-          .image(800, 100, "saveDisc")
+          .image(860, 556, "saveDisc")
           .setScrollFactor(0)
           .setScale(0.5)
 
