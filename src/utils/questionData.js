@@ -10,7 +10,11 @@ export const questionData = async (amount, category, difficulty) => {
       .replace(/&amp;/g, "&")
       .replace(/&ouml;/g, "ö")
       .replace(/&deg;/g, "°")
-      .replace(/&eacute;/g, "é"),
+      .replace(/&eacute;/g, "é")
+      .replace(/&aacute;/g, "á")
+      .replace(/&uacute;/g, "ú")
+      .replace(/&oacute;/g, "ó")
+      .replace(/&iacute;/g, "í"),
     correctAnswer: currentQuestion.correct_answer
       .replace(/&quot;/g, '"')
       .replace(/&#039;/g, "'")
@@ -18,7 +22,11 @@ export const questionData = async (amount, category, difficulty) => {
       .replace(/&amp;/g, "&")
       .replace(/&ouml;/g, "ö")
       .replace(/&deg;/g, "°")
-      .replace(/&eacute;/g, "é"),
+      .replace(/&eacute;/g, "é")
+      .replace(/&aacute;/g, "á")
+      .replace(/&uacute;/g, "ú")
+      .replace(/&oacute;/g, "ó")
+      .replace(/&iacute;/g, "í"),
     incorrectAnswers: currentQuestion.incorrect_answers.map((answer) =>
       answer
         .replace(/&quot;/g, '"')
@@ -28,6 +36,10 @@ export const questionData = async (amount, category, difficulty) => {
         .replace(/&ouml;/g, "ö")
         .replace(/&deg;/g, "°")
         .replace(/&eacute;/g, "é")
+        .replace(/&aacute;/g, "á")
+        .replace(/&uacute;/g, "ú")
+        .replace(/&oacute;/g, "ó")
+        .replace(/&iacute;/g, "í")
     ),
   }));
   return questions;
