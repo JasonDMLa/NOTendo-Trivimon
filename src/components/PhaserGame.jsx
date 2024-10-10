@@ -190,7 +190,7 @@ const PhaserGame = ({
         this.load.image("saveDisc", "../../badges/saveDisc.png");
         //////
         this.load.audio("lake", "../../music/lake.mp3");
-        this.load.audio("calm", "../../music/calmMusic.mp3");
+        this.load.audio("calm", "../../music/gameMusic.mp3");
         this.load.audio("save", "../../music/save.mp3");
         this.load.audio("error", "../../music/error.mp3");
       },
@@ -210,7 +210,7 @@ const PhaserGame = ({
 
         this.music = this.sound.add("calm", {
           loop: true, // Loops the music
-          volume: 0.0, // Set volume (0 to 1)
+          volume: 0.1, // Set volume (0 to 1)
         });
 
         this.music.play();
@@ -708,7 +708,7 @@ const PhaserGame = ({
         ) {
           setFinishedBadges(true);
           this.time.delayedCall(2000, () => {
-            setDisplayText("All Badges Earned, Game Complete !!!");
+            setDisplayText("All badges earned, you may now challenge the boss !!!");
             boss = addStaticImage(this, 2914, 638, "tree", 0.1);
             boss.setVisible(false);
             setBodySizeAndOffset(boss, 0.1, 0.1);
