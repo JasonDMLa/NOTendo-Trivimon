@@ -7,6 +7,7 @@ import SportScene from "../Scenes/SportScene";
 import HistoryScene from "../Scenes/HistoryScene";
 import AnimalScene from "../Scenes/AnimalScene";
 import BossScene from "../Scenes/BossScene";
+import CreditScene from "../Scenes/CreditScene";
 import { setBodySizeAndOffset } from "../utils/setBodySizeAndOffset";
 import { addStaticImage } from "../utils/addStaticImage";
 import { updateUser, findUser } from "../data/mongoApi";
@@ -52,7 +53,7 @@ const PhaserGame = ({
   const [historyQuestionsLoaded, setHistoryQuestionsLoaded] = useState(false);
   const [animalQuestionsLoaded, setAnimalQuestionsLoaded] = useState(false);
   const [bossQuestionsLoaded, setBossQuestionsLoaded] = useState(false);
-  
+
   ////
   let [enteredScience, setEnteredScience] = useState(false);
   let [enteredVideoGame, setEnteredVideoGame] = useState(false);
@@ -62,7 +63,6 @@ const PhaserGame = ({
   let [enteredSport, setEnteredSport] = useState(false);
 
   let [enteredBoss, setEnteredBoss] = useState(false);
- 
 
   ///////
   let [showSport, setShowSport] = useState(true);
@@ -179,7 +179,6 @@ const PhaserGame = ({
         this.load.image("history", "../../houses/history.png");
         this.load.image("animal", "../../houses/animal.png");
 
-
         //////
         this.load.image("bar", "../../badges/BadgePlaceholder.png");
         this.load.image("musicBadge", "../../badges/Music.png");
@@ -286,12 +285,12 @@ const PhaserGame = ({
 
         // Create static images using the reusable function
 
-        music = addStaticImage(this, 905, 1950, "music", 0.1);
-        science = addStaticImage(this, 1630, 890, "science", 0.1);
+        music = addStaticImage(this, 905, 1890, "music", 0.1);
+        science = addStaticImage(this, 1630, 875, "science", 0.1);
         videoGame = addStaticImage(this, 2780, 1210, "videoGame", 0.1);
         sport = addStaticImage(this, 2240, 720, "sport", 0.1);
-        history = addStaticImage(this, 730, 1150, "history", 0.3);
-        animal = addStaticImage(this, 2200, 1510, "animal", 0.07);
+        history = addStaticImage(this, 730, 1080, "history", 0.3);
+        animal = addStaticImage(this, 2200, 1490, "animal", 0.07);
 
         // Keep hitbox logic unchanged
 
@@ -300,9 +299,15 @@ const PhaserGame = ({
         setBodySizeAndOffset(science, 0.1, 0.1);
         setBodySizeAndOffset(videoGame, 0.1, 0.1);
         setBodySizeAndOffset(sport, 0.1, 0.1);
-        setBodySizeAndOffset(history, 0.3, 0.3);
+        setBodySizeAndOffset(history, 0.2, 0.2);
         setBodySizeAndOffset(animal, 0.07, 0.07);
-      
+        history.setVisible(false);
+        animal.setVisible(false);
+        sport.setVisible(false);
+        music.setVisible(false);
+        videoGame.setVisible(false);
+        science.setVisible(false);
+
 
         //////
         if (!videoGameCompleted) {
@@ -341,6 +346,7 @@ const PhaserGame = ({
           this.physics.add.collider(this.player, staticVideoGame, () => {
             console.log("Player collided with the static videoGame");
           });
+          staticVideoGame.setVisible(false)
         }
         //////////////////////////////////////////////////
 
@@ -365,7 +371,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static science if disabled
           const staticScience = this.physics.add
-            .staticImage(1630, 890, "science")
+            .staticImage(1630, 875, "science")
             .setScale(0.1);
           staticScience.body.setSize(
             staticScience.width * 0.1,
@@ -378,6 +384,7 @@ const PhaserGame = ({
           this.physics.add.collider(this.player, staticScience, () => {
             console.log("Player collided with the static science");
           });
+          staticScience.setVisible(false)
         }
 
         //////////////////////////
@@ -403,7 +410,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticMusic = this.physics.add
-            .staticImage(905, 1950, "music")
+            .staticImage(905, 1890, "music")
             .setScale(0.1);
           staticMusic.body.setSize(
             staticMusic.width * 0.1,
@@ -416,6 +423,7 @@ const PhaserGame = ({
           this.physics.add.collider(this.player, staticMusic, () => {
             console.log("Player collided with the static music");
           });
+          staticMusic.setVisible(false)
         }
         //////////////////////////////////////////////////
         if (!sportCompleted) {
@@ -452,6 +460,7 @@ const PhaserGame = ({
           this.physics.add.collider(this.player, staticSport, () => {
             console.log("Player collided with the static sport");
           });
+          staticSport.setVisible(false)
         }
 
         ///////////////////////
@@ -478,19 +487,20 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static videoGame if disabled
           const staticHistory = this.physics.add
-            .staticImage(730, 1150, "history")
-            .setScale(0.3);
+            .staticImage(730, 1080, "history")
+            .setScale(0.2);
           staticHistory.body.setSize(
-            staticHistory.width * 0.3,
-            staticHistory.height * 0.3
+            staticHistory.width * 0.2,
+            staticHistory.height * 0.2
           );
           staticHistory.body.setOffset(
-            (staticHistory.width - staticHistory.width * 0.3) / 2,
-            (staticHistory.height - staticHistory.height * 0.3) / 2
+            (staticHistory.width - staticHistory.width * 0.2) / 2,
+            (staticHistory.height - staticHistory.height * 0.2) / 2
           );
           this.physics.add.collider(this.player, staticHistory, () => {
             console.log("Player collided with the static history");
           });
+          staticHistory.setVisible(false)
         }
         //////////////////////////////////////////////////
 
@@ -515,7 +525,7 @@ const PhaserGame = ({
         } else {
           // Keep the logic to handle static animal if disabled
           const staticAnimal = this.physics.add
-            .staticImage(2200, 1510, "animal")
+            .staticImage(2200, 1490, "animal")
             .setScale(0.07);
 
           staticAnimal.body.setSize(
@@ -529,6 +539,7 @@ const PhaserGame = ({
           this.physics.add.collider(this.player, staticAnimal, () => {
             console.log("Player collided with the static animal");
           });
+          staticAnimal.setVisible(false)
         }
 
         /////////////////////////////////////////////////
@@ -697,10 +708,9 @@ const PhaserGame = ({
         ) {
           setFinishedBadges(true);
           this.time.delayedCall(2000, () => {
-
             setDisplayText("All Badges Earned, Game Complete !!!");
             boss = addStaticImage(this, 2914, 638, "tree", 0.1);
-            boss.setVisible(true);
+            boss.setVisible(false);
             setBodySizeAndOffset(boss, 0.1, 0.1);
 
             if (!bossCompleted) {
@@ -723,7 +733,8 @@ const PhaserGame = ({
               });
             } else {
               // Keep the logic to handle static videoGame if disabled
-              setDisplayText("You beat the boss, Well Done")
+              setCurrentScene("CreditScene");
+              setDisplayText("You beat the boss, Well Done");
               const staticBoss = this.physics.add
                 .staticImage(2914, 638, "tree")
                 .setScale(0.1);
@@ -738,6 +749,7 @@ const PhaserGame = ({
               this.physics.add.collider(this.player, staticBoss, () => {
                 console.log("Player collided with the static videoGame");
               });
+              staticBoss.setVisible(false)
             }
           });
         } else {
@@ -745,8 +757,6 @@ const PhaserGame = ({
             setDisplayText("");
           });
         }
-
-
 
         // Create animations for each direction
         this.anims.create({
@@ -832,16 +842,7 @@ const PhaserGame = ({
       },
 
       update: function () {
-        // if (finishedBadges) {
-        //   // boss.x = 991,
-        //   // boss.y = 726
-        //   (boss.x = 991), (boss.y = 726);
-         
-        //   setBodySizeAndOffset(boss, 0, 5);
-        // }
-
         if (!this.player) return;
-
         this.player.setVelocity(0);
 
         // Diagonal movement first
@@ -890,16 +891,16 @@ const PhaserGame = ({
           this.player.anims.stop(); // Stop animation if no keys pressed
         }
         // Update the coordinates display to stick with the player
-        this.coordText.setText(
-          "Coordinates: (" +
-            this.player.x.toFixed(0) +
-            ", " +
-            this.player.y.toFixed(0) +
-            ")"
-        );
+        // this.coordText.setText(
+        //   "Coordinates: (" +
+        //     this.player.x.toFixed(0) +
+        //     ", " +
+        //     this.player.y.toFixed(0) +
+        //     ")"
+        // );
 
-        // Make the text follow the player by setting its position relative to the player
-        this.coordText.setPosition(this.player.x - 50, this.player.y - 50);
+        // // Make the text follow the player by setting its position relative to the player
+        // this.coordText.setPosition(this.player.x - 50, this.player.y - 50);
       },
     };
 
@@ -924,7 +925,7 @@ const PhaserGame = ({
             setScienceCompleted,
             setEnteredScience,
             setDisplayText
-          ) // Call your ScienceScene
+          )
         ) : currentScene === "VideoGameScene" ? (
           VideoGameScene(
             setCurrentScene,
@@ -941,9 +942,10 @@ const PhaserGame = ({
           AnimalScene(setCurrentScene, setAnimalCompleted, setEnteredAnimal)
         ) : currentScene === "BossScene" ? (
           BossScene(setCurrentScene, setBossCompleted, setEnteredBoss)
-     
+        ) : currentScene === "CreditScene" ? (
+          CreditScene(setCurrentScene)
         ) : (
-          <h1>nope</h1>
+          <h1>error</h1>
         ),
     };
 

@@ -72,7 +72,7 @@ const LoginAccount = ({
         <button type="submit" disabled={loading}>
           Login
         </button>
-        <p >
+        {/* <p >
           Available Users:
           <select
             id="users-bar"
@@ -84,7 +84,7 @@ const LoginAccount = ({
           >
             <option>{"fred"}</option>
           </select>
-        </p>
+        </p> */}
       </form>
       {error && <p className="error-message">{error}</p>}
       {loading && <p className="loading-text">Loading...</p>}

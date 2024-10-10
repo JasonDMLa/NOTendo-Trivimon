@@ -14,9 +14,9 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
       this.load.image("PHP2", "../triviaScenes/playerBar2.png");
       this.load.image("PHP3", "../triviaScenes/playerBar3.png");
       this.load.audio("correct", "../../music/correct.mp3");
-      this.load.audio("wrong","../../music/wrong.mp3")
-      this.load.audio("win","../../music/win.mp3")
-      this.load.audio("fail","../../music/fail.mp3")
+      this.load.audio("wrong", "../../music/wrong.mp3");
+      this.load.audio("win", "../../music/win.mp3");
+      this.load.audio("fail", "../../music/fail.mp3");
     },
 
     create: function () {
@@ -28,7 +28,7 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
       this.add.image(140, 100, "PHP").setScale(0.3).setOrigin(0.5, 0.5);
 
       let currentQuestionIndex = 0;
-      let score = 15;
+      let score = 1;
       let wrongAnswer = 3;
       let correctAnswer = "";
       let heart;
@@ -206,18 +206,16 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
           this.music = this.sound.add("correct", {
             loop: false, // Loops the music
             volume: 0.5, // Set volume (0 to 1)
-
           });
-  
+
           this.music.play();
           score--;
         } else {
           this.music = this.sound.add("wrong", {
             loop: false, // Loops the music
             volume: 0.5, // Set volume (0 to 1)
-
           });
-  
+
           this.music.play();
           wrongAnswer--;
         }
@@ -226,12 +224,11 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
           this.music = this.sound.add("win", {
             loop: false, // Loops the music
             volume: 0.5, // Set volume (0 to 1)
-
           });
           this.music.play();
           answerButtons.forEach((button) => button.disableInteractive());
           setTimeout(() => {
-            setCurrentScene("FirstScene");
+            setCurrentScene("CreditScene");
             setAnimalCompleted(true);
           }, 2000); // 2000 ms = 2 seconds
         }
@@ -240,7 +237,6 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
           this.music = this.sound.add("fail", {
             loop: false, // Loops the music
             volume: 0.5, // Set volume (0 to 1)
-
           });
           this.music.play();
           answerButtons.forEach((button) => button.disableInteractive());
@@ -263,7 +259,6 @@ const BossScene = (setCurrentScene, setBossCompleted, setEnteredBoss) => {
           enemyHeart13,
           enemyHeart14,
           enemyHeart15,
-
         ];
 
         // Make the corresponding heart invisible based on the score
